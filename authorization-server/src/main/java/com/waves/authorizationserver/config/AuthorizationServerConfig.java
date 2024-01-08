@@ -24,6 +24,7 @@ import org.springframework.security.oauth2.server.authorization.settings.Authori
 import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
 import org.springframework.security.oauth2.server.authorization.settings.TokenSettings;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 
 import java.time.Duration;
 import java.util.UUID;
@@ -36,6 +37,9 @@ public class AuthorizationServerConfig {
     public SecurityFilterChain authorizationServcerFilterChain(HttpSecurity http) throws Exception {
         OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
         http.getConfigurer(OAuth2AuthorizationServerConfigurer.class).oidc(Customizer.withDefaults());
+        http.exceptionHandling(exceptions -> exceptions.authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login")))
+                .oauth2ResourceServer((resourceServer) -> resourceServer
+                        .jwt(Customizer.withDefaults()));
         return http.formLogin(Customizer.withDefaults()).build();
     }
 
@@ -43,7 +47,7 @@ public class AuthorizationServerConfig {
     public RegisteredClientRepository registeredClientRepository(){
         RegisteredClient registeredClient = RegisteredClient.withId(UUID.randomUUID().toString())
                 .clientId("client")
-                .clientSecret("{noop}secret")
+                .clientSecret("secret")
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
@@ -64,7 +68,8 @@ public class AuthorizationServerConfig {
     @Bean
     public AuthorizationServerSettings authorizationServerSettings(){
         return AuthorizationServerSettings.builder()
-                .issuer("http://localhost:8080").build();
+                .issuer("http://localhost:8080")
+                .build();
     }
 
     @Bean

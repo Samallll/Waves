@@ -13,3 +13,7 @@ bauthorization-server/src/main/java/com/waves/authorizationserver/config/Default
 Zauthorization-server/src/main/java/com/waves/authorizationserver/config/keys/JwksKeys.java,4\b\4bb583292978eead03b5477d10076605134ab801
 }
 Mapi-gateway/src/main/java/com/waves/apigateway/controller/DemoController.java,b\7\b7a799815692bfd5dcac0990e444c8938bf6dd75
+y
+Iapi-gateway/src/main/java/com/waves/apigateway/config/SecurityConfig.java,6\d\6d452d8eaced3d9fb003a974cfabf641ab7d4fb4
+y
+Iapi-gateway/src/main/java/com/waves/apigateway/ApiGatewayApplication.java,3\c\3c12f4f3c2c5f177e229733d7753ae1c8610892e
