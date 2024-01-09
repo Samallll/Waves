@@ -17,3 +17,17 @@ y
 Iapi-gateway/src/main/java/com/waves/apigateway/config/SecurityConfig.java,6\d\6d452d8eaced3d9fb003a974cfabf641ab7d4fb4
 y
 Iapi-gateway/src/main/java/com/waves/apigateway/ApiGatewayApplication.java,3\c\3c12f4f3c2c5f177e229733d7753ae1c8610892e
+ã
+[authorization-server/src/main/java/com/waves/authorizationserver/config/CORSCustomizer.java,c\3\c36ab75c4a6630a0211a3cf25dbdbedfdd8a7c28
+C
+api-gateway/pom.xml,2\b\2bfa2b108f2439e99e004f4085b58c22cf995f73
+ò
+hauthorization-server/src/main/java/com/waves/authorizationserver/config/SpringSecurityConfiguration.java,1\e\1e55c868d85b6a21c937a04d3a1d4fc0004d4687
+Å
+Qauthorization-server/src/main/java/com/waves/authorizationserver/entity/User.java,4\6\460dda0ae3fbaea9d1188c2acb29fa8c8bdf5fdc
+è
+_authorization-server/src/main/java/com/waves/authorizationserver/repository/UserRepository.java,3\4\34b0651ff1368c84d7c83eb7be317353ef09f50a
+ö
+jauthorization-server/src/main/java/com/waves/authorizationserver/service/CustomAuthenticationProvider.java,5\e\5e77bf9289920d6edd7a5becee08d1306764d290
+ñ
+fauthorization-server/src/main/java/com/waves/authorizationserver/service/CustomUserServiceDetails.java,2\4\2404257b4de8ca2cb87eb88e7fc8b7801298e320

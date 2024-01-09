@@ -1,3 +1,4 @@
 
+G	java:S106""+Replace this use of System.out by a logger.(Ÿı¡û8á•ÍæÎ1
 X
-java:S1874#";Remove this use of "NoOpPasswordEncoder"; it is deprecated.(å‰ö8Ó¼Ä¤Î1
+java:S1874*";Remove this use of "NoOpPasswordEncoder"; it is deprecated.(”‹ç8»ÚÆæÎ1

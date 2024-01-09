@@ -13,7 +13,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http.authorizeHttpRequests(
-                auth -> auth.anyRequest().authenticated()
+                auth -> auth.requestMatchers("/articles").hasRole("USER")
+                        .anyRequest().authenticated()
         ).oauth2ResourceServer(
                 oauth2 -> oauth2.jwt(Customizer.withDefaults())
         );
@@ -21,5 +22,3 @@ public class SecurityConfig {
         return http.build();
     }
 }
-
-// http://localhost:8080/oauth2/authorize?response_type=code&client_id=client&scope=openid&redirect_uri=http://127.0.0.1:3000/authorized&code_challenge=scqWYQ2OcKQG23ZkMIVzMG7KUS-WPb5Hrtwjdfz1OcY&code_challenge_method=S256
