@@ -49,7 +49,7 @@ public class SpringSecurityConfiguration {
                         "admin",
                         "admin",
                         passwordEncoder.encode("admin"),
-                        "ROLE_ADMIN",
+                        "ADMIN",
                         "000000000",
                         false
                 );
