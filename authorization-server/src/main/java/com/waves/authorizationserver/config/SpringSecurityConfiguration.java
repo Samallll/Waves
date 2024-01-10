@@ -38,18 +38,6 @@ public class SpringSecurityConfiguration {
 
     }
 
-//    @Bean
-//    public UserDetailsService users() {
-//
-//            UserDetails user = User.withUsername("sergey")
-//                .password(passwordEncoder().encode("password"))
-//                .roles("USER")
-//                .build();
-//
-//        return new InMemoryUserDetailsManager(user);
-//
-//    }
-
     @Bean
     ApplicationRunner clientsRunner(UserRepository userRepository,
                                     PasswordEncoder passwordEncoder) {
