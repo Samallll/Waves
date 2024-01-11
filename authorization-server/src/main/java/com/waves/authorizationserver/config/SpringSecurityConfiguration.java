@@ -19,18 +19,22 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SpringSecurityConfiguration {
 
-    // http://127.0.0.1:8000/oauth2/authorize?response_type=code&client_id=client1&redirect_uri=http://127.0.0.1:8080/authorized&scope=openid read
-    // http://127.0.0.1:8000/oauth2/authorize?response_type=code&client_id=client1&redirect_uri=http://127.0.0.1:8080/authorized&scope=openid read&code_challenge=7KsB5rHCPcsHLxs3eijds83BQHc0yUMku227l516UUE&code_challenge_method=S256
+    // http://127.0.0.1:8000/oauth2/authorize?response_type=code&client_id=client1&redirect_uri=http://127.0.0.1:3000/authorized&scope=openid read
+    // http://127.0.0.1:8000/oauth2/authorize?response_type=code&client_id=client1&redirect_uri=http://127.0.0.1:3000/authorized&scope=openid read&code_challenge=7KsB5rHCPcsHLxs3eijds83BQHc0yUMku227l516UUE&code_challenge_method=S256
     // code_verifier : m1vPAe8FO_w2GMSIyxr-NtTdAF8e2b_475XMF3Q1pIEWCC1LmaO2LWdzurW-MA46wfZcqkBsqmo257XYgeP-1KXjoElxMl7dHJ-d4iCqouR1QJ4Do40xaT1JKOz8KWe5
     private final CustomAuthenticationProvider customAuthenticationProvider;
 
-    public SpringSecurityConfiguration(CustomAuthenticationProvider customAuthenticationProvider) {
+    private final CORSCustomizer corsCustomizer;
+
+    public SpringSecurityConfiguration(CustomAuthenticationProvider customAuthenticationProvider, CORSCustomizer corsCustomizer) {
         this.customAuthenticationProvider = customAuthenticationProvider;
+        this.corsCustomizer = corsCustomizer;
     }
 
     @Bean
     SecurityFilterChain configureSecurityFilterChain(HttpSecurity http) throws Exception {
 
+        corsCustomizer.corsCustomizer(http);
         http
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests.anyRequest().authenticated())
                 .formLogin(Customizer.withDefaults());

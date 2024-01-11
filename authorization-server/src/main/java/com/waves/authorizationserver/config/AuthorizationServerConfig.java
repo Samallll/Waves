@@ -45,8 +45,11 @@ public class AuthorizationServerConfig {
 
     private final PasswordEncoder passwordEncoder;
 
-    public AuthorizationServerConfig(PasswordEncoder passwordEncoder) {
+    private final CORSCustomizer corsCustomizer;
+
+    public AuthorizationServerConfig(PasswordEncoder passwordEncoder, CORSCustomizer corsCustomizer) {
         this.passwordEncoder = passwordEncoder;
+        this.corsCustomizer = corsCustomizer;
     }
 
     @Bean
@@ -58,7 +61,7 @@ public class AuthorizationServerConfig {
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
-                .redirectUri("http://127.0.0.1:8080/authorized")
+                .redirectUri("http://127.0.0.1:3000/authorized")
                 .scope(OidcScopes.OPENID)
                 .scope("read")
                 //.clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
@@ -77,9 +80,8 @@ public class AuthorizationServerConfig {
     public SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http) throws Exception {
 
         OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
-
         http.getConfigurer(OAuth2AuthorizationServerConfigurer.class).oidc(Customizer.withDefaults());
-
+        corsCustomizer.corsCustomizer(http);
         return http.formLogin(Customizer.withDefaults()).build();
     }
 

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="8b37a9c2-7ed7-4c69-abdc-f8ff55cb8b66" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../.idea/sonarlint/issuestore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/sonarlint/issuestore/index.pb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/sonarlint/securityhotspotstore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/sonarlint/securityhotspotstore/index.pb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front-end/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front-end/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front-end/package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front-end/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front-end/public/favicon.ico" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front-end/public/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front-end/public/logo192.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front-end/public/logo512.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front-end/public/manifest.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front-end/public/robots.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front-end/src/App.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front-end/src/App.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front-end/src/App.test.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front-end/src/index.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front-end/src/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front-end/src/logo.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front-end/src/reportWebVitals.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front-end/src/setupTests.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../package.json" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "customColor": "",
+  "associatedIndex": 4
+}]]></component>
+  <component name="ProjectId" id="2anNBe9Z1gJJAHx7DRemhGd1Xjp" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "master"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="8b37a9c2-7ed7-4c69-abdc-f8ff55cb8b66" name="Changes" comment="" />
+      <created>1704950253458</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1704950253458</updated>
+    </task>
+    <servers />
+  </component>
+</project>

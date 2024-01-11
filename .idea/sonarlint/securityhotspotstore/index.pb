@@ -25,3 +25,14 @@ _authorization-server/src/main/java/com/waves/authorizationserver/repository/Use
 jauthorization-server/src/main/java/com/waves/authorizationserver/service/CustomAuthenticationProvider.java,5\e\5e77bf9289920d6edd7a5becee08d1306764d290
 –
 fauthorization-server/src/main/java/com/waves/authorizationserver/service/CustomUserServiceDetails.java,2\4\2404257b4de8ca2cb87eb88e7fc8b7801298e320
+D
+front-end/src/App.js,7\3\73e799f840cce9853017d74df13aea07d65ec2df
+F
+front-end/src/index.js,5\f\5ff0ed3076de98a06fecbd200ce8eb290f4344a8
+:
+
+.gitignore,a\5\a5cc2925ca8258af241be7e5b0381edf30266302
+†
+Vauthorization-server/src/main/java/com/waves/authorizationserver/config/CORSCustomizer,1\4\14e4b26a179f36b7e8f712417faf74aa4390a779
+‹
+[authorization-server/src/main/java/com/waves/authorizationserver/config/CORSCustomizer.java,c\3\c36ab75c4a6630a0211a3cf25dbdbedfdd8a7c28
