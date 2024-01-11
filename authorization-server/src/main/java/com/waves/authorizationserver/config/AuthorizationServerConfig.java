@@ -29,6 +29,7 @@ import org.springframework.security.oauth2.server.authorization.settings.TokenSe
 import org.springframework.security.oauth2.server.authorization.token.JwtEncodingContext;
 import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenCustomizer;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -81,6 +82,8 @@ public class AuthorizationServerConfig {
 
         OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
         http.getConfigurer(OAuth2AuthorizationServerConfigurer.class).oidc(Customizer.withDefaults());
+        http.exceptionHandling(exceptions -> exceptions.authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login")))
+                .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
         corsCustomizer.corsCustomizer(http);
         return http.formLogin(Customizer.withDefaults()).build();
     }
@@ -96,7 +99,7 @@ public class AuthorizationServerConfig {
     public ClientSettings clientSettings() {
         return ClientSettings.builder()
                 .requireAuthorizationConsent(false)
-                .requireProofKey(false)
+                .requireProofKey(true)
                 .build();
     }
 
@@ -133,7 +136,7 @@ public class AuthorizationServerConfig {
                 Set<String> authorities = principal.getAuthorities().stream()
                         .map(GrantedAuthority::getAuthority)
                         .collect(Collectors.toSet());
-                context.getClaims().claim("roles", authorities);
+                context.getClaims().claim("authorities", authorities);
             }
         };
     }

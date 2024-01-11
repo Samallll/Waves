@@ -36,3 +36,5 @@ F
 Vauthorization-server/src/main/java/com/waves/authorizationserver/config/CORSCustomizer,1\4\14e4b26a179f36b7e8f712417faf74aa4390a779
 ‹
 [authorization-server/src/main/java/com/waves/authorizationserver/config/CORSCustomizer.java,c\3\c36ab75c4a6630a0211a3cf25dbdbedfdd8a7c28
+y
+Iapi-gateway/src/main/java/com/waves/apigateway/config/CORSCustomizer.java,0\2\020d3fca08a6ed233a0488ab51021bd96633a604

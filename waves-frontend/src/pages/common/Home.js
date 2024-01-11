@@ -1,16 +1,17 @@
 import { useEffect,useState } from "react"
-import demo from "../../apis/authorize"; 
+import demo from "../../apis/demo"; 
 
 function Home(){
   
   const[demoStr,setDemoStr] = useState('')
 
   useEffect(() => {
+
       const token = sessionStorage.getItem('access_token');
       const headers = new Headers();
-      headers.set('Content-type', 'plain/text');
       headers.set('Authorization', `Bearer ${token}`);
       const url = demo();
+
       fetch(url, {
           method: 'GET',
           mode: 'cors',
@@ -29,6 +30,7 @@ function Home(){
       </div>
       <div>
         <p>
+          <h4>Articles are:</h4>
           {demoStr}
         </p>
       </div>
