@@ -3,38 +3,53 @@ import { useSearchParams } from "react-router-dom"
 import authorize from "../../apis/authorize";
 import token from "../../apis/token";
 import { Buffer } from "buffer";
+import { useNavigate } from "react-router-dom";
 
 function Redirect() {
 
   const[searchParam] = useSearchParams();
+  const navigate = useNavigate();
+
   useEffect(()=>{
     if(searchParam?.get('code')){
+
       sessionStorage.setItem('code',searchParam?.get('code'));
-      console.log(searchParam?.get('code'));
+
+      const formData = new URLSearchParams();
+      formData.append('client_id', 'client1');
+      formData.append('grant_type', 'authorization_code');
+      formData.append('code_verifier', 'm1vPAe8FO_w2GMSIyxr-NtTdAF8e2b_475XMF3Q1pIEWCC1LmaO2LWdzurW-MA46wfZcqkBsqmo257XYgeP-1KXjoElxMl7dHJ-d4iCqouR1QJ4Do40xaT1JKOz8KWe5');
+      formData.append('redirect_uri', 'http://127.0.0.1:3000/authorized');
+      formData.append('code', sessionStorage.getItem('code'));
+
       const client = 'client1';
       const secret = 'myClientSecretValue'
-      const headers = new Headers();
-      headers.set('Content-type','application/x-www-form-urlencoded');
-      headers.set('Authorization',`Basic ${Buffer.from(`${client}:${secret}`).toString('base64')}`)
-      headers.set('Accept','*/*')
-      headers.set('Accept-Encoding','gzip, deflate, br')
       const url = token();
-      console.log(`Basic ${Buffer.from(`${client}:${secret}`).toString('base64')}`)
-      console.log(url)
 
       fetch(url,{
         method:'POST',
         mode:'cors',
-        headers
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Authorization': `Basic ${Buffer.from(`${client}:${secret}`).toString('base64')}`,
+        },
+        body:formData
       }).then(async (response) => {
-        const token = response.json;
-        console.log(token);
-      })
+        const token = await response.json();
+        console.log(token.access_token)
+        if(token?.id_token) {
+            sessionStorage.setItem('id_token', token.id_token);
+            sessionStorage.setItem('access_token', token.access_token);
+            navigate('/home');
+        }
+    }).catch((err) => {
+        console.log(err);
+    })
     }
     else if(!searchParam?.get('code')){
       window.location.href = authorize();
     }
-  })
+  },[])
 
   return (
     <div>
