@@ -1,5 +1,6 @@
 import { useEffect,useState } from "react"
 import demo from "../../apis/demo"; 
+import { Link } from "react-router-dom";
 
 function Home(){
   
@@ -19,6 +20,8 @@ function Home(){
       }).then(async (demoData) => {
           const demo = await demoData.text();
           setDemoStr(demo);
+      }).catch(error => {
+        console.log(error)
       })
 
   }, []);
@@ -34,6 +37,7 @@ function Home(){
           {demoStr}
         </p>
       </div>
+      <Link to={"/logout"}>Logout</Link>
     </>
   )
 }

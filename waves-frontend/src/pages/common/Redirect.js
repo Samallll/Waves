@@ -18,7 +18,7 @@ function Redirect() {
       const formData = new URLSearchParams();
       formData.append('client_id', 'client1');
       formData.append('grant_type', 'authorization_code');
-      formData.append('code_verifier', 'm1vPAe8FO_w2GMSIyxr-NtTdAF8e2b_475XMF3Q1pIEWCC1LmaO2LWdzurW-MA46wfZcqkBsqmo257XYgeP-1KXjoElxMl7dHJ-d4iCqouR1QJ4Do40xaT1JKOz8KWe5');
+      formData.append('code_verifier', '8pS4DixsoGFl_7GBK459cNnT1qwdchciRD46xuRb2sBL1X8L4vy2JH2v5n4lUMC6iBjxXHP1S7R7bahLok5gBdziStql9UAqtDnZ0Dyf1YpOO0PnrFcsCFYrufaOOIFY');
       formData.append('redirect_uri', 'http://127.0.0.1:3000/authorized');
       formData.append('code', sessionStorage.getItem('code'));
 

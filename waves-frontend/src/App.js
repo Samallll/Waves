@@ -4,6 +4,7 @@ import Home from './pages/common/Home';
 import Redirect from './pages/common/Redirect';
 import SignUp from './pages/common/SignUp';
 import './App.css';
+import Logout from './pages/common/Logout';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Route path='/redirect' element={<Redirect/>}/>
           <Route path='/registration' element={<SignUp/>}/>
           <Route path='/authorized' element={<Redirect/>}/>
+          <Route path='/logout' element={<Logout/>}/>
         </Routes>
       </BrowserRouter>
     </div>
