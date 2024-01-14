@@ -1,0 +1,77 @@
+.OtpForm{
+    width: 600px;
+    height: 600px;
+    background-color: #32A6E7;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 25px;
+    border: 1px black solid;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.otpField{
+    background: #071F48;
+    color: white;
+    font-weight: 600;
+    font-size: 20px;
+    font-stretch: expanded;
+    border-radius: 10px;
+    padding: 5px 10px 5px 10px;
+    text-align: center;
+}
+
+.mainContent{
+    width: 500px;
+    height: 292px; 
+    background: #E7E7E7; 
+    border-radius: 15px;
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.subHeading{ 
+    color: #5A4226; 
+    font-size: 18px;
+    font-weight: 600;
+    word-wrap: break-word;
+    padding-bottom: 20px;
+    margin-bottom: 10px;
+}
+
+.heading{
+    text-align: center;
+    color: #766358; 
+    font-size: 24px;
+    font-weight: 700;
+    word-wrap: break-word;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.Logo{
+    min-width: 200px;
+    height: 57.68px; 
+    color: white; 
+    font-size: 48px; 
+    font-weight: 700; 
+    word-wrap: break-word;
+    margin-bottom: 50px;
+}
+
+.proceed{
+    width: 157px;
+    height: 38px;
+    background: #071F48; 
+    border-radius: 25px;
+    border: 1px black solid;
+    margin-top: 30px;
+    color: white;
+    font-size: 16px;
+    font-weight: 700;
+    text-align: center;
+}

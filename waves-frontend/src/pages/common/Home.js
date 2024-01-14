@@ -1,10 +1,32 @@
 import { useEffect,useState } from "react"
 import demo from "../../apis/demo"; 
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router";
 
 function Home(){
   
   const[demoStr,setDemoStr] = useState('')
+  const navigate = useNavigate();
+
+  const logout = () => {
+    
+    const token = sessionStorage.getItem('access_token');
+    const headers = new Headers();
+    headers.set('Authorization', `Bearer ${token}`);
+
+    sessionStorage.removeItem('access_token');
+    sessionStorage.removeItem('id_token');
+    
+    fetch("http://127.0.0.1:8000/connect/logout",{
+      method:'GET',
+      mode: 'no-cors'
+    }).then(async (demoData) => {
+      console.log(demoData)
+    }).catch(error=>{
+      console.log(error)
+    })
+
+    navigate("/login")
+  }
 
   useEffect(() => {
 
@@ -37,7 +59,7 @@ function Home(){
           {demoStr}
         </p>
       </div>
-      <Link to={"/logout"}>Logout</Link>
+      <button onClick={logout}>Logout</button>
     </>
   )
 }

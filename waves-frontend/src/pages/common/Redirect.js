@@ -36,7 +36,6 @@ function Redirect() {
         body:formData
       }).then(async (response) => {
         const token = await response.json();
-        console.log(token.access_token)
         if(token?.id_token) {
             sessionStorage.setItem('id_token', token.id_token);
             sessionStorage.setItem('access_token', token.access_token);
