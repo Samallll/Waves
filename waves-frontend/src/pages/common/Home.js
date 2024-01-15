@@ -15,6 +15,7 @@ function Home(){
 
     sessionStorage.removeItem('access_token');
     sessionStorage.removeItem('id_token');
+    sessionStorage.removeItem('code');
     
     fetch("http://127.0.0.1:8000/connect/logout",{
       method:'GET',

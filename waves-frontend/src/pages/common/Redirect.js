@@ -1,4 +1,4 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useSearchParams } from "react-router-dom"
 import authorize from "../../apis/authorize";
 import token from "../../apis/token";
@@ -14,6 +14,7 @@ function Redirect() {
     if(searchParam?.get('code')){
 
       sessionStorage.setItem('code',searchParam?.get('code'));
+      console.log("redn");
 
       const formData = new URLSearchParams();
       formData.append('client_id', 'client1');
@@ -39,6 +40,7 @@ function Redirect() {
         if(token?.id_token) {
             sessionStorage.setItem('id_token', token.id_token);
             sessionStorage.setItem('access_token', token.access_token);
+            console.log(sessionStorage.getItem('access_token'));
             navigate('/home');
         }
     }).catch((err) => {

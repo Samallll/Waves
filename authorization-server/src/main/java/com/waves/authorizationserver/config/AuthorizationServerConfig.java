@@ -62,6 +62,7 @@ public class AuthorizationServerConfig {
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
+                .redirectUri("http://127.0.0.1:3000/login/oauth2/code/spring")
                 .redirectUri("http://127.0.0.1:3000/authorized")
                 .scope(OidcScopes.OPENID)
                 .scope("read")
@@ -137,6 +138,7 @@ public class AuthorizationServerConfig {
                         .map(GrantedAuthority::getAuthority)
                         .collect(Collectors.toSet());
                 context.getClaims().claim("authorities", authorities);
+                context.getClaims().claim("jti", UUID.randomUUID().toString());
             }
         };
     }
