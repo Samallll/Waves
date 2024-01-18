@@ -5,16 +5,18 @@ import Redirect from './pages/common/Redirect';
 import './App.css';
 import Registration from './pages/common/Registration';
 import OtpValidation from './pages/common/OtpValidation';
+import Test from './pages/common/Test';
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route exact path='/' element={<Login/>}/>
+          <Route exact path='/' element={<Test/>}/>
           {/* <Route path='/userHome' element={<UserHome/>}/>
           <Route path='/adminHome' element={<AdminHome/>}/> */}
-          <Route path="/login" element={<Login/>}/>
+          <Route path="/login" element={<Test/>}/>
+          <Route path="/logged-out" element={<Test/>}/>
           <Route path='/home' element={<Home/>}/>
           <Route path='/redirect' element={<Redirect/>}/>
           <Route path='/registration' element={<Registration/>}/>

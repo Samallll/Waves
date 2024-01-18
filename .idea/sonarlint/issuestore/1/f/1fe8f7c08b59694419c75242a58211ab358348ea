@@ -1,0 +1,12 @@
+
+d
+java:S1192A"GDefine a constant instead of duplicating this literal "/login" 3 times.(«†Ÿ‘8ôä¬”Ñ1
+T
+java:S1611?"8Remove the parentheses around the "exceptions" parameter(Œ´þq8°å¬”Ñ1
+Y
+java:S1611E"<Remove the parentheses around the "resourceServer" parameter(õìÌš8²å¬”Ñ1
+T
+java:S1611P"7Remove the parentheses around the "authorize" parameter(–²ÇÁ8»å¬”Ñ1
+N
+java:S1611["1Remove the parentheses around the "web" parameter(¥»çñ8Åå¬”Ñ1
+]	java:S125f"<This block of commented-out lines of code should be removed.(éúüœüÿÿÿÿ8Íå¬”Ñ1

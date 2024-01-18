@@ -1,4 +1,4 @@
-package com.waves.userservice.config;
+package com.waves.emailservice.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -10,6 +10,7 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
 
+@Configuration
 @EnableMethodSecurity
 public class SecurityConfig {
 
@@ -40,4 +41,3 @@ public class SecurityConfig {
         return jwtAuthenticationConverter;
     }
 }
-

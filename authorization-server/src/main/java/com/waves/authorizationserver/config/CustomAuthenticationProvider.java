@@ -1,5 +1,6 @@
-package com.waves.authorizationserver.service;
+package com.waves.authorizationserver.config;
 
+import com.waves.authorizationserver.service.CustomUserServiceDetails;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

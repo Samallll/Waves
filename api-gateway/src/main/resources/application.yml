@@ -1,19 +1,37 @@
 server:
-  port: 9000
+  port: 8090
 
 spring:
+  application:
+    name: cloudgateway
+  cloud:
+    gateway:
+      default-filters:
+        - CustomTokenRelay=
+      routes:
+        - id: email-service-router
+          uri: http://localhost:8091/
+          predicates:
+            - Path=/email/**
+        - id: user-service-router
+          uri: http://localhost:8092/
+          predicates:
+            - Path=/user/**
+        - id: react-app
+          uri: http://localhost:3000/
+          predicates:
+            - Path=/**
   security:
     oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: http://localhost:8000
-          jwk-set-uri: http://localhost:8000/oauth2/jwks
-
-logging:
-  level:
-    org:
-      springframework:
-        security:
-          oauth2:
-            server:
-              resource: DEBUG
+      client:
+        registration:
+          gateway:
+            provider: spring
+            client-id: client
+            client-secret: secret
+            scope: openid, profile
+            authorization-grant-type: authorization_code
+            redirect-uri: http://127.0.0.1:8090/login/oauth2/code/gateway
+        provider:
+          spring:
+            issuer-uri: http://localhost:9000

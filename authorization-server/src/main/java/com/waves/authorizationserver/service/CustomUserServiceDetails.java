@@ -3,13 +3,18 @@ package com.waves.authorizationserver.service;
 import com.waves.authorizationserver.entity.User;
 import com.waves.authorizationserver.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -35,4 +40,38 @@ public class CustomUserServiceDetails implements UserDetailsService {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(11);
     }
+
+
+    @Bean
+    ApplicationRunner clientsRunner(UserRepository userRepository,
+                                    PasswordEncoder passwordEncoder) {
+        return args -> {
+
+            if (userRepository.findByRole("ADMIN") == null) {
+                User admin = new User(
+                        1L,
+                        "admin",
+                        "admin",
+                        passwordEncoder.encode("admin"),
+                        "ADMIN",
+                        "000000000",
+                        false
+                );
+                userRepository.save(admin);
+            }
+            if (userRepository.findByRole("USER") == null) {
+                User user = new User(
+                        2L,
+                        "user",
+                        "user",
+                        passwordEncoder.encode("user"),
+                        "USER",
+                        "1111111111",
+                        false
+                );
+                userRepository.save(user);
+            }
+        };
+    }
+
 }
