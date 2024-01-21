@@ -9,7 +9,8 @@ function OtpForm(props) {
     const submitURL = props.submitURL;
     const [error,setError] = useState("");
     const [otp,setOtp] = useState("");
-    const expiryTime = useSelector((state) => state.otp.expiryTime);
+    const otpStored = useSelector((state) => state.otp);
+    const navigate = useNavigate();
 
     if (!props.submitURL) {
         throw new Error('OtpForm component requires a "submitURL" prop');
@@ -28,12 +29,40 @@ function OtpForm(props) {
             return;
         }
     
-        if (Date.now() > expiryTime) {
+        if (Date.now() > otpStored.expiryTime) {
             setError('OTP has expired');
             return;
         }
+        if(!(otpStored.otp === otp)){
+            setError('Incorrect OTP. Please try again.');
+            return;
+        }
+        const user = sessionStorage.getItem("userRegistrationData");
+        const userData = JSON.parse(user);
+        
+        const url = "http://127.0.0.1:8090/api/v1/register/user"; 
+        const userRegisterDto = { 
+            emailId:userData.email,
+            fullName:userData.fullName,
+            password:userData.password
+         };
 
-        // using the data stored in the session , send a request to the back end for user creation.
+        const response = fetch(url, {
+            method: "POST",
+            body: JSON.stringify(userRegisterDto),
+            headers: { "Content-Type": "application/json" },
+        });
+        sessionStorage.removeItem("userRegistrationData");
+        response.then(
+            () => {
+                navigate("/");
+            }
+          ).catch((error) => {
+            console.error("Network error:", error);
+            setError("An error occurred. Please try again.");
+            navigate('/register'); 
+          });
+
     }
 
 
@@ -63,7 +92,7 @@ function OtpForm(props) {
                                 onChange={(e)=>setOtp(e.target.value)}
                                 className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required=""/>
                         </div>
-                        <OtpTimer expiryTime={expiryTime}/>
+                        <OtpTimer expiryTime={otpStored.expiryTime}/>
                         <button type="submit" className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Validate Otp</button>
                     </form>
                 </div>

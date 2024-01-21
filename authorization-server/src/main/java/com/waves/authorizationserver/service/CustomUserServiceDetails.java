@@ -59,18 +59,6 @@ public class CustomUserServiceDetails implements UserDetailsService {
                 );
                 userRepository.save(admin);
             }
-            if (userRepository.findByRole("USER") == null) {
-                User user = new User(
-                        2L,
-                        "user",
-                        "user",
-                        passwordEncoder.encode("user"),
-                        "USER",
-                        "1111111111",
-                        false
-                );
-                userRepository.save(user);
-            }
         };
     }
 

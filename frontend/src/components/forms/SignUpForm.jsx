@@ -3,6 +3,7 @@ import logo from '../../assets/square-logo.jpg'
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { generateOtp } from '../../features/otpSlice';
+import { generateRandomOtp, sendEmail } from '../../utils/authMethods';
 
 function SignUpForm() {
 
@@ -23,8 +24,7 @@ function SignUpForm() {
 
         e.preventDefault();
         if(validateFormData(userRegisterData)){
-            dispatch(generateOtp())
-            navigate("/otp");
+            checkEmailAvailability();
         }   
     }
 
@@ -46,25 +46,37 @@ function SignUpForm() {
             setError("Password must be at least 8 characters long");
             return false;
         }
-    
-        // fetch('/api/check-email-availability', {
-        // method: 'POST',
-        // body: JSON.stringify({ email }),
-        // })
-        // .then(response => response.json())
-        // .then(data => {
-        //     if (!data.available) {
-        //         setError("Email is already taken.");
-        //         return false;
-        //     }
-        // })
-        // .catch(()=>{
-        //     setError("Error checking email availability");
-        //     return false;
-        // });
 
         return true;
     }
+
+    async function checkEmailAvailability() {
+      
+        await fetch(`http://127.0.0.1:8090/api/v1/register/emailCheck?email=${encodeURIComponent(userRegisterData.email)}`)
+        .then((response) => {
+            if (response.ok) {
+              response.text().then((existingEmailId) => {
+                if(existingEmailId === ""){
+                    const otp = generateRandomOtp();
+                    dispatch(generateOtp(otp))
+                    const message = "Here is your otp: " + otp;
+                    const subject = "OTP Verification - CrowdCraft.com"
+                    sendEmail(userRegisterData.email,subject,message);
+                    sessionStorage.setItem("userRegistrationData", JSON.stringify(userRegisterData));
+                    navigate("/otp");
+                }
+                else{
+                    setError("Email Id exists")
+                }
+              });
+            } else {
+              setError("Email check failed, Please try again later");
+            }
+          })
+        .catch(() => {
+            setError("Email check failed, Please try again later");
+        })  
+      }
 
     const handleChange = (e) =>(
         setUserRegisterData(

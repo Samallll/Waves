@@ -1,22 +1,33 @@
+eureka:
+  client:
+    register-with-eureka: false
+
 server:
   port: 8090
 
 spring:
   application:
-    name: cloudgateway
+    name: cloud-gateway
   cloud:
     gateway:
+      discovery:
+        locator:
+          enabled: true
       default-filters:
         - CustomTokenRelay=
       routes:
         - id: email-service-router
-          uri: http://localhost:8091/
+          uri: http://localhost:8091
           predicates:
-            - Path=/email-service/**
+            - Path=/api/v1/email/**
         - id: user-service-router
-          uri: http://localhost:8092/api/v1
+          uri: http://localhost:8092
           predicates:
-            - Path=/user-service/**
+            - Path=/api/v1/user/**
+        - id: registration-service-router
+          uri: http://localhost:8093
+          predicates:
+            - Path=/api/v1/register/**
         - id: react-app
           uri: http://localhost:3000/
           predicates:
@@ -24,7 +35,7 @@ spring:
       globalcors:
         cors-configurations:
           '[/**]':
-            allowedOrigins: "http://127.0.0.1:3000" # Include the scheme (http://)
+            allowedOrigins: "http://127.0.0.1:3000"
             allowedMethods: "*"
             allowedHeaders: "*"
   security:
@@ -41,3 +52,9 @@ spring:
         provider:
           spring:
             issuer-uri: http://localhost:9000
+
+logging:
+  level:
+    org:
+      springframework:
+        security: TRACE

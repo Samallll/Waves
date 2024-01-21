@@ -3,6 +3,8 @@ package com.waves.userservice.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.jwt.JwtDecoders;
@@ -18,6 +20,7 @@ public class SecurityConfig {
 
     private static final String JWT_ROLE_NAME = "authorities";
     private static final String ROLE_PREFIX = "ROLE_";
+
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

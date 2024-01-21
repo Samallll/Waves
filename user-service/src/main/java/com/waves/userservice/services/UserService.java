@@ -1,7 +1,7 @@
 package com.waves.userservice.services;
 
 import com.waves.userservice.model.User;
-import com.waves.userservice.model.UserRegisterDto;
+import com.waves.userservice.model.UserDto;
 import com.waves.userservice.repository.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -22,20 +23,16 @@ public class UserService implements UserDetailsService {
         this.userRepository = userRepository;
     }
 
-    public Optional<User> getUserByEmailId(String emailId){
-        return userRepository.findByEmailId(emailId);
-    }
+    public boolean toggleLockStatus(Long userId){
 
-    public User registerUser(UserRegisterDto userRegisterDto) {
-
-        User newUser = new User();
-        newUser.setRole("USER");
-        newUser.setPassword(passwordEncoder().encode(userRegisterDto.getPassword()));
-        newUser.setEmailId(userRegisterDto.getEmailId());
-        newUser.setFullName(userRegisterDto.getFullName());
-        //send welcome mail!
-        return userRepository.save(newUser);
-
+        Optional<User> user = userRepository.findById(userId);
+        if(user.isPresent()){
+            User editUser = user.get();
+            editUser.setLocked(!editUser.isLocked());
+            userRepository.save(editUser);
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -50,5 +47,20 @@ public class UserService implements UserDetailsService {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(11);
+    }
+
+    public List<UserDto> getAllUsersWithDetails() {
+
+        return userRepository.findAll()
+                .stream()
+                .filter(user -> !"ADMIN".equals(user.getRole()))
+                .map(user -> new UserDto(
+                        user.getUserId(),
+                        user.getFullName(),
+                        user.getRole(),
+                        user.getEmailId(),
+                        user.isLocked()
+                ))
+                .toList();
     }
 }

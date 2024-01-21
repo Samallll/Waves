@@ -11,7 +11,6 @@ import org.springframework.security.oauth2.client.web.server.DefaultServerOAuth2
 import org.springframework.security.oauth2.client.web.server.ServerOAuth2AuthorizationRequestResolver;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authentication.logout.ServerLogoutSuccessHandler;
-import org.springframework.web.server.WebFilterChain;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -20,6 +19,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class SecurityConfig {
 
     private final ReactiveClientRegistrationRepository repository;
+
 
     public SecurityConfig(ReactiveClientRegistrationRepository repository) {
         this.repository = repository;

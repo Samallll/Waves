@@ -18,8 +18,6 @@ fauthorization-server/src/main/java/com/waves/authorizationserver/service/Custom
 :
 
 .gitignore,a\5\a5cc2925ca8258af241be7e5b0381edf30266302
-x
-Huser-service/src/main/java/com/waves/userservice/controller/General.java,5\2\5245700891efd35cfc411312bc1df0b051576d34
 {
 Kuser-service/src/main/java/com/waves/userservice/model/UserRegisterDto.java,9\d\9d4c530eeeb1f53e14378aed3c34a886fb5624d7
 D
@@ -64,3 +62,47 @@ Memail-service/src/main/java/com/waves/emailservice/config/SecurityConfig.java,
 aapi-gateway/src/main/java/com/waves/apigateway/config/RedirectServerAuthenticationEntryPoint.java,3\4\34d66aaadfe2de3943317ae2b82c0f3e7dbdc62a
 ~
 Napi-gateway/src/main/java/com/waves/apigateway/controller/LoginController.java,5\a\5a351fb744798c23eae8983c6530c06536bf56c2
+
+Ouser-service/src/main/java/com/waves/userservice/controller/UserController.java,e\a\ead48cd48d03055aa80c9a0eff0eea928d53cae6
+ì
+cauthorization-server/src/main/java/com/waves/authorizationserver/controller/RegisterController.java,7\b\7b2e136575dc6b5b4c39299785cb6c8f1f5569de
+à
+Xregistration-service/src/main/java/com/waves/registrationservice/client/EmailClient.java,b\6\b6ffff3f11be5abf8d9b58d83245d91e793d84b0
+ã
+[registration-service/src/main/java/com/waves/registrationservice/config/SecurityConfig.java,3\0\30b03f86fd13f2e0a5c61e6d11bc1d7dd544d440
+å
+\registration-service/src/main/java/com/waves/registrationservice/config/WebClientConfig.java,9\4\94c3bc498e65759d27143443393751f7e627f686
+Ñ
+Tregistration-service/src/main/java/com/waves/registrationservice/model/EmailDto.java,3\7\370599ba874be27ad3e04a8557be0858124c51e1
+Ä
+Pregistration-service/src/main/java/com/waves/registrationservice/model/User.java,6\2\6283952f8fa3a71b612e6ec8fd1e4e9b2482f894
+ã
+[registration-service/src/main/java/com/waves/registrationservice/model/UserRegisterDto.java,4\4\4468aff12746620ee3598a14a7f287d21c0f6fee
+è
+_registration-service/src/main/java/com/waves/registrationservice/repository/UserRepository.java,f\b\fb385b5b1667209c474a8724fb3063a4e01dc5bf
+L
+registration-service/pom.xml,c\e\ce13b7704c2f3808e8497bdd0d2142458caec255
+ó
+gregistration-service/src/main/java/com/waves/registrationservice/controller/RegistrationController.java,9\f\9f738f0ba308fc7d9c7de7e58a2a746289d30c47
+í
+bregistration-service/src/main/java/com/waves/registrationservice/services/RegistrationService.java,3\2\32ce3b8e59aa2f4c79d30017e53f85b2e9287232
+à
+Xservice-registry/src/main/java/com/waves/serviceregistry/ServiceRegistryApplication.java,9\5\95d92c2f0471f8a1822ec9b9973bf8c2fbc0b886
+î
+dregistration-service/src/main/java/com/waves/registrationservice/RegistrationServiceApplication.java,4\9\49893e1310a4039d8e2b61a5957500b9dab907ed
+É
+Sregistration-service/src/main/java/com/waves/registrationservice/model/UserDto.java,7\d\7de9ee2f975daffde15daf415c67148c66e7694f
+s
+Cuser-service/src/main/java/com/waves/userservice/model/UserDto.java,f\2\f2f4952ef71bb705ba93c875d015a7115a3100f2
+F
+api-gateway/.gitignore,f\f\ff1c5d5433a8148c17672f6832c630bb2426e4e9
+O
+authorization-server/.gitignore,5\3\53eaeea2bbb680e67130542b4c3ff27e29048827
+H
+email-service/.gitignore,c\1\c12e4122ab86a73b57591da9cfe65e8e326fa9ba
+O
+registration-service/.gitignore,b\1\b1c33923dfb22f9cb8d6e2289cc3db936e8630b8
+K
+service-registry/.gitignore,3\5\35f2355e849023183ef66a811c3101c8616a2f73
+G
+user-service/.gitignore,8\f\8fb4a2885731e1b858b46663b1d1abc16602014b

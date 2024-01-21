@@ -1,4 +1,4 @@
-package com.waves.userservice.model;
+package com.waves.registrationservice.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { generateOtp } from '../features/otpSlice';
+import { generateRandomOtp, sendEmail } from '../utils/authMethods'
 
 const OtpTimer = ({ expiryTime }) => {
 
@@ -25,9 +26,11 @@ const OtpTimer = ({ expiryTime }) => {
 
   const reSendOtp = () => {
 
-    dispatch(generateOtp())
-    // code to send the email
-
+    const otp = generateRandomOtp()
+    dispatch(generateOtp(otp))
+    const message = "Here is your otp: " + otp;
+    const subject = "OTP Verification - CrowdCraft.com"
+    sendEmail(userRegisterData.email,subject,message);
   }
 
   useEffect(() => {

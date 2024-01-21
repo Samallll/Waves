@@ -2,15 +2,19 @@
 
 .login-page {
   width: 700px;
-  padding: 8% 0 0;
-  margin: auto;
+  margin: 90px auto;
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 }
 .form {
   position: relative;
   z-index: 1;
   background: #FFFFFF;
   max-width: 360px;
-  margin: 0 auto 100px;
+  margin: 0 auto;
   padding: 45px;
   text-align: center;
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
@@ -78,6 +82,7 @@ a:hover, a:active {
 }
 body {
   background: #4169E1;
+  margin: 0px;
   font-family: "Roboto", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
