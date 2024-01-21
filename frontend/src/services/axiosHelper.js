@@ -1,0 +1,1 @@
+//method to send the requests , for otp validaion : get the body and the submitUrl

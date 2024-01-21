@@ -12,15 +12,21 @@ spring:
         - id: email-service-router
           uri: http://localhost:8091/
           predicates:
-            - Path=/email/**
+            - Path=/email-service/**
         - id: user-service-router
-          uri: http://localhost:8092/
+          uri: http://localhost:8092/api/v1
           predicates:
-            - Path=/user/**
+            - Path=/user-service/**
         - id: react-app
           uri: http://localhost:3000/
           predicates:
             - Path=/**
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "http://127.0.0.1:3000" # Include the scheme (http://)
+            allowedMethods: "*"
+            allowedHeaders: "*"
   security:
     oauth2:
       client:

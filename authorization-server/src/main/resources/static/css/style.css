@@ -59,6 +59,23 @@
   color: #4169E1;
   text-decoration: none;
 }
+
+
+a:link, a:visited {
+  background-color: white;
+  color: black;
+  padding: 14px 25px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border:1px solid #4169E1;
+}
+
+a:hover, a:active {
+  background-color: #4169E1;
+  color:white;
+  font-weight:bold;
+}
 body {
   background: #4169E1;
   font-family: "Roboto", sans-serif;

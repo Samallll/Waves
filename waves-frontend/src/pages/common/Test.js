@@ -44,7 +44,7 @@ function Test() {
   
   const getUserInfo=() => {
     
-    fetch("http://127.0.0.1:8090/userinfo",{
+    fetch("http://127.0.0.1:8090/me",{
       method:'GET',
       mode: 'no-cors'
     }).then(async (demoData) => {

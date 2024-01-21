@@ -21,7 +21,7 @@ function App() {
           <Route path='/redirect' element={<Redirect/>}/>
           <Route path='/registration' element={<Registration/>}/>
           <Route path='/authorized' element={<Redirect/>}/>
-          <Route path='/otp/verify' element={<OtpValidation/>}/>
+          <Route path='/login-success' element={<OtpValidation/>}/>
         </Routes>
       </BrowserRouter>
     </div>
