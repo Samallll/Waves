@@ -1,8 +1,7 @@
 @import url(https://fonts.googleapis.com/css?family=Roboto:300);
 
 .login-page {
-  width: 700px;
-  margin: 90px auto;
+  margin: auto;
   height: 100vh;
   display: flex;
   flex-direction: row;

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { setLoggedUser, setAuthenticated } from '../features/authSlice'; 
+import { fetchLoggedUser } from '../features/authSlice';
 
 function Redirect() {
   const dispatch = useDispatch();
@@ -16,27 +16,30 @@ function Redirect() {
           return;
         }
         const data = await response.json();
-        console.log(data.roles)
+        console.log(data)
         switch (data.roles) {
           case 'ADMIN':
             navigate('/admin');
+            console.log("admin")
+            dispatch(fetchLoggedUser(data.username));
             break;
           case 'USER':
             navigate('/user');
+            console.log("user")
+            dispatch(fetchLoggedUser(data.username));
             break;
           default:
+            console.log("default deviation")
             navigate('/home');
         }
       } catch (error) {
+        console.log("error navigation")
         navigate('/home');
       }
     };
 
     fetchUserData();
   }, []);
-    
-    
- 
   return null;
  }
  

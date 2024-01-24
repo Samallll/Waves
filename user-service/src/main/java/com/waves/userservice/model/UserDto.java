@@ -20,4 +20,6 @@ public class UserDto {
     private String emailId;
 
     private boolean isLocked;
+
+    private String phoneNumber;
 }

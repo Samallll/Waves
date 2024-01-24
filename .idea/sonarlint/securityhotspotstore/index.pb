@@ -18,8 +18,6 @@ fauthorization-server/src/main/java/com/waves/authorizationserver/service/Custom
 :
 
 .gitignore,a\5\a5cc2925ca8258af241be7e5b0381edf30266302
-{
-Kuser-service/src/main/java/com/waves/userservice/model/UserRegisterDto.java,9\d\9d4c530eeeb1f53e14378aed3c34a886fb5624d7
 D
 user-service/pom.xml,d\2\d2f5d1978e5f519100a679c4109f89296278badc
 z
@@ -90,8 +88,6 @@ bregistration-service/src/main/java/com/waves/registrationservice/services/Regis
 Xservice-registry/src/main/java/com/waves/serviceregistry/ServiceRegistryApplication.java,9\5\95d92c2f0471f8a1822ec9b9973bf8c2fbc0b886
 î
 dregistration-service/src/main/java/com/waves/registrationservice/RegistrationServiceApplication.java,4\9\49893e1310a4039d8e2b61a5957500b9dab907ed
-É
-Sregistration-service/src/main/java/com/waves/registrationservice/model/UserDto.java,7\d\7de9ee2f975daffde15daf415c67148c66e7694f
 s
 Cuser-service/src/main/java/com/waves/userservice/model/UserDto.java,f\2\f2f4952ef71bb705ba93c875d015a7115a3100f2
 F
@@ -106,3 +102,11 @@ K
 service-registry/.gitignore,3\5\35f2355e849023183ef66a811c3101c8616a2f73
 G
 user-service/.gitignore,8\f\8fb4a2885731e1b858b46663b1d1abc16602014b
+ô
+iauthorization-server/src/main/java/com/waves/authorizationserver/config/CustomAuthenticationProvider.java,f\d\fd3debf7f17c8dad83156914258425d47ee99c56
+ß
+wauthorization-server/src/main/java/com/waves/authorizationserver/config/MyOAuth2RefreshTokenAuthenticationProvider.java,4\7\47131fa152cd14ed90e674edd437aad83c9667d5
+ü
+oauthorization-server/src/main/java/com/waves/authorizationserver/config/MyOidcLogoutAuthenticationProvider.java,9\0\90bb475126d8c50a873dd373b2dc0193896e30c7
+è
+_api-gateway/src/main/java/com/waves/apigateway/config/CustomTokenRelayGatewayFilterFactory.java,e\8\e878492dbb9cc23bacd28de9e07e74b069d6e1d2

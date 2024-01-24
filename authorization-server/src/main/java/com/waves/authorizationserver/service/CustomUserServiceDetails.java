@@ -5,6 +5,8 @@ import com.waves.authorizationserver.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.authentication.AccountExpiredException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -13,8 +15,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
 import org.springframework.stereotype.Service;
 
+import javax.security.auth.login.AccountLockedException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -31,10 +35,14 @@ public class CustomUserServiceDetails implements UserDetailsService {
 
         User user = userRepository.findByEmailId(username);
         if(user != null){
+            if(user.isLocked()){
+                throw new AccountExpiredException("Account locked by Admin");
+            }
             return user;
         }
         throw new UsernameNotFoundException("UserName not found");
     }
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {

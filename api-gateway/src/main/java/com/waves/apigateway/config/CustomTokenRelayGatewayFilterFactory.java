@@ -41,7 +41,8 @@ public class CustomTokenRelayGatewayFilterFactory extends TokenRelayGatewayFilte
 
     private final ServerOAuth2AuthorizedClientRepository authorizedClientRepository;
     private final WebClient.Builder webClientBuilder;
-    private final Duration accessTokenExpiresSkew = Duration.ofMinutes(10);
+    private final Duration accessTokenExpiresSkew = Duration.ofMinutes(1);
+    //buffer time : used for calculating the new expiration time (to overcome system clock differences)
 
     public CustomTokenRelayGatewayFilterFactory(
             ObjectProvider<ReactiveOAuth2AuthorizedClientManager> clientManagerProvider,

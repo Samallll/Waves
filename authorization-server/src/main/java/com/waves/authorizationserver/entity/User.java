@@ -35,7 +35,7 @@ public class User implements UserDetails {
 
     private String phoneNumber;
 
-    private boolean isLocked=false;
+    private boolean isLocked = false;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

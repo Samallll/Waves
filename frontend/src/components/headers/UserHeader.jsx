@@ -1,17 +1,19 @@
 import React from 'react'
 import { Link,NavLink } from 'react-router-dom'
 import Logo from './Logo'
+import { AppBar } from '@mui/material';
 
 function UserHeader() {
 
     const logoutURI = import.meta.env.VITE_LOGOUT_URI;
 
     function logout(){
+        localStorage.removeItem('logged_user');
         window.location.href = "http://127.0.0.1:8090/logout"
     }
     
   return (
-        <header className="shadow sticky z-50 top-0">
+        <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
             <nav className="bg-white border-gray-200 px-4 lg:px-6 py-2.5">
                 <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
                     <Logo/>
@@ -82,7 +84,7 @@ function UserHeader() {
                     </div>
                 </div>
             </nav>
-        </header>
+        </AppBar>
   )
 }
 

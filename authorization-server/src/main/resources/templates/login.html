@@ -10,7 +10,8 @@
         <h1>Let's grow together!!</h1>
         <h2>Please Log In</h2>
         <div class="error" th:if="${param.error}">
-            Invalid username and password.</div>
+            Invalid Username or Password.
+        </div>
         <div class="error" th:if="${param.logout}">
             You have been logged out.</div>
         <form  class="login-form" th:action="@{/login}" method="post">

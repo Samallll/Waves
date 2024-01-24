@@ -3,6 +3,7 @@ package com.waves.userservice.services;
 import com.waves.userservice.model.User;
 import com.waves.userservice.model.UserDto;
 import com.waves.userservice.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
@@ -23,12 +25,24 @@ public class UserService implements UserDetailsService {
         this.userRepository = userRepository;
     }
 
-    public boolean toggleLockStatus(Long userId){
+    public boolean lockUser(Long userId){
 
         Optional<User> user = userRepository.findById(userId);
         if(user.isPresent()){
             User editUser = user.get();
-            editUser.setLocked(!editUser.isLocked());
+            editUser.setLocked(true);
+            userRepository.save(editUser);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean unlockUser(Long userId){
+
+        Optional<User> user = userRepository.findById(userId);
+        if(user.isPresent()){
+            User editUser = user.get();
+            editUser.setLocked(false);
             userRepository.save(editUser);
             return true;
         }
@@ -59,8 +73,44 @@ public class UserService implements UserDetailsService {
                         user.getFullName(),
                         user.getRole(),
                         user.getEmailId(),
-                        user.isLocked()
+                        user.isLocked(),
+                        user.getPhoneNumber()
                 ))
                 .toList();
+    }
+
+    public Optional<UserDto> getuserDetails(Long userId) {
+
+        Optional<User> user = userRepository.findById(userId);
+        if(user.isPresent()){
+            UserDto userDto = userToUserDtoMapper(user.get());
+            log.debug("UserService : User Mapped to UserDto");
+            return Optional.of(userDto);
+        }
+        log.error("User not found");
+        return Optional.empty();
+    }
+
+    private static UserDto userToUserDtoMapper(User user) {
+        UserDto userDto = new UserDto();
+        userDto.setUserId(user.getUserId());
+        userDto.setLocked(user.isLocked());
+        userDto.setRole(user.getRole());
+        userDto.setEmailId(user.getEmailId());
+        userDto.setPhoneNumber(user.getPhoneNumber());
+        userDto.setFullName(user.getFullName());
+        return userDto;
+    }
+
+    public Optional<UserDto> getuserDetailsByEmail(String email) {
+
+        Optional<User> user = userRepository.findByEmailId(email);
+        if(user.isPresent()){
+            UserDto userDto = userToUserDtoMapper(user.get());
+            log.debug("UserService : User Mapped to UserDto");
+            return Optional.of(userDto);
+        }
+        log.error("User not found");
+        return Optional.empty();
     }
 }
