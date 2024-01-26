@@ -58,7 +58,7 @@ public class UserController {
     }
 
     @GetMapping("/email/{email}")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<UserDto> getUserDetails(@PathVariable String email){
         Optional<UserDto> userDto = userService.getuserDetailsByEmail(email);
         return userDto.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_MODIFIED).body(null));
@@ -76,6 +76,14 @@ public class UserController {
         return userUpdationStatus?
             ResponseEntity.status(HttpStatus.OK).body("User data updated"):
             ResponseEntity.status(HttpStatus.NOT_MODIFIED).body("Failed to update the data");
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/search-user/{emailId}")
+    public ResponseEntity<List<UserDto>> searchUsersByEmailId(@PathVariable String emailId){
+
+        List<UserDto> users = userService.findUsersByEmailId(emailId);
+        return ResponseEntity.status(HttpStatus.OK).body(users);
     }
 
     @GetMapping("/hello")

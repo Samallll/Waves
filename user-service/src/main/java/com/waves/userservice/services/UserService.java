@@ -134,4 +134,13 @@ public class UserService implements UserDetailsService {
         log.debug("User data not found");
         return false;
     }
+
+    public List<UserDto> findUsersByEmailId(String emailId) {
+
+        List<User> users = userRepository.findByEmailIdContaining(emailId);
+        return users.stream()
+                .filter(user -> !user.getRole().equals("ADMIN"))
+                .map(UserService::userToUserDtoMapper)
+                .toList();
+    }
 }

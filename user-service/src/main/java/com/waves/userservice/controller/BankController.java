@@ -1,12 +1,14 @@
 package com.waves.userservice.controller;
 
 import com.waves.userservice.model.Bank;
+import com.waves.userservice.model.UserDto;
 import com.waves.userservice.services.BankService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -24,7 +26,6 @@ public class BankController {
     public ResponseEntity<Bank> bankDetailsForUser(@PathVariable Long userId){
 
         Optional<Bank> bank = bankService.getBankDetailsForUser(userId);
-        System.out.println(bank.get().getBankId());
         return bank.map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
