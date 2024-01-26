@@ -5,8 +5,10 @@ import logo from '../assets/square-logo.jpg'
 
 function AdminLayout() {
 
+  const logoutURI = import.meta.env.VITE_LOGOUT_URI
+
   function logout(){
-    window.location.href = "http://127.0.0.1:8090/logout"
+    window.location.href = logoutURI
   }
 
   return (

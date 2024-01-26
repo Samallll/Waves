@@ -11,6 +11,9 @@ import { Provider } from 'react-redux'
 import store from './store/store'
 import Redirect from './components/Redirect'
 import AdminRoutes from './routes/AdminRoutes'
+import ForgotPassword from './components/forms/ForgotPassword'
+import OtpValidation from './components/forms/OtpValidation'
+import ConfirmPasswordForm from './components/forms/ConfirmPasswordForm'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -19,9 +22,12 @@ const router = createBrowserRouter(
         <Route path='' element={<Redirect />}/>
         <Route path='/home' element={<Home/>}/>
         <Route path='/register' element={<SignUpForm/>}/>
-        <Route path='/otp' element={<OtpForm submitURL="http://127.0.0.1:8090/user/"/>}/>
+        <Route path='/otp' element={<OtpForm/>}/>
         <Route path='user/*' element={<UserRoutes />} />
         <Route path='admin/*' element={<AdminRoutes />} />
+        <Route path='/forgot-password' element={<ForgotPassword />} />
+        <Route path='/otpValidate' element={<OtpValidation />} />
+        <Route path='/password-confirmation' element={<ConfirmPasswordForm/>}/>
       </Route>
   )
 )

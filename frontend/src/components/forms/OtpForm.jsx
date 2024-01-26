@@ -4,17 +4,14 @@ import { Link, useNavigate } from 'react-router-dom';
 import OtpTimer from '../OtpTimer';
 import { useSelector } from 'react-redux';
 
-function OtpForm(props) {
+function OtpForm() {
 
-    const submitURL = props.submitURL;
     const [error,setError] = useState("");
     const [otp,setOtp] = useState("");
     const otpStored = useSelector((state) => state.otp);
     const navigate = useNavigate();
 
-    if (!props.submitURL) {
-        throw new Error('OtpForm component requires a "submitURL" prop');
-    }
+    const registerUri = import.meta.env.VITE_REGISTRATION_SERVICE_BASE_URI
     
     const handleSubmit = (e) => {
 
@@ -40,7 +37,7 @@ function OtpForm(props) {
         const user = sessionStorage.getItem("userRegistrationData");
         const userData = JSON.parse(user);
         
-        const url = "http://127.0.0.1:8090/api/v1/register/user"; 
+        const url = `${registerUri}/user`; 
         const userRegisterDto = { 
             emailId:userData.email,
             fullName:userData.fullName,

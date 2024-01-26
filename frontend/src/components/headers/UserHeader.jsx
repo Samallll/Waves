@@ -2,14 +2,18 @@ import React from 'react'
 import { Link,NavLink } from 'react-router-dom'
 import Logo from './Logo'
 import { AppBar } from '@mui/material';
+import { useSelector } from 'react-redux';
 
 function UserHeader() {
 
     const logoutURI = import.meta.env.VITE_LOGOUT_URI;
 
+    const loggedUser = useSelector((state)=> state.auth.loggedUser)
+    const userId = loggedUser ? loggedUser.userId : "";
+
     function logout(){
         localStorage.removeItem('logged_user');
-        window.location.href = "http://127.0.0.1:8090/logout"
+        window.location.href = logoutURI
     }
     
   return (
@@ -19,7 +23,7 @@ function UserHeader() {
                     <Logo/>
                     <div className="flex items-center lg:order-2">
                         <Link
-                            to="/user/register"
+                            to={`/user/${userId}`}
                             className="text-gray-800 hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 focus:outline-none"
                         >
                             Profile

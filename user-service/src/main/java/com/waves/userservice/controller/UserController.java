@@ -1,6 +1,8 @@
 package com.waves.userservice.controller;
 
+import com.waves.userservice.model.Bank;
 import com.waves.userservice.model.UserDto;
+import com.waves.userservice.services.BankService;
 import com.waves.userservice.services.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -51,7 +53,7 @@ public class UserController {
     @GetMapping("/{userId}")
 //    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<UserDto> getUserDetails(@PathVariable Long userId){
-        Optional<UserDto> userDto = userService.getuserDetails(userId);
+        Optional<UserDto> userDto = userService.getUserDtoDetails(userId);
         return userDto.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_MODIFIED).body(null));
     }
 
@@ -62,6 +64,19 @@ public class UserController {
         return userDto.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_MODIFIED).body(null));
     }
 
+    @PreAuthorize("hasAnyRole('USER','HOST','ADMIN')")
+    @PutMapping("/update-user")
+    public ResponseEntity<String> updateUser(@RequestBody UserDto userDto){
+
+        if(userDto.getUserId() == null){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid User Id");
+        }
+        boolean userUpdationStatus = userService.updateUser(userDto);
+
+        return userUpdationStatus?
+            ResponseEntity.status(HttpStatus.OK).body("User data updated"):
+            ResponseEntity.status(HttpStatus.NOT_MODIFIED).body("Failed to update the data");
+    }
 
     @GetMapping("/hello")
     public ResponseEntity<String> testing(){

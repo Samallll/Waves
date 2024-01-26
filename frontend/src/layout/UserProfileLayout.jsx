@@ -13,15 +13,14 @@ import EditIcon from '@mui/icons-material/Edit';
 import AccountBoxOutlinedIcon from '@mui/icons-material/AccountBoxOutlined';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const drawerWidth = 240;
 
 export default function UserProfileLayout() {
 
   const navigate = useNavigate();
-  const { userId } = useParams();
-
-
+  const loggedUser = useSelector((state)=>state.auth.loggedUser)
   // Add the logic to check whether the logged in user id is equal to the entered url userId
 
   return (
@@ -42,8 +41,7 @@ export default function UserProfileLayout() {
                 }}}>
           <List sx={{ my: 4, padding: '5px' }}>
             <ListItem disablePadding className='hover:bg-blue-200'>
-              <ListItemButton onClick={()=>navigate('/user/1')}> 
-              {/* provide the userid in the link */}
+              <ListItemButton onClick={()=>navigate(`/user/${loggedUser.userId}`)}> 
                 <ListItemIcon>
                   <AccountBoxOutlinedIcon color='primary'/>
                 </ListItemIcon>
@@ -51,7 +49,7 @@ export default function UserProfileLayout() {
               </ListItemButton>
             </ListItem>
             <ListItem disablePadding className='hover:bg-blue-200'>
-              <ListItemButton onClick={()=>navigate('/user/1/edit')}> 
+              <ListItemButton onClick={()=>navigate(`/user/${loggedUser.userId}/edit`)}> 
               {/* provide the userid in the link */}
                 <ListItemIcon>
                   <EditIcon color='primary'/>
@@ -60,21 +58,11 @@ export default function UserProfileLayout() {
               </ListItemButton>
             </ListItem>
             <ListItem disablePadding className='hover:bg-blue-200'>
-              <ListItemButton onClick={()=>navigate('/user/1/1')}> 
-              {/* provide the userid in the link */}
+              <ListItemButton onClick={()=>navigate(`/user/${loggedUser.userId}/bank`)}> 
                 <ListItemIcon >
                   <AccountBalanceIcon color='primary'/>
                 </ListItemIcon>
                 <ListItemText primary="Bank Details"/>
-              </ListItemButton>
-            </ListItem>
-            <ListItem disablePadding className='hover:bg-blue-200'>
-              <ListItemButton onClick={()=>navigate('/user/1/1/edit')}> 
-              {/* provide the userid in the link */}
-                <ListItemIcon >
-                  <AccountBalanceIcon color='primary'/>
-                </ListItemIcon>
-                <ListItemText primary="Edit Bank Details"/>
               </ListItemButton>
             </ListItem>
           </List>

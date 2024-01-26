@@ -1,5 +1,7 @@
 import { createSlice,createAsyncThunk } from "@reduxjs/toolkit";
 
+const baseUrl = import.meta.env.VITE_USER_SERVICE_BASE_URI
+
 const getLoggedUserFromLocalStorage = () => {
     try{
         return JSON.parse(localStorage.getItem('logged_user') || '')
@@ -11,7 +13,7 @@ const getLoggedUserFromLocalStorage = () => {
 
 export const fetchLoggedUser = createAsyncThunk("auth/fetchLoggedUser", async (email) => {
     try {
-       const response = await fetch(`http://127.0.0.1:8090/api/v1/user/email/${email}`);
+       const response = await fetch(`${baseUrl}/email/${email}`);
        const loggedUser = await response.json();
        localStorage.setItem('logged_user',JSON.stringify(loggedUser));
        return loggedUser;
@@ -38,7 +40,11 @@ const authSlice = createSlice({
             state.loggedUser = {
                 ...state.loggedUser,
                 role: action.payload.role !== undefined ? action.payload.role : state.loggedUser.role,
-                email: action.payload.email !== undefined ? action.payload.email : state.loggedUser.email,
+                emailId: action.payload.emailId !== undefined ? action.payload.emailId : state.loggedUser.emailId,
+                fullName: action.payload.fullName !== undefined ? action.payload.fullName : state.loggedUser.fullName,
+                phoneNumber: action.payload.phoneNumber !== undefined ? action.payload.phoneNumber : state.loggedUser.phoneNumber,
+                userId: action.payload.userId !== undefined ? action.payload.userId : state.loggedUser.userId,
+                isLocked: action.payload.userId !== undefined ? action.payload.isLocked : state.loggedUser.isLocked
               };
               localStorage.setItem('logged_user', JSON.stringify(state.loggedUser));
         }
@@ -49,10 +55,8 @@ const authSlice = createSlice({
                 console.log("Fetching the data from backend");
             })
             .addCase(fetchLoggedUser.fulfilled, (state, action) => {
-                console.log("Fetching completed..");
+                console.log("Completed fetching..");
                 state.loggedUser = action.payload;
-                console.log(action.payload);
-                console.log("Success");
             })
             .addCase(fetchLoggedUser.rejected, (state, action) => {
                 console.log("Failed");

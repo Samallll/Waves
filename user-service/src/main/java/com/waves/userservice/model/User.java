@@ -37,6 +37,9 @@ public class User implements UserDetails {
 
     private boolean isLocked=false;
 
+    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL)
+    private Bank bank;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority>  authorities = new ArrayList<>();

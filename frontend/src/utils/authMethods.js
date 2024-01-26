@@ -1,3 +1,5 @@
+const userServiceUri = import.meta.env.VITE_USER_SERVICE_BASE_URI
+const emailServiceUri = import.meta.env.VITE_EMAIL_SERVICE_BASE_URI
 
 export const generateRandomOtp = () => {
     
@@ -20,7 +22,7 @@ export const sendEmail = (toList,subject,body) => {
         body
     }
 
-    fetch('http://127.0.0.1:8090/api/v1/email/sendMail', {
+    fetch(`${emailServiceUri}/sendMail`, {
         method: 'POST',
         body: JSON.stringify(emailDto),
         headers: { 'Content-Type': 'application/json' }
@@ -30,7 +32,7 @@ export const sendEmail = (toList,subject,body) => {
 
 export const lockUser = (userId) => {
 
-    fetch(`http://127.0.0.1:8090/api/v1/user/lock/${userId}`) 
+    fetch(`${userServiceUri}/lock/${userId}`) 
     .then(response => response.text()) 
     .then(responseData => {
         console.log(responseData); 
@@ -43,7 +45,7 @@ export const lockUser = (userId) => {
 
 export const unlockUser = (userId) => {
 
-    fetch(`http://127.0.0.1:8090/api/v1/user/unlock/${userId}`) 
+    fetch(`${userServiceUri}/unlock/${userId}`) 
     .then(response => response.text()) 
     .then(responseData => {
         console.log(responseData); 
@@ -56,11 +58,25 @@ export const unlockUser = (userId) => {
 
 export const whomami = (email) => {
 
-    fetch(`http://127.0.0.1:8090/api/v1/user/email/${email}`)
+    fetch(`${userServiceUri}/email/${email}`)
     .then(response => response.json())
     .then(responseData => {
         console.log(responseData);
         return responseData;
     })
     
+}
+
+export const loggedUserUpdate = (userData) => {
+    try {
+        const response = fetch(`${userServiceUri}/update-user`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(userData),
+        });
+    } catch (error) {
+        console.error('Error updating user:', error);
+    }
 }

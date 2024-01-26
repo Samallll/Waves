@@ -6,10 +6,12 @@ function UserManagement() {
     const [records ,setRecords] = useState([]);
     const [toggled,setToggled] = useState(false);
     const [search,setSearch] = useState("");
+    const userServiceUri = import.meta.env.VITE_USER_SERVICE_BASE_URI
+    
 
     useEffect(() => {
 
-        fetch('http://127.0.0.1:8090/api/v1/user/all-users') 
+        fetch(`${userServiceUri}/all-users`) 
         .then(response => response.json())
         .then(responseData => {
           setRecords(responseData);

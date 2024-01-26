@@ -5,6 +5,7 @@ import com.waves.registrationservice.model.User;
 import com.waves.registrationservice.model.UserRegisterDto;
 import com.waves.registrationservice.services.RegistrationService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,6 +33,18 @@ public class RegistrationController {
             return ResponseEntity.status(HttpStatus.CREATED).body("User created successfully");
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User creation failed");
+        }
+    }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<String> changePassword(@RequestBody UserRegisterDto userRegisterDto ){
+
+        boolean passwordToggle = registrationService.changePassword(userRegisterDto.getEmailId(),userRegisterDto.getPassword());
+        if(passwordToggle){
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body("Password updated successfully");
+        }
+        else{
+            return ResponseEntity.status(HttpStatus.NOT_MODIFIED).body("Password modification failed");
         }
     }
 

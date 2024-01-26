@@ -110,3 +110,11 @@ wauthorization-server/src/main/java/com/waves/authorizationserver/config/MyOAuth
 oauthorization-server/src/main/java/com/waves/authorizationserver/config/MyOidcLogoutAuthenticationProvider.java,9\0\90bb475126d8c50a873dd373b2dc0193896e30c7
 è
 _api-gateway/src/main/java/com/waves/apigateway/config/CustomTokenRelayGatewayFilterFactory.java,e\8\e878492dbb9cc23bacd28de9e07e74b069d6e1d2
+p
+@user-service/src/main/java/com/waves/userservice/model/Bank.java,c\8\c8ca98b4659aa3ab283d1c6cd4c2e9fc5488d6be
+
+Ouser-service/src/main/java/com/waves/userservice/repository/BankRepository.java,c\e\cebc3caf629ce3d4d581e6d6206e871b9ae3a8d9
+z
+Juser-service/src/main/java/com/waves/userservice/services/BankService.java,d\9\d9e5481be24f1f9bb4aaa38adafbefa5c92c6aef
+
+Ouser-service/src/main/java/com/waves/userservice/controller/BankController.java,7\7\77b6c496631952068bce64ed9cead3146851555c

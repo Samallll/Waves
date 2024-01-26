@@ -1,10 +1,10 @@
 import React from 'react'
-import { useState,useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useEffect,useState } from 'react';
+import {useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-function EditBankDetails() {
-
+function AddBankDetails() {
+  
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [error,setError] = useState("");
     const navigate = useNavigate();
@@ -32,6 +32,7 @@ function EditBankDetails() {
     const handleSubmit = (e) => {
 
         e.preventDefault();
+
         if (!bankDetails.beneficiaryName.trim()) {
             setError('Beneficiary Name is required');
             return;
@@ -56,7 +57,33 @@ function EditBankDetails() {
             setError('IFSC Code is not valid');
             return;
           }
+          setError("")
+
         openModal();
+    }
+
+    const submitForm = async () => {
+
+        try {
+            const response = await fetch(`${userServiceUri}/bank/add/${loggedUser.userId}`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(bankDetails),
+            });
+            if (response.ok) {
+              const data = await response.text();
+              console.log('Bank details created:', data);
+              navigate(`/user/${loggedUser.userId}/bank`)
+            } else {
+              console.error('Failed to create bank details:', response.statusText);
+            }
+          } catch (error) {
+            console.error('Error creating bank details:', error);
+          }
+
+          closeModal();
     }
 
     const handleChange = (e) => {
@@ -66,51 +93,6 @@ function EditBankDetails() {
         })
     }
 
-    const submitForm = async () => {
-        
-        try {
-        const response = await fetch(`${userServiceUri}/bank/update/${loggedUser.userId}`, {
-            method: 'PUT',
-            headers: {
-            'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(bankDetails),
-        });
-        if (response.ok) {
-            const data = await response.text();
-            console.log('Bank details updated:', data);
-            navigate(`/user/${loggedUser.userId}/bank`)
-        } else {
-            console.error('Failed to create bank details:', response.statusText);
-        }
-        } catch (error) {
-        console.error('Error creating bank details:', error);
-        }
-
-        closeModal();
-    }
-
-    useEffect(()=>{
-
-        async function fetchUserBankDetails() {
-            try {
-                const response = await fetch(`${userServiceUri}/bank/${loggedUser.userId}`);
-                if (!response.ok) {
-                    throw new Error('Details not found');
-                }
-                const data = await response.json();
-                if(data.bankId === ""){
-                    setError("Please provide your bank details for transactions")
-                }
-                setBankDetails(data);
-            } catch (error) {
-                console.error('Error fetching user bank details:', error);
-            }
-        }
-
-        fetchUserBankDetails();
-    },[loggedUser.userId])
-
   return (
     <section className="py-10 bg-gray-800 sm:py-16 lg:py-24">
         <div className="px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl">
@@ -118,7 +100,7 @@ function EditBankDetails() {
               
                 <div className="overflow-hidden bg-gray-100 rounded-xl">
                     <div className="px-6 py-12 sm:p-12">
-                        <h3 className="text-3xl font-semibold text-center text-gray-900">Edit Account Details</h3>
+                        <h3 className="text-3xl font-semibold text-center text-gray-900">Add Account Details</h3>
                         { error && <h4 className='font-bold text-white bg-red-600 text-center my-4 mx-5 p-3 rounded border'>{error}</h4>}
                         <form className="mt-6" onSubmit={handleSubmit}>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5 gap-y-4">
@@ -194,7 +176,7 @@ function EditBankDetails() {
                                     className="block mt-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                                     type="submit"
                                 >
-                                    Save Changes
+                                    Submit
                                 </button>
 
                                 {isModalOpen && (
@@ -275,4 +257,4 @@ function EditBankDetails() {
   )
 }
 
-export default EditBankDetails
+export default AddBankDetails

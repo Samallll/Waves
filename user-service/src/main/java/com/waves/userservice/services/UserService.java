@@ -79,7 +79,7 @@ public class UserService implements UserDetailsService {
                 .toList();
     }
 
-    public Optional<UserDto> getuserDetails(Long userId) {
+    public Optional<UserDto> getUserDtoDetails(Long userId) {
 
         Optional<User> user = userRepository.findById(userId);
         if(user.isPresent()){
@@ -89,6 +89,10 @@ public class UserService implements UserDetailsService {
         }
         log.error("User not found");
         return Optional.empty();
+    }
+
+    public Optional<User> getUserDetails(Long userId) {
+        return userRepository.findById(userId);
     }
 
     private static UserDto userToUserDtoMapper(User user) {
@@ -112,5 +116,22 @@ public class UserService implements UserDetailsService {
         }
         log.error("User not found");
         return Optional.empty();
+    }
+
+    public boolean updateUser(UserDto userDto) {
+
+        Optional<User> user = userRepository.findById(userDto.getUserId());
+        if(user.isPresent()){
+            user.get().setLocked(userDto.isLocked());
+            user.get().setRole(userDto.getRole());
+            user.get().setPhoneNumber(userDto.getPhoneNumber());
+            user.get().setFullName(userDto.getFullName());
+            user.get().setEmailId(userDto.getEmailId());
+            userRepository.save(user.get());
+            log.trace("User data updated successfully");
+            return true;
+        }
+        log.debug("User data not found");
+        return false;
     }
 }

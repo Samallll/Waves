@@ -7,6 +7,7 @@ const OtpTimer = ({ expiryTime }) => {
 
     const [error,setError] = useState("");
     const dispatch = useDispatch();  
+    const registeredEmail = localStorage.getItem("registeredEmail");
 
   const calculateTimeLeft = () => {
     const difference = expiryTime - Date.now();
@@ -30,7 +31,7 @@ const OtpTimer = ({ expiryTime }) => {
     dispatch(generateOtp(otp))
     const message = "Here is your otp: " + otp;
     const subject = "OTP Verification - CrowdCraft.com"
-    sendEmail(userRegisterData.email,subject,message);
+    sendEmail(registeredEmail,subject,message);
   }
 
   useEffect(() => {

@@ -8,6 +8,7 @@ import { generateRandomOtp, sendEmail } from '../../utils/authMethods';
 function SignUpForm() {
 
     const loginURI = import.meta.env.VITE_LOGIN_URI;
+    const registerURI = import.meta.env.VITE_REGISTRATION_SERVICE_BASE_URI
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -52,7 +53,7 @@ function SignUpForm() {
 
     async function checkEmailAvailability() {
       
-        await fetch(`http://127.0.0.1:8090/api/v1/register/emailCheck?email=${encodeURIComponent(userRegisterData.email)}`)
+        await fetch(`${registerURI}/emailCheck?email=${encodeURIComponent(userRegisterData.email)}`)
         .then((response) => {
             if (response.ok) {
               response.text().then((existingEmailId) => {
@@ -61,6 +62,7 @@ function SignUpForm() {
                     dispatch(generateOtp(otp))
                     const message = "Here is your otp: " + otp;
                     const subject = "OTP Verification - CrowdCraft.com"
+                    localStorage.setItem('registeredEmail',userRegisterData.email);
                     sendEmail(userRegisterData.email,subject,message);
                     sessionStorage.setItem("userRegistrationData", JSON.stringify(userRegisterData));
                     navigate("/otp");

@@ -5,6 +5,7 @@ import com.waves.registrationservice.model.EmailDto;
 import com.waves.registrationservice.model.User;
 import com.waves.registrationservice.model.UserRegisterDto;
 import com.waves.registrationservice.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class RegistrationService implements UserDetailsService {
 
     private final UserRepository userRepository;
@@ -25,6 +27,19 @@ public class RegistrationService implements UserDetailsService {
     public RegistrationService(UserRepository userRepository, EmailClient emailClient) {
         this.userRepository = userRepository;
         this.emailClient = emailClient;
+    }
+
+    public boolean changePassword(String email, String newPassword){
+
+        Optional<User> user = userRepository.findByEmailId(email);
+        if(user.isPresent()){
+            user.get().setPassword(passwordEncoder().encode(newPassword));
+            userRepository.save(user.get());
+            log.trace("User found in Database");
+            return true;
+        }
+        log.debug("User not found!");
+        return false;
     }
 
     public Optional<User> getUserByEmailId(String emailId){
