@@ -1,48 +1,40 @@
 import React, { useState,useEffect } from 'react'
 import DataTable from 'react-data-table-component'
 import { lockUser,unlockUser } from '../../utils/authMethods';
+import { Pagination } from '@mui/material';
 
 function UserManagement() {
     const [records ,setRecords] = useState([]);
     const [toggled,setToggled] = useState(false);
     const [searchData,setSearchData] = useState("");
+    const [page, setPage] = useState(0);
+    const [pageSize, setPageSize] = useState(10);
+    const [totalPages, setTotalPages] = useState(0);
     const userServiceUri = import.meta.env.VITE_USER_SERVICE_BASE_URI
     
+
+    const fetchUsers = async () => {
+      try {
+        const response = await fetch(`${userServiceUri}/users?page=${page}&size=${pageSize}&searchQuery=${searchData}`);
+        const data = await response.json();
+        setRecords(data.content);
+        setTotalPages(data.totalPages);
+      } catch (error) {
+        console.error('Error fetching users:', error);
+      }
+    };
+
     useEffect(() => {
-      const searchUser = async (searchTerm) => {
-        try {
-          let response;
-          if (searchTerm === '') {
-            response = await fetch(`${userServiceUri}/all-users`);
-          } else {
-            response = await fetch(`${userServiceUri}/search-user/${searchTerm}`);
-          }
-          const data = await response.json();
-          setRecords(data);
-        } catch (error) {
-          console.error('Error fetching data:', error);
-        }
-      };
+      fetchUsers();
+    }, [page, pageSize, searchData,toggled]);
   
-      searchUser(searchData);
-    }, [searchData]);
+    const handlePageChange = (event, value) => {
+      setPage(value - 1);
+    };
   
     const searchChange = (event) => {
       setSearchData(event.target.value);
     };
-
-    useEffect(() => {
-
-        fetch(`${userServiceUri}/all-users`) 
-        .then(response => response.json())
-        .then(responseData => {
-          setRecords(responseData);
-        })
-        .catch(error => {
-          console.error('Error fetching data:', error);
-        });
-
-    },[toggled])
 
     const handleBlock = (row) => {
         lockUser(row.userId);
@@ -111,7 +103,6 @@ function UserManagement() {
             className='my-5 py-5 px-6 border'
             columns ={coloumn}
             data = {records}
-            pagination
             customStyles={{
                 headCells : {
                 style: {
@@ -133,6 +124,15 @@ function UserManagement() {
             }}
             >    
         </DataTable>
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+          <Pagination
+            count={totalPages}
+            page={page + 1}
+            onChange={handlePageChange}
+            variant="outlined"
+            shape="rounded"
+          />
+        </div>
     </>
   )
 }

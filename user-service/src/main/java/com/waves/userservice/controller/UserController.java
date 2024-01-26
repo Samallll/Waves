@@ -5,6 +5,9 @@ import com.waves.userservice.model.UserDto;
 import com.waves.userservice.services.BankService;
 import com.waves.userservice.services.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -85,6 +88,18 @@ public class UserController {
         List<UserDto> users = userService.findUsersByEmailId(emailId);
         return ResponseEntity.status(HttpStatus.OK).body(users);
     }
+
+    @GetMapping("/users")
+    public ResponseEntity<Page<UserDto>> getUsersByPaginationAndSearch(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String searchQuery) {
+        
+        Pageable pageable = PageRequest.of(page, size);
+        Page<UserDto> usersPage = userService.getUsersByPaginationAndSearch(pageable, searchQuery);
+        return ResponseEntity.ok(usersPage);
+    }
+
 
     @GetMapping("/hello")
     public ResponseEntity<String> testing(){

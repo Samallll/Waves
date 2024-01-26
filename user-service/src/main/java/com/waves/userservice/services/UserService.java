@@ -5,6 +5,9 @@ import com.waves.userservice.model.UserDto;
 import com.waves.userservice.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -142,5 +145,22 @@ public class UserService implements UserDetailsService {
                 .filter(user -> !user.getRole().equals("ADMIN"))
                 .map(UserService::userToUserDtoMapper)
                 .toList();
+    }
+
+    public Page<UserDto> getUsersByPaginationAndSearch(Pageable pageable, String searchQuery) {
+
+        Page<User> result;
+        if (searchQuery != null && !searchQuery.isEmpty()) {
+            result = userRepository.findByEmailIdContaining(searchQuery, pageable);
+        } else {
+            result = userRepository.findAll(pageable);
+        }
+        List<UserDto> userDtos = result.getContent()
+                .stream()
+                .filter(user -> !user.getRole().equals("ADMIN"))
+                .map(UserService::userToUserDtoMapper)
+                .toList();
+        log.debug("Converted paginated User list into UserDtos");
+        return new PageImpl<>(userDtos, pageable, result.getTotalElements());
     }
 }
