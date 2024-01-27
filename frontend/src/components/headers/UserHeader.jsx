@@ -11,6 +11,14 @@ function UserHeader() {
     const loggedUser = useSelector((state)=> state.auth.loggedUser)
     const userId = loggedUser ? loggedUser.userId : "";
 
+    useEffect(()=>{
+
+        if(loggedUser.role === "HOST"){
+            setHostId()
+        }
+
+    },[])
+
     function logout(){
         localStorage.removeItem('logged_user');
         window.location.href = logoutURI
@@ -45,7 +53,7 @@ function UserHeader() {
                                 to="/"
                                     className={({isActive}) =>
                                         `block py-2 pr-4 pl-3 duration-200 border-b border-gray-100 
-                                        ${isActive ? "text-orange-700" : "text-gray-700" } lg:hover:bg-transparent lg:border-0 hover:text-orange-700 lg:p-0`
+                                        ${isActive ? "text-blue-700" : "text-gray-700" } lg:hover:bg-transparent lg:border-0 hover:text-blue-700 lg:p-0`
                                     }
                                 >
                                     Home
@@ -56,7 +64,7 @@ function UserHeader() {
                                 to="/about"
                                     className={({isActive}) =>
                                         `block py-2 pr-4 pl-3 duration-200 border-b border-gray-100 
-                                        ${isActive ? "text-orange-700" : "text-gray-700" } lg:hover:bg-transparent lg:border-0 hover:text-orange-700 lg:p-0`
+                                        ${isActive ? "text-blue-700" : "text-gray-700" } lg:hover:bg-transparent lg:border-0 hover:text-blue-700 lg:p-0`
                                     }
                                 >
                                     Events
@@ -67,22 +75,38 @@ function UserHeader() {
                                 to="/contact"
                                     className={({isActive}) =>
                                         `block py-2 pr-4 pl-3 duration-200 border-b border-gray-100 
-                                        ${isActive ? "text-orange-700" : "text-gray-700" } lg:hover:bg-transparent lg:border-0 hover:text-orange-700 lg:p-0`
+                                        ${isActive ? "text-blue-700" : "text-gray-700" } lg:hover:bg-transparent lg:border-0 hover:text-blue-700 lg:p-0`
                                     }
                                 >
                                     Organize
                                 </NavLink>
                             </li>    
                             <li>
-                                <NavLink
-                                to="/contact"
-                                    className={({isActive}) =>
-                                        `block py-2 pr-4 pl-3 duration-200 border-b border-gray-100 
-                                        ${isActive ? "text-orange-700" : "text-gray-700" } lg:hover:bg-transparent lg:border-0 hover:text-orange-700 lg:p-0`
-                                    }
-                                >
-                                    List your Event
-                                </NavLink>
+                                {
+                                    loggedUser.role === "USER" ?
+
+                                    <NavLink
+                                        to={`/user/${loggedUser.userId}/host-registration`}
+                                        className={({isActive}) =>
+                                            `block py-2 pr-4 pl-3 duration-200 border-b border-gray-100 
+                                            ${isActive ? "text-blue-700" : "text-gray-700" } lg:hover:bg-transparent lg:border-0 hover:text-blue-700 lg:p-0`
+                                        }
+                                    >
+                                        Be an host
+                                    </NavLink>
+                                    
+                                    :
+
+                                    <NavLink
+                                        to="/host/:hostId"
+                                        className={({isActive}) =>
+                                            `block py-2 pr-4 pl-3 duration-200 border-b border-gray-100 
+                                            ${isActive ? "text-blue-700" : "text-gray-700" } lg:hover:bg-transparent lg:border-0 hover:text-blue-700 lg:p-0`
+                                        }
+                                    >
+                                        List your Event
+                                    </NavLink>
+                                }
                             </li>                      
                         </ul>
                     </div>

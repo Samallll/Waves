@@ -1,14 +1,12 @@
 package com.waves.userservice.controller;
 
 import com.waves.userservice.model.Bank;
-import com.waves.userservice.model.UserDto;
-import com.waves.userservice.services.BankService;
+import com.waves.userservice.services.Imp.BankServiceImp;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -16,23 +14,23 @@ import java.util.Optional;
 @EnableMethodSecurity
 public class BankController {
 
-    private final BankService bankService;
+    private final BankServiceImp bankServiceImp;
 
-    public BankController(BankService bankService) {
-        this.bankService = bankService;
+    public BankController(BankServiceImp bankServiceImp) {
+        this.bankServiceImp = bankServiceImp;
     }
 
     @GetMapping("/{userId}")
     public ResponseEntity<Bank> bankDetailsForUser(@PathVariable Long userId){
 
-        Optional<Bank> bank = bankService.getBankDetailsForUser(userId);
+        Optional<Bank> bank = bankServiceImp.getBankDetailsForUser(userId);
         return bank.map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping("/add/{userId}")
     public ResponseEntity<String> createBankDetailsForUser(@PathVariable Long userId, @RequestBody Bank bank){
-        boolean bankCreated = bankService.registerBankDetailsForUser(userId, bank);
+        boolean bankCreated = bankServiceImp.registerBankDetailsForUser(userId, bank);
         if (bankCreated) {
             return ResponseEntity.status(HttpStatus.CREATED).body("Bank details created successfully");
         } else {
@@ -42,7 +40,7 @@ public class BankController {
 
     @PutMapping("/update/{userId}")
     public ResponseEntity<String> updateBankDetailsForUser(@PathVariable Long userId, @RequestBody Bank bank) {
-        boolean bankUpdated = bankService.updateBankDetailsForUser(userId, bank);
+        boolean bankUpdated = bankServiceImp.updateBankDetailsForUser(userId, bank);
         if (bankUpdated) {
             return ResponseEntity.ok("Bank details updated successfully");
         } else {

@@ -28,6 +28,10 @@ spring:
           uri: http://localhost:8093
           predicates:
             - Path=/api/v1/register/**
+        - id: host-service-router
+          uri: http://localhost:8094
+          predicates:
+            - Path=/api/v1/host/**
         - id: react-app
           uri: http://localhost:3000/
           predicates:
@@ -57,4 +61,4 @@ logging:
   level:
     org:
       springframework:
-        security: TRACE
+        security: DEBUG

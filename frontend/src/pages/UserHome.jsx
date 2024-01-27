@@ -4,7 +4,7 @@ import Footer from '../components/footer/Footer'
 function UserHome() {
   return (
     <>
-      <div className="py-16 bg-white">
+      <div className="mt-16 py-16 bg-white">
         <div className="container m-auto px-6 text-gray-600 md:px-12 xl:px-20">
             <div className="space-y-6 md:space-y-0 md:flex md:gap-6 lg:items-center lg:gap-20">
                 <div className="md:5/12 lg:w-5/12">

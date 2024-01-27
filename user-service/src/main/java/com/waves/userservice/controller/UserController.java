@@ -1,8 +1,6 @@
 package com.waves.userservice.controller;
 
-import com.waves.userservice.model.Bank;
 import com.waves.userservice.model.UserDto;
-import com.waves.userservice.services.BankService;
 import com.waves.userservice.services.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -90,16 +88,26 @@ public class UserController {
     }
 
     @GetMapping("/users")
+    @PreAuthorize("hasAnyRole('HOST','ADMIN')")
     public ResponseEntity<Page<UserDto>> getUsersByPaginationAndSearch(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false) String searchQuery) {
-        
+
         Pageable pageable = PageRequest.of(page, size);
         Page<UserDto> usersPage = userService.getUsersByPaginationAndSearch(pageable, searchQuery);
         return ResponseEntity.ok(usersPage);
     }
 
+    @GetMapping("/upgrade-role/{userId}")
+    public ResponseEntity<String> upgradeRoleToHost(@PathVariable Long userId){
+        return userService.upgradeToHost(userId) ? ResponseEntity.ok("Upgraded successfully") : ResponseEntity.ok("Failed to upgrade");
+    }
+
+    @GetMapping("/downgrade-role/{userId}")
+    public ResponseEntity<String> downgradeRoleToHost(@PathVariable Long userId){
+        return userService.downgradeToUser(userId) ? ResponseEntity.ok("Downgraded successfully") : ResponseEntity.ok("Failed to downgrade");
+    }
 
     @GetMapping("/hello")
     public ResponseEntity<String> testing(){

@@ -1,6 +1,7 @@
 import { createSlice,createAsyncThunk } from "@reduxjs/toolkit";
 
-const baseUrl = import.meta.env.VITE_USER_SERVICE_BASE_URI
+const userServiceURI = import.meta.env.VITE_USER_SERVICE_BASE_URI
+const hostServiceURI = import.meta.env.VITE_HOST_SERVICE_BASE_URI
 
 const getLoggedUserFromLocalStorage = () => {
     try{
@@ -11,9 +12,18 @@ const getLoggedUserFromLocalStorage = () => {
     }
 };
 
+const getHostDetailsFromLocalStorage = () => {
+    try{
+        return JSON.parse(localStorage.getItem('host_details') || '')
+    }
+    catch{
+        return null;
+    }
+};
+
 export const fetchLoggedUser = createAsyncThunk("auth/fetchLoggedUser", async (email) => {
     try {
-       const response = await fetch(`${baseUrl}/email/${email}`);
+       const response = await fetch(`${userServiceURI}/email/${email}`);
        const loggedUser = await response.json();
        localStorage.setItem('logged_user',JSON.stringify(loggedUser));
        return loggedUser;
@@ -22,20 +32,31 @@ export const fetchLoggedUser = createAsyncThunk("auth/fetchLoggedUser", async (e
        throw error; 
     }
    });
+
+export const fetchHostDetails = createAsyncThunk("auth/fetchHostDetails",async (email) => {
+    try{
+        const response = await fetch(`${hostServiceURI}/host/${email}`);
+        const hostDetails = await response.json();
+        localStorage.setItem('host_details',JSON.stringify(hostDetails));
+        return hostDetails;
+    }
+    catch(error){
+        console.error('Error fetching logged user:', error);
+        throw error;
+    }
+    });
+
+
 const initialState = {
     loggedUser: getLoggedUserFromLocalStorage(),
-    isAuthenticated: false
+    isAuthenticated: false,
+    hostDetails:getHostDetailsFromLocalStorage()
 }
 
 const authSlice = createSlice({
     name:"auth",
     initialState,
     reducers:{
-        setLoggedUser(state,action){
-            state.loggedUser = action.payload;
-            state.isAuthenticated = true;
-            localStorage.setItem('logged_user', JSON.stringify(state.loggedUser));
-        },
         updateLoggedUser(state,action){
             state.loggedUser = {
                 ...state.loggedUser,
@@ -57,13 +78,22 @@ const authSlice = createSlice({
             .addCase(fetchLoggedUser.fulfilled, (state, action) => {
                 console.log("Completed fetching..");
                 state.loggedUser = action.payload;
+                state.isAuthenticated = true;
             })
             .addCase(fetchLoggedUser.rejected, (state, action) => {
                 console.log("Failed");
+                state.error = action.error;
+            })
+            .addCase(fetchHostDetails.fulfilled,(state,action)=>{
+                console.log("Completed fetching..");
+                state.hostDetails = action.payload;
+            })
+            .addCase(fetchHostDetails.rejected, (state, action) => {
+                console.log("Failed to fetch host details");
                 state.error = action.error;
             });
     }
 })
 
-export const {updateLoggedUser,setLoggedUser} = authSlice.actions
+export const {updateLoggedUser} = authSlice.actions
 export default authSlice.reducer;

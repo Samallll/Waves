@@ -21,6 +21,7 @@ function UserRoutes() {
               <Route path='bank' element={<BankDetails/>}/>
               <Route path='bank/edit' element={<EditBankDetails/>}/>
               <Route path='bank/add' element={<AddBankDetails/>}/>
+              <Route path='host-registration' element={<EditUserProfile/>}/>
             </Route>
         </Route>
     </Routes>

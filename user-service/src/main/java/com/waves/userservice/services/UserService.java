@@ -163,4 +163,30 @@ public class UserService implements UserDetailsService {
         log.debug("Converted paginated User list into UserDtos");
         return new PageImpl<>(userDtos, pageable, result.getTotalElements());
     }
+
+    public boolean upgradeToHost(Long userId){
+
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isPresent()){
+            user.get().setRole("HOST");
+            userRepository.save(user.get());
+            log.info("User role upgraded to Host");
+            return true;
+        }
+        log.info("Failed to upgrade the User role to Host");
+        return false;
+    }
+
+    public boolean downgradeToUser(Long userId){
+
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isPresent()){
+            user.get().setRole("USER");
+            userRepository.save(user.get());
+            log.info("Host role downgraded to User");
+            return true;
+        }
+        log.info("Failed to downgrade the Host role to User");
+        return false;
+    }
 }

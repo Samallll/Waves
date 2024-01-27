@@ -7,12 +7,13 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="authorization-server" />
+        <module name="email-service" />
         <module name="api-gateway" />
         <module name="registration-service" />
         <module name="user-service" />
-        <module name="authorization-server" />
+        <module name="host-service" />
         <module name="service-registry" />
-        <module name="email-service" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -24,6 +25,7 @@
       <module name="api-gateway" options="-parameters" />
       <module name="authorization-server" options="-parameters" />
       <module name="email-service" options="-parameters" />
+      <module name="host-service" options="-parameters" />
       <module name="registration-service" options="-parameters" />
       <module name="resource-server" options="-parameters" />
       <module name="service-registry" options="-parameters" />

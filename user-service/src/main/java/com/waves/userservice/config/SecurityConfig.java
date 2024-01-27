@@ -22,7 +22,6 @@ public class SecurityConfig {
     private static final String JWT_ROLE_NAME = "authorities";
     private static final String ROLE_PREFIX = "ROLE_";
 
-
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http

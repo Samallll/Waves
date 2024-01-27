@@ -27,6 +27,11 @@ function Redirect() {
             navigate('/user');
             dispatch(fetchLoggedUser(data.username));
             break;
+          case 'HOST':
+            navigate('/host');
+            dispatch(fetchLoggedUser(data.username));
+            dispatch(fetchHostDetails(data.username));
+            break;
           default:
             navigate('/home');
         }
