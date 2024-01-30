@@ -1,3 +1,5 @@
 
 H
-java:S1452"&Remove usage of generic wildcard type.(ğĞŸ¥ıÿÿÿÿ8ĞãÆØÔ1
+java:S1452 "&Remove usage of generic wildcard type.(ğĞŸ¥ıÿÿÿÿ8ôÏÎÕ1
+a
+java:S1612="?Replace this lambda with method reference 'ResponseEntity::ok'.(×ÖÔÙıÿÿÿÿ8–ôÏÎÕ1

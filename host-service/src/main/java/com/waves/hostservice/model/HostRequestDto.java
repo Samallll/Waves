@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity
 @Getter
 @Setter
 @NoArgsConstructor
@@ -18,15 +17,21 @@ public class HostRequestDto {
 
     private String email;
 
-    private Long bankDetailId;
+    private Long bankId;
 
-    private boolean isApproved;
+    private RequestStatus status;
 
-    public HostRequestDto(Long hostRequestId, Long userId, String emailId, Long bankDetailId, boolean approved) {
+    private String designation;
+
+    private String about;
+
+    public HostRequestDto(Long hostRequestId, Long userId, String emailId, Long bankId, RequestStatus status, String designation, String about) {
         this.hostRequestId = hostRequestId;
         this.userId = userId;
         this.email = emailId;
-        this.bankDetailId = bankDetailId;
-        this.isApproved = approved;
+        this.bankId = bankId;
+        this.status = status;
+        this.designation = designation;
+        this.about = about;
     }
 }

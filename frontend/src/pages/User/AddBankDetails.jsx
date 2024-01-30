@@ -2,6 +2,7 @@ import React from 'react'
 import { useEffect,useState } from 'react';
 import {useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { fetchLoggedUser } from '../../features/authSlice';
 
 function AddBankDetails() {
   
@@ -74,7 +75,9 @@ function AddBankDetails() {
             });
             if (response.ok) {
               const data = await response.text();
+              dispatch(fetchLoggedUser(loggedUser.email));
               console.log('Bank details created:', data);
+
               navigate(`/user/${loggedUser.userId}/bank`)
             } else {
               console.error('Failed to create bank details:', response.statusText);

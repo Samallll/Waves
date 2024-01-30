@@ -22,4 +22,6 @@ public class UserDto {
     private boolean isLocked;
 
     private String phoneNumber;
+
+    private Long bankId;
 }

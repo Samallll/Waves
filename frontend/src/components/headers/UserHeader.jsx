@@ -1,28 +1,34 @@
-import React from 'react'
-import { Link,NavLink } from 'react-router-dom'
+import React, { useEffect,useState } from 'react'
+import { Link,NavLink, useNavigate } from 'react-router-dom'
 import Logo from './Logo'
 import { AppBar } from '@mui/material';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 function UserHeader() {
 
     const logoutURI = import.meta.env.VITE_LOGOUT_URI;
+    const gatewayURI = import.meta.env.VITE_API_GATEWAY_BASE_URI
 
     const loggedUser = useSelector((state)=> state.auth.loggedUser)
     const userId = loggedUser ? loggedUser.userId : "";
 
-    useEffect(()=>{
-
-        if(loggedUser.role === "HOST"){
-            setHostId()
-        }
-
-    },[])
+    const[role,setRole] = useState("");
 
     function logout(){
         localStorage.removeItem('logged_user');
         window.location.href = logoutURI
     }
+
+    useEffect(()=>{
+        try{
+            const response = fetch(`${gatewayURI}/me`,{mode:'no-cors'});
+            response.then(response => response.json())
+            .then(data => setRole(data.roles))
+        }
+        catch(error){
+            console.log(error)
+        }
+    },[role])
     
   return (
         <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
@@ -83,16 +89,16 @@ function UserHeader() {
                             </li>    
                             <li>
                                 {
-                                    loggedUser.role === "USER" ?
+                                    role && role === "USER" ?
 
                                     <NavLink
-                                        to={`/user/${loggedUser.userId}/host-registration`}
+                                        to='/user/host-registration'
                                         className={({isActive}) =>
                                             `block py-2 pr-4 pl-3 duration-200 border-b border-gray-100 
                                             ${isActive ? "text-blue-700" : "text-gray-700" } lg:hover:bg-transparent lg:border-0 hover:text-blue-700 lg:p-0`
                                         }
                                     >
-                                        Be an host
+                                        Be an Host
                                     </NavLink>
                                     
                                     :

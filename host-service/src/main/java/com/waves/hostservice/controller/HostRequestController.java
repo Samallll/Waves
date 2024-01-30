@@ -2,10 +2,15 @@ package com.waves.hostservice.controller;
 
 import com.waves.hostservice.model.HostRequest;
 import com.waves.hostservice.model.HostRequestDto;
+import com.waves.hostservice.model.RequestStatus;
 import com.waves.hostservice.services.HostRequestService;
 import com.waves.hostservice.services.Impl.HostRequestServiceImp;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,6 +43,17 @@ public class HostRequestController {
         return ResponseEntity.ok(hostRequestService.getAllRequests());
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<Page<HostRequestDto>> getUsersByPaginationAndSearch(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String searchQuery) {
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<HostRequestDto> usersPage = hostRequestService.getUsersByPaginationAndSearch(pageable, searchQuery);
+        return ResponseEntity.ok(usersPage);
+    }
+
     @GetMapping("/{hostRequestId}")
     public ResponseEntity<HostRequestDto> getAllRequestsById(@PathVariable Long hostRequestId) {
         Optional<HostRequestDto> hostRequestOptional = hostRequestService.getRequestById(hostRequestId);
@@ -51,6 +67,15 @@ public class HostRequestController {
         Optional<HostRequestDto> hostRequestOptional = hostRequestService.getRequestByUserId(userId);
         return hostRequestOptional
                 .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<HostRequestDto> checkForHostRequest(@RequestParam Long userId,
+                                       @RequestParam RequestStatus status){
+
+        Optional<HostRequestDto> isUnique = hostRequestService.fidHostRequestByIdAndStatus(userId,status);
+        return isUnique.map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 

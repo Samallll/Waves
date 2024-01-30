@@ -1,5 +1,6 @@
 const userServiceUri = import.meta.env.VITE_USER_SERVICE_BASE_URI
 const emailServiceUri = import.meta.env.VITE_EMAIL_SERVICE_BASE_URI
+const hostServiceURI = import.meta.env.VITE_HOST_SERVICE_BASE_URI
 
 export const generateRandomOtp = () => {
     
@@ -78,5 +79,15 @@ export const loggedUserUpdate = (userData) => {
         });
     } catch (error) {
         console.error('Error updating user:', error);
+    }
+}
+
+export const uniqueHostRequest = (userId,status) => {
+    try{
+        const response = fetch(`${hostServiceURI}/host-request/?userId=${userId}&status=${status}`)
+        return response;
+    }
+    catch(error){
+        console.log(error);
     }
 }

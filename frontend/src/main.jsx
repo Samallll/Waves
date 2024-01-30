@@ -14,6 +14,7 @@ import AdminRoutes from './routes/AdminRoutes'
 import ForgotPassword from './components/forms/ForgotPassword'
 import OtpValidation from './components/forms/OtpValidation'
 import ConfirmPasswordForm from './components/forms/ConfirmPasswordForm'
+import HostRoutes from './routes/HostRoutes'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -25,6 +26,7 @@ const router = createBrowserRouter(
         <Route path='/otp' element={<OtpForm/>}/>
         <Route path='user/*' element={<UserRoutes />} />
         <Route path='admin/*' element={<AdminRoutes />} />
+        <Route path='host/*' element={<HostRoutes />} />
         <Route path='/forgot-password' element={<ForgotPassword />} />
         <Route path='/otpValidate' element={<OtpValidation />} />
         <Route path='/password-confirmation' element={<ConfirmPasswordForm/>}/>

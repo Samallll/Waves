@@ -71,14 +71,18 @@ public class UserService implements UserDetailsService {
         return userRepository.findAll()
                 .stream()
                 .filter(user -> !"ADMIN".equals(user.getRole()))
-                .map(user -> new UserDto(
-                        user.getUserId(),
-                        user.getFullName(),
-                        user.getRole(),
-                        user.getEmailId(),
-                        user.isLocked(),
-                        user.getPhoneNumber()
-                ))
+                .map(user -> {
+                    Long bankId = user.getBank() != null ? user.getBank().getBankId() : null;
+                    return new UserDto(
+                            user.getUserId(),
+                            user.getFullName(),
+                            user.getRole(),
+                            user.getEmailId(),
+                            user.isLocked(),
+                            user.getPhoneNumber(),
+                            bankId // Map the bank ID or null
+                    );
+                })
                 .toList();
     }
 
@@ -106,6 +110,7 @@ public class UserService implements UserDetailsService {
         userDto.setEmailId(user.getEmailId());
         userDto.setPhoneNumber(user.getPhoneNumber());
         userDto.setFullName(user.getFullName());
+        userDto.setBankId(user.getBank() != null ? user.getBank().getBankId() : null);
         return userDto;
     }
 

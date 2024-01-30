@@ -1,9 +1,6 @@
 package com.waves.hostservice.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,8 +23,13 @@ public class HostRequest {
 
     private String aadharNumber;
 
-    private Long bankDetailId;
+    private Long bankId;
 
-    private boolean isApproved;
+    @Enumerated(EnumType.STRING)
+    private RequestStatus status = RequestStatus.PENDING;
+
+    private String designation;
+
+    private String about;
 
 }

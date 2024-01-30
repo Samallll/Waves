@@ -25,7 +25,8 @@ public class HostServiceImp implements HostService {
 
         Host newHost = new Host(
                 hostRequest.getUserId(),
-                hostRequest.getEmailId()
+                hostRequest.getEmailId(),
+                hostRequest.getDesignation()
         );
         newHost.setLocked(false);
         newHost.setHostRequest(hostRequest);

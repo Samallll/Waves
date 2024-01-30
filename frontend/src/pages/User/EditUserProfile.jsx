@@ -16,7 +16,8 @@ function EditUserProfile() {
         phoneNumber:loggedUser.phoneNumber,
         userId:loggedUser.userId,
         isLocked:loggedUser.isLocked,
-        role:loggedUser.role  
+        role:loggedUser.role ,
+        bankId:loggedUser.bankId 
     })
 
     const [error,setError] = useState("");

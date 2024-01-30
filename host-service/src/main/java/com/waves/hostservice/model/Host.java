@@ -26,8 +26,11 @@ public class Host {
 
     private boolean isLocked;
 
-    public Host(Long userId, String emailId) {
+    private String designation;
+
+    public Host(Long userId, String emailId,String designation) {
         this.emailId = emailId;
         this.userId = userId;
+        this.designation = designation;
     }
 }

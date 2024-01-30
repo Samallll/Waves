@@ -20,4 +20,6 @@ public class HostDto {
     private boolean isLocked;
 
     private Long hostRequestId;
+
+    private String designation;
 }

@@ -26,6 +26,7 @@ export const fetchLoggedUser = createAsyncThunk("auth/fetchLoggedUser", async (e
        const response = await fetch(`${userServiceURI}/email/${email}`);
        const loggedUser = await response.json();
        localStorage.setItem('logged_user',JSON.stringify(loggedUser));
+       console.log(loggedUser)
        return loggedUser;
     } catch (error) {
        console.error('Error fetching logged user:', error);
@@ -65,6 +66,7 @@ const authSlice = createSlice({
                 fullName: action.payload.fullName !== undefined ? action.payload.fullName : state.loggedUser.fullName,
                 phoneNumber: action.payload.phoneNumber !== undefined ? action.payload.phoneNumber : state.loggedUser.phoneNumber,
                 userId: action.payload.userId !== undefined ? action.payload.userId : state.loggedUser.userId,
+                bankId: action.payload.bankId !== undefined ? action.payload.bankId : state.loggedUser.bankId,
                 isLocked: action.payload.userId !== undefined ? action.payload.isLocked : state.loggedUser.isLocked
               };
               localStorage.setItem('logged_user', JSON.stringify(state.loggedUser));
