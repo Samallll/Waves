@@ -1,4 +1,4 @@
-package com.waves.hostservice.model;
+package com.waves.hostservice.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

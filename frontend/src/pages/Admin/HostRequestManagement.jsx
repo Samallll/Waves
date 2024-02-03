@@ -58,7 +58,7 @@ function HostRequestManagement() {
           name: "Action",
           cell: (row) => {
             return ( 
-              <Link className= "bg-transparent hover:bg-blue-700 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded" to={'/admin/host-requests/1'}>View Detatils</Link>
+              <Link className= "bg-transparent hover:bg-blue-700 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded" to={`/admin/host-requests/${row.hostRequestId}`}>View Detatils</Link>
               );
           },
         }

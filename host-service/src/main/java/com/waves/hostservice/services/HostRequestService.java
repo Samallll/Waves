@@ -1,7 +1,7 @@
 package com.waves.hostservice.services;
 
 import com.waves.hostservice.model.HostRequest;
-import com.waves.hostservice.model.HostRequestDto;
+import com.waves.hostservice.model.dto.HostRequestDto;
 import com.waves.hostservice.model.RequestStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

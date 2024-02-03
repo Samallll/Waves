@@ -1,7 +1,9 @@
 package com.waves.hostservice.services.Impl;
 
-import com.waves.hostservice.model.HostRequestDto;
+import com.waves.hostservice.model.dto.EmailDto;
+import com.waves.hostservice.model.dto.HostRequestDto;
 import com.waves.hostservice.model.RequestStatus;
+import com.waves.hostservice.producer.EmailProducer;
 import com.waves.hostservice.repository.HostRequestRepository;
 import com.waves.hostservice.model.HostRequest;
 import com.waves.hostservice.services.HostRequestService;
@@ -19,7 +21,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -28,9 +29,12 @@ public class HostRequestServiceImp implements HostRequestService {
     private final HostRequestRepository hostRequestRepository;
     private final HostService hostService;
 
-    public HostRequestServiceImp(HostRequestRepository hostRequestRepository, HostServiceImp hostServiceImp) {
+    private final EmailProducer emailProducer;
+
+    public HostRequestServiceImp(HostRequestRepository hostRequestRepository, HostServiceImp hostServiceImp, EmailProducer emailProducer) {
         this.hostRequestRepository = hostRequestRepository;
         this.hostService = hostServiceImp;
+        this.emailProducer = emailProducer;
     }
 
     public HostRequest createHostRequest(HostRequest hostRequest) {
@@ -43,7 +47,7 @@ public class HostRequestServiceImp implements HostRequestService {
         List<HostRequest> hostRequests = hostRequestRepository.findAll();
         return hostRequests.stream()
                 .map(this::convertToDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public Optional<HostRequestDto> getRequestById(Long hostRequestId) {
@@ -64,10 +68,31 @@ public class HostRequestServiceImp implements HostRequestService {
 
         Optional<HostRequest> hostRequest = hostRequestRepository.findById(hostRequestId);
         if(hostRequest.isPresent()){
-            hostService.createHost(hostRequest.get());
-            hostRequest.get().setStatus(RequestStatus.APPROVED);
+            HostRequest request = hostRequest.get();
+            hostService.createHost(request);
+            request.setStatus(RequestStatus.APPROVED);
             // make a call to the broker to send the data for updating the user role to host
-            hostRequestRepository.save(hostRequest.get());
+            EmailDto welcomeMail = new EmailDto();
+            welcomeMail.setToList(request.getEmailId());
+            welcomeMail.setSubject("Welcome to the Crowdcraft Host Community!");
+            welcomeMail.setBody("""
+                Hi [Host Name],
+                
+                We're thrilled to announce that your host application has been approved! You're now officially part of the Crowdcraft family, and we can't wait to see the amazing events you'll bring to life.
+                
+                Here are some next steps to get you started:
+                
+                Create your first event listing: Log in to your Crowdcraft dashboard and start crafting your event page. Share all the exciting details to attract attendees and organizers.
+                Browse our resources: Check out our helpful guides and tips for hosting successful events. We're here to support you every step of the way.
+                Join our community: Connect with other hosts, organizers, and attendees in our vibrant community forums. Share ideas, collaborate, and create unforgettable experiences together.
+                
+                We're excited to see what you create! ✨
+                
+                Happy hosting,
+                The Crowdcraft Team
+            """);
+            emailProducer.sendEmailTask(welcomeMail);
+            hostRequestRepository.save(request);
             log.info("Host created successfully");
             return true;
         }

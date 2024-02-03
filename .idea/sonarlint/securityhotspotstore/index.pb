@@ -130,10 +130,6 @@ p
 @host-service/src/main/java/com/waves/hostservice/model/Host.java,b\c\bc07516e9ec93f12d81d228de69c630a334cba6c
 w
 Ghost-service/src/main/java/com/waves/hostservice/model/HostRequest.java,b\5\b5eaf96897e2be626b250c1e3d012ec8b0416102
-s
-Chost-service/src/main/java/com/waves/hostservice/model/HostDto.java,2\0\2002627d74499dd4e221faff35c07a291110b32c
-z
-Jhost-service/src/main/java/com/waves/hostservice/model/HostRequestDto.java,2\6\266d77934a547a0ef8d09b46c237214eab4e767e
 z
 Jhost-service/src/main/java/com/waves/hostservice/services/HostService.java,2\f\2f6837271e26fa8ca9a973d7ba30bb6d6cb3100d
 †
@@ -154,3 +150,13 @@ y
 Ihost-service/src/main/java/com/waves/hostservice/model/RequestStatus.java,c\a\cac0ac8d6c440936ffe238836f88b9afeab3aec9
 |
 Lhost-service/src/main/java/com/waves/hostservice/HostServiceApplication.java,d\b\db6a703b9301bb4004fe1338986d27f7f18c1082
+|
+Lhost-service/src/main/java/com/waves/hostservice/producer/EmailProducer.java,2\8\28a9f24bac8ed0c8555a80382d807222eda95e8d
+‚
+Remail-service/src/main/java/com/waves/emailservice/consumer/HostEmailConsumer.java,5\0\50287b2ee0d6d56421ef072e5ca1b621f490e5e1
+x
+Hhost-service/src/main/java/com/waves/hostservice/model/dto/EmailDto.java,4\9\4910c98e1696dadd1bea13b762f6c76c0298e774
+z
+Jemail-service/src/main/java/com/waves/emailservice/config/KafkaConfig.java,e\f\ef55626290f5704848cd8409dfc8e84b4bc63e3e
+€
+Pemail-service/src/main/java/com/waves/emailservice/config/KafkaErrorHandler.java,e\3\e3be360878a13930b805df20a1bb1b3d0bb59a87

@@ -1,5 +1,6 @@
-package com.waves.hostservice.model;
+package com.waves.hostservice.model.dto;
 
+import com.waves.hostservice.model.RequestStatus;
 import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

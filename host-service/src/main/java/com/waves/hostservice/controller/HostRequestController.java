@@ -1,8 +1,10 @@
 package com.waves.hostservice.controller;
 
 import com.waves.hostservice.model.HostRequest;
-import com.waves.hostservice.model.HostRequestDto;
+import com.waves.hostservice.model.dto.EmailDto;
+import com.waves.hostservice.model.dto.HostRequestDto;
 import com.waves.hostservice.model.RequestStatus;
+import com.waves.hostservice.producer.EmailProducer;
 import com.waves.hostservice.services.HostRequestService;
 import com.waves.hostservice.services.Impl.HostRequestServiceImp;
 import org.springframework.data.domain.Page;
@@ -10,7 +12,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 
@@ -54,8 +55,9 @@ public class HostRequestController {
         return ResponseEntity.ok(usersPage);
     }
 
-    @GetMapping("/{hostRequestId}")
+    @GetMapping("/details/{hostRequestId}")
     public ResponseEntity<HostRequestDto> getAllRequestsById(@PathVariable Long hostRequestId) {
+
         Optional<HostRequestDto> hostRequestOptional = hostRequestService.getRequestById(hostRequestId);
         return hostRequestOptional
                 .map(hostRequest -> ResponseEntity.ok(hostRequest))
@@ -82,13 +84,14 @@ public class HostRequestController {
     @GetMapping("/approve/{hostRequestId}")
     public ResponseEntity<String> approveHostRequest(@PathVariable Long hostRequestId){
 
-        boolean hostCreation = hostRequestService.approveRequest(hostRequestId);
-        if(hostCreation){
-            return ResponseEntity.ok("Host Request Approved");
-        }
-        else{
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to approve the request");
-        }
+//        boolean hostCreation = hostRequestService.approveRequest(hostRequestId);
+//        if(hostCreation){
+//            return ResponseEntity.ok("Host Request Approved");
+//        }
+//        else{
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to approve the request");
+//        }
+        return ResponseEntity.ok("Host Request Approved");
     }
 
     @GetMapping("/disapprove/{hostRequestId}")
@@ -102,4 +105,5 @@ public class HostRequestController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to disapprove the request");
         }
     }
+
 }

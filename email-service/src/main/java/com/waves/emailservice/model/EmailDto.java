@@ -1,14 +1,14 @@
 package com.waves.emailservice.model;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.io.Serializable;
 
 @Getter
 @Setter
 @ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class EmailDto implements Serializable {
 
     private String subject;
