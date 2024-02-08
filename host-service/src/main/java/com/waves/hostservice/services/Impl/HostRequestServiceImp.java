@@ -4,6 +4,7 @@ import com.waves.hostservice.model.dto.EmailDto;
 import com.waves.hostservice.model.dto.HostRequestDto;
 import com.waves.hostservice.model.RequestStatus;
 import com.waves.hostservice.producer.EmailProducer;
+import com.waves.hostservice.producer.UserProducer;
 import com.waves.hostservice.repository.HostRequestRepository;
 import com.waves.hostservice.model.HostRequest;
 import com.waves.hostservice.services.HostRequestService;
@@ -31,10 +32,13 @@ public class HostRequestServiceImp implements HostRequestService {
 
     private final EmailProducer emailProducer;
 
-    public HostRequestServiceImp(HostRequestRepository hostRequestRepository, HostServiceImp hostServiceImp, EmailProducer emailProducer) {
+    private final UserProducer userProducer;
+
+    public HostRequestServiceImp(HostRequestRepository hostRequestRepository, HostServiceImp hostServiceImp, EmailProducer emailProducer, UserProducer userProducer) {
         this.hostRequestRepository = hostRequestRepository;
         this.hostService = hostServiceImp;
         this.emailProducer = emailProducer;
+        this.userProducer = userProducer;
     }
 
     public HostRequest createHostRequest(HostRequest hostRequest) {
@@ -71,12 +75,12 @@ public class HostRequestServiceImp implements HostRequestService {
             HostRequest request = hostRequest.get();
             hostService.createHost(request);
             request.setStatus(RequestStatus.APPROVED);
-            // make a call to the broker to send the data for updating the user role to host
+            userProducer.upgradeToHost(request.getUserId());
             EmailDto welcomeMail = new EmailDto();
             welcomeMail.setToList(request.getEmailId());
             welcomeMail.setSubject("Welcome to the Crowdcraft Host Community!");
             welcomeMail.setBody("""
-                Hi [Host Name],
+                Hi,
                 
                 We're thrilled to announce that your host application has been approved! You're now officially part of the Crowdcraft family, and we can't wait to see the amazing events you'll bring to life.
                 
@@ -106,7 +110,31 @@ public class HostRequestServiceImp implements HostRequestService {
         Optional<HostRequest> hostRequest = hostRequestRepository.findById(hostRequestId);
         if(hostRequest.isPresent()){
             hostRequest.get().setStatus(RequestStatus.REJECTED);
+            EmailDto rejectionMail = new EmailDto();
+            rejectionMail.setToList(hostRequest.get().getEmailId());
+            rejectionMail.setSubject("Important Information Regarding Your Host Application");
+            rejectionMail.setBody("""
+                       Dear Customer,
+                                                   
+                       Thank you for your interest in becoming a host on Crowdcraft. We appreciate the effort you put into your application and have carefully reviewed it.
+                       
+                       Unfortunately, we've decided not to approve your application at this time. While we cannot share specific details regarding the reasons for rejection, we encourage you to review our hosting guidelines and ensure your future applications align with our platform's standards. These guidelines provide valuable insights into the criteria we consider when approving hosts.
+                       
+                       Additionally, you might find it helpful to:
+                       
+                       Browse our help center: We have a wealth of resources and information available to answer your questions and provide further guidance on crafting a strong application.
+                       Connect with our community: Join our forum and engage with other hosts and organizers to gain insights and learn from their experiences.
+                       Furthermore, if you'd like to understand the reasons behind this decision in more detail, feel free to contact our support team. They'll be happy to assist you privately and offer additional feedback to help you improve your future applications.
+                       
+                       We sincerely appreciate your understanding and wish you the best of luck in your event endeavors.
+                       
+                       Sincerely,
+                       
+                       The Crowdcraft Team
+                    """);
+            emailProducer.sendEmailTask(rejectionMail);
             hostRequestRepository.save(hostRequest.get());
+            log.info("Host request rejected successfully");
             return true;
         }
         return false;

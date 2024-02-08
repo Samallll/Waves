@@ -67,7 +67,7 @@ function UserHeader() {
                             </li>
                             <li>
                                 <NavLink
-                                to="/about"
+                                to="/events"
                                     className={({isActive}) =>
                                         `block py-2 pr-4 pl-3 duration-200 border-b border-gray-100 
                                         ${isActive ? "text-blue-700" : "text-gray-700" } lg:hover:bg-transparent lg:border-0 hover:text-blue-700 lg:p-0`
@@ -104,7 +104,7 @@ function UserHeader() {
                                     :
 
                                     <NavLink
-                                        to="/host/:hostId"
+                                        to="/host/register-event"
                                         className={({isActive}) =>
                                             `block py-2 pr-4 pl-3 duration-200 border-b border-gray-100 
                                             ${isActive ? "text-blue-700" : "text-gray-700" } lg:hover:bg-transparent lg:border-0 hover:text-blue-700 lg:p-0`

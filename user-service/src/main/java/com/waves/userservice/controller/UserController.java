@@ -36,6 +36,7 @@ public class UserController {
                 ResponseEntity.status(HttpStatus.NOT_MODIFIED).body("Failed to modify");
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/unlock/{userId}")
     public ResponseEntity<String> userUnBlock(@PathVariable Long userId){
 
@@ -45,11 +46,13 @@ public class UserController {
     }
 
     @GetMapping("/all-users")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<UserDto>> getAllUsers(){
 
         List<UserDto> users = userService.getAllUsersWithDetails();
         return ResponseEntity.ok(users);
     }
+
 
     @GetMapping("/{userId}")
 //    @PreAuthorize("hasRole('USER')")
@@ -59,7 +62,7 @@ public class UserController {
     }
 
     @GetMapping("/email/{email}")
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    @PreAuthorize("hasAnyRole('USER','ADMIN','HOST')")
     public ResponseEntity<UserDto> getUserDetails(@PathVariable String email){
         Optional<UserDto> userDto = userService.getuserDetailsByEmail(email);
         return userDto.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_MODIFIED).body(null));
@@ -99,18 +102,16 @@ public class UserController {
         return ResponseEntity.ok(usersPage);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/upgrade-role/{userId}")
     public ResponseEntity<String> upgradeRoleToHost(@PathVariable Long userId){
         return userService.upgradeToHost(userId) ? ResponseEntity.ok("Upgraded successfully") : ResponseEntity.ok("Failed to upgrade");
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/downgrade-role/{userId}")
     public ResponseEntity<String> downgradeRoleToHost(@PathVariable Long userId){
         return userService.downgradeToUser(userId) ? ResponseEntity.ok("Downgraded successfully") : ResponseEntity.ok("Failed to downgrade");
     }
 
-    @GetMapping("/hello")
-    public ResponseEntity<String> testing(){
-        return ResponseEntity.ok("success");
-    }
 }

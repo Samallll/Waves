@@ -84,14 +84,13 @@ public class HostRequestController {
     @GetMapping("/approve/{hostRequestId}")
     public ResponseEntity<String> approveHostRequest(@PathVariable Long hostRequestId){
 
-//        boolean hostCreation = hostRequestService.approveRequest(hostRequestId);
-//        if(hostCreation){
-//            return ResponseEntity.ok("Host Request Approved");
-//        }
-//        else{
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to approve the request");
-//        }
-        return ResponseEntity.ok("Host Request Approved");
+        boolean hostCreation = hostRequestService.approveRequest(hostRequestId);
+        if(hostCreation){
+            return ResponseEntity.ok("Host Request Approved");
+        }
+        else{
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to approve the request");
+        }
     }
 
     @GetMapping("/disapprove/{hostRequestId}")

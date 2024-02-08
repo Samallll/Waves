@@ -19,3 +19,8 @@ logging:
     org:
       springframework:
         security: DEBUG
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0

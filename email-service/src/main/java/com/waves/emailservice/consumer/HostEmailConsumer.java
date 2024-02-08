@@ -11,7 +11,7 @@ public class HostEmailConsumer {
 
     @KafkaListener(topics = "email")
     public void consumeEvents(EmailDto emailDto) {
-        log.info("consumer consume the events {} ", emailDto.toString());
+        log.info("consumer consume the events {} ", emailDto.getToList());
     }
 
 //    When you send object as string

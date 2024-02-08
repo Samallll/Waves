@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { fetchLoggedUser } from '../features/authSlice';
+import { fetchHostDetails } from '../features/authSlice';
 
 function Redirect() {
   const dispatch = useDispatch();
@@ -36,7 +37,7 @@ function Redirect() {
             navigate('/home');
         }
       } catch (error) {
-        console.log("error navigation")
+        console.log("error navigation",error)
         navigate('/home');
       }
     };

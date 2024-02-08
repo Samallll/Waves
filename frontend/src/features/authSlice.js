@@ -36,8 +36,9 @@ export const fetchLoggedUser = createAsyncThunk("auth/fetchLoggedUser", async (e
 
 export const fetchHostDetails = createAsyncThunk("auth/fetchHostDetails",async (email) => {
     try{
-        const response = await fetch(`${hostServiceURI}/host/${email}`);
+        const response = await fetch(`${hostServiceURI}/details/${email}`);
         const hostDetails = await response.json();
+        console.log(hostDetails)
         localStorage.setItem('host_details',JSON.stringify(hostDetails));
         return hostDetails;
     }

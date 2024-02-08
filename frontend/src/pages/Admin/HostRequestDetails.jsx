@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 function HostRequestDetails() {
 
@@ -7,6 +7,7 @@ function HostRequestDetails() {
     const [requestId,setRequestId] = useState("");
     const [hostRequestDetails,setHostRequestDetails] = useState();
     const [userDetails,setUserDetails] = useState();
+    const navigate = useNavigate();
 
     const userServiceURI = import.meta.env.VITE_USER_SERVICE_BASE_URI;
     const hostServiceURI = import.meta.env.VITE_HOST_SERVICE_BASE_URI;
@@ -17,7 +18,6 @@ function HostRequestDetails() {
         fetch(`${hostServiceURI}/host-request/details/${hostRequestId}`)
             .then((response) => response.json())
             .then((data) => {
-
                 setHostRequestDetails(data)  
 
                 const { userId } = data;
@@ -38,6 +38,15 @@ function HostRequestDetails() {
         .then(data => console.log(data))
     }
 
+    const rejectRequest = () => {
+        fetch(`${hostServiceURI}/host-request/disapprove/${hostRequestDetails.hostRequestId}`)
+        .then(response => response.text())
+        .then(data => {
+            console.log(data)
+            navigate("/admin/host-requests")
+        })
+    }
+
   return (
     <>
             <div className='mt-20 bg-gray-800 text-white p-20 rounded-[20px] mx-10'>
@@ -49,38 +58,42 @@ function HostRequestDetails() {
                     <dl className="divide-y divide-gray-100">
                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                         <dt className="text-base font-medium leading-6 text-white">Full name</dt>
-                        <dd className="mt-1 text-base leading-6 text-gray-300 sm:col-span-2 sm:mt-0">{userDetails ? userDetails.fullName : ""}</dd>
+                        <dd className="mt-1 text-base leading-6 text-gray-300 sm:col-span-2 sm:mt-0">{userDetails ? userDetails?.fullName : ""}</dd>
                     </div>
                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                         <dt className="text-base font-medium leading-6 text-white">Designation</dt>
-                        <dd className="mt-1 text-base leading-6 text-gray-300 sm:col-span-2 sm:mt-0">{hostRequestDetails ? hostRequestDetails.designation : ""}</dd>
+                        <dd className="mt-1 text-base leading-6 text-gray-300 sm:col-span-2 sm:mt-0">{hostRequestDetails ? hostRequestDetails?.designation : ""}</dd>
                     </div>
                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                         <dt className="text-base font-medium leading-6 text-white">Email address</dt>
-                        <dd className="mt-1 text-base leading-6 text-gray-300 sm:col-span-2 sm:mt-0">{userDetails ? userDetails.emailId : ""}</dd>
+                        <dd className="mt-1 text-base leading-6 text-gray-300 sm:col-span-2 sm:mt-0">{userDetails ? userDetails?.emailId : ""}</dd>
                     </div>
                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                         <dt className="text-base font-medium leading-6 text-white">Contact Number</dt>
-                        <dd className="mt-1 text-base leading-6 text-gray-300 sm:col-span-2 sm:mt-0">{userDetails ? userDetails.phoneNumber : ""}</dd>
+                        <dd className="mt-1 text-base leading-6 text-gray-300 sm:col-span-2 sm:mt-0">{userDetails ? userDetails?.phoneNumber : ""}</dd>
                     </div>
                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                         <dt className="text-base font-medium leading-6 text-white">About</dt>
-                        <dd className="mt-1 text-base leading-6 text-gray-300 sm:col-span-2 sm:mt-0">{hostRequestDetails ? hostRequestDetails.about : ""}</dd>
+                        <dd className="mt-1 text-base leading-6 text-gray-300 sm:col-span-2 sm:mt-0">{hostRequestDetails ? hostRequestDetails?.about : ""}</dd>
                     </div>
-                    <button onClick={approveRequest} className="mt-4 relative inline-flex items-center justify-center px-10 py-4 overflow-hidden font-mono font-medium tracking-tighter text-white bg-gray-800 rounded-lg group">
-                        <span className="absolute w-0 h-0 transition-all duration-500 ease-out bg-green-600 rounded-full group-hover:w-56 group-hover:h-56"></span>
-                        <span className="absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-30 bg-gradient-to-b from-transparent via-transparent to-gray-700"></span>
-                        <span className="relative">Approve</span>
-                    </button>
-                    <button className="mt-4 ms-4 relative inline-flex items-center justify-center px-10 py-4 overflow-hidden font-mono font-medium tracking-tighter text-white bg-gray-800 rounded-lg group">
-                        <span className="absolute w-0 h-0 transition-all duration-500 ease-out bg-red-600 rounded-full group-hover:w-56 group-hover:h-56"></span>
-                        <span className="absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-30 bg-gradient-to-b from-transparent via-transparent to-gray-700"></span>
-                        <span className="relative">Reject</span>
-                    </button>
+                    {hostRequestDetails && hostRequestDetails?.status === 'PENDING'  ? (
+                        <>
+                            <button onClick={approveRequest} className="mt-4 relative inline-flex items-center justify-center px-10 py-4 overflow-hidden font-mono font-medium tracking-tighter text-white bg-gray-800 rounded-lg group">
+                                <span className="absolute w-0 h-0 transition-all duration-500 ease-out bg-green-600 rounded-full group-hover:w-56 group-hover:h-56"></span>
+                                <span className="absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-30 bg-gradient-to-b from-transparent via-transparent to-gray-700"></span>
+                                <span className="relative">Approve</span>
+                            </button>
+                            <button onClick={rejectRequest} className="mt-4 ms-4 relative inline-flex items-center justify-center px-10 py-4 overflow-hidden font-mono font-medium tracking-tighter text-white bg-gray-800 rounded-lg group">
+                                <span className="absolute w-0 h-0 transition-all duration-500 ease-out bg-red-600 rounded-full group-hover:w-56 group-hover:h-56"></span>
+                                <span className="absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-30 bg-gradient-to-b from-transparent via-transparent to-gray-700"></span>
+                                <span className="relative">Reject</span>
+                            </button>
+                        </>
+                        ) : null}
                     </dl>
                 </div>
             </div>
-
+        
     </>
   )
 }

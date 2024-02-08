@@ -15,6 +15,7 @@ import ForgotPassword from './components/forms/ForgotPassword'
 import OtpValidation from './components/forms/OtpValidation'
 import ConfirmPasswordForm from './components/forms/ConfirmPasswordForm'
 import HostRoutes from './routes/HostRoutes'
+import Events from './pages/Events'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -30,6 +31,7 @@ const router = createBrowserRouter(
         <Route path='/forgot-password' element={<ForgotPassword />} />
         <Route path='/otpValidate' element={<OtpValidation />} />
         <Route path='/password-confirmation' element={<ConfirmPasswordForm/>}/>
+        <Route path='/events' element={<Events/>}/>
       </Route>
   )
 )

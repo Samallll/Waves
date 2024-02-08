@@ -32,6 +32,10 @@ spring:
           uri: http://localhost:8094
           predicates:
             - Path=/api/v1/host/**
+        - id: event-service-router
+          uri: http://localhost:8095
+          predicates:
+            - Path=/api/v1/event/**
         - id: react-app
           uri: http://localhost:3000/
           predicates:

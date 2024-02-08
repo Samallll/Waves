@@ -1,10 +1,9 @@
 
 H
-java:S1452!"&Remove usage of generic wildcard type.(ğĞŸ¥ıÿÿÿÿ8»ŞÄÖ1
+java:S1452!"&Remove usage of generic wildcard type.(ğĞŸ¥ıÿÿÿÿ8è‡ìÉ×1
 a
-java:S1612?"?Replace this lambda with method reference 'ResponseEntity::ok'.(×ÖÔÙıÿÿÿÿ8ÿˆğÇÖ1
-X	java:S125W"<This block of commented-out lines of code should be removed.(”ûç‘8ğ«äÖ1
+java:S1612?"?Replace this lambda with method reference 'ResponseEntity::ok'.(×ÖÔÙıÿÿÿÿ8ò‡ìÉ×1
 g
-java:S1128"ERemove this unused import 'com.waves.hostservice.model.dto.EmailDto'.(şøÙÒûÿÿÿÿ8ºñ¤äÖ1
+java:S1128"ERemove this unused import 'com.waves.hostservice.model.dto.EmailDto'.(şøÙÒûÿÿÿÿ8·Ğ×Ê×1
 k
-java:S1128"IRemove this unused import 'com.waves.hostservice.producer.EmailProducer'.(²û–ùÿÿÿÿ8Ö¥äÖ1
+java:S1128"IRemove this unused import 'com.waves.hostservice.producer.EmailProducer'.(²û–ùÿÿÿÿ8·Ğ×Ê×1

@@ -5,6 +5,7 @@ import com.waves.hostservice.services.HostService;
 import com.waves.hostservice.services.Impl.HostServiceImp;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,11 +26,13 @@ public class HostController {
         this.hostService = hostServiceImp;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/all")
     public ResponseEntity<List<Host>> getAllHosts(){
         return ResponseEntity.ok(hostService.getAllHosts());
     }
 
+    @PreAuthorize("hasAnyRole('HOST','ADMIN')")
     @GetMapping("/{hostId}")
     public ResponseEntity<Host> getHostById(@PathVariable Long hostId){
 
@@ -38,13 +41,15 @@ public class HostController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/{email}")
+    @PreAuthorize("hasAnyRole('USER','HOST','ADMIN')")
+    @GetMapping("/details/{emailId}")
     public ResponseEntity<Host> getHostByEmailId(@PathVariable String emailId){
         Optional<Host> host = hostService.getHostByEmail(emailId);
         return host.map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/lock/{hostId}")
     public ResponseEntity<String> lockHost(@PathVariable Long hostId){
 
@@ -57,6 +62,7 @@ public class HostController {
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/unlock/{hostId}")
     public ResponseEntity<String> unlockHost(@PathVariable Long hostId){
 

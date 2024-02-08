@@ -16,18 +16,16 @@ public class EmailProducer {
 
     private final KafkaTemplate<String,EmailDto> kafkaJsonTemplate;
 
-    private final KafkaTemplate<String,String> kafkaTemplate;
-
     public void sendEmailTask(EmailDto emailDto) {
         try {
             CompletableFuture<SendResult<String, EmailDto>> future = kafkaJsonTemplate.send("email", emailDto);
             future.whenComplete((result, ex) -> {
                 if (ex == null) {
-                    log.info("Sent message=[" + emailDto.toString() +
+                    log.info("Sent message=[" + emailDto.getToList() +
                             "] with offset=[" + result.getRecordMetadata().offset() + "]");
                 } else {
                     log.info("Unable to send message=[" +
-                            emailDto.toString() + "] due to : " + ex.getMessage());
+                            emailDto.getToList() + "] due to : " + ex.getMessage());
                 }
             });
 
