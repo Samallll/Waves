@@ -1,11 +1,14 @@
 import React, { useState,useEffect } from 'react'
+import { updateLocation } from '../../../features/eventSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
-function Location({onUpdate}) {
+function Location() {
+
+    const dispatch = useDispatch();
 
     const initialLocation = {
-        eventId:"",
         streetAddress:"",
-        country:"",
+        country:"India",
         state:"",
         city:"",
         zipCode:"",
@@ -14,16 +17,16 @@ function Location({onUpdate}) {
     const [location,setLocation] = useState(initialLocation);
 
     const handleChange = (e) => {
-        setLocation(
-            { 
-                ...location, 
-                [e.target.name]: e.target.value 
-            });
-    };
-
-    useEffect(() => {
-        onUpdate(location);
-      }, [location]);
+    
+        const updatedLocation = {
+          ...location,
+          [e.target.name]: e.target.value,
+        };
+      
+        setLocation(updatedLocation);
+      
+        dispatch(updateLocation(updatedLocation));
+      };
 
     return (
         <>
@@ -31,7 +34,6 @@ function Location({onUpdate}) {
                 <div className="mt-8 border-b border-gray-900/10 pb-12">
                     <h2 className="text-lg font-semibold leading-7 text-gray-900">{location?.eventId === "" ? "":"Edit "}Location Details</h2>
                     <p className="mt-1 text-sm leading-6 text-gray-600">The location details about the place of event hosting.</p>
-                    <input type='hidden' value={location.eventId}/>
                     <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-6">
 
                     <div className="col-span-4">

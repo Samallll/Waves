@@ -1,2 +1,13 @@
 
-{	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(ÀŠæ®ıÿÿÿÿ8‘˜ôÉØ1
+h	java:S112"FDefine and throw a dedicated exception instead of using a generic one.(Ò‚Òéüÿÿÿÿ8»£¤‘Û1
+{	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(ÀŠæ®ıÿÿÿÿ8¾£¤‘Û1
+H
+java:S1168X"+Return an empty collection instead of null.(¥¹ï8Ù£¤‘Û1
+H
+java:S1168]"+Return an empty collection instead of null.(¥¹ï8Ú£¤‘Û1
+H
+java:S1168b"+Return an empty collection instead of null.(¥¹ï8Ú£¤‘Û1
+H
+java:S1168g"+Return an empty collection instead of null.(¥¹ï8Û£¤‘Û1
+H
+java:S1168l"+Return an empty collection instead of null.(¥¹ï8Û£¤‘Û1

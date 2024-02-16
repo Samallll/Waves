@@ -1,44 +1,57 @@
 package com.waves.eventservice.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
+import lombok.*;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class JobPost {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long jobPostId;
 
+    @NotEmpty(message = "Job Name must not be empty and should be at least 3 characters long")
+    @Size(min =  3, message = "Job Name must not be empty and should be at least 3 characters long")
     private String jobName;
+
+    @NotEmpty(message = "Skills Required must not be empty and each skill should be at least 3 characters long")
+    private String skillsRequired;
+
+    @NotEmpty(message = "Job Description must not be empty and should be at least 10 characters long")
+    @Size(min =  10, message = "Job Description must not be empty and should be at least 10 characters long")
+    private String jobDescription;
+
+    @NotEmpty(message = "Terms And Conditions must not be empty and should be at least 10 characters long")
+    @Size(min =  10, message = "Terms And Conditions must not be empty and should be at least 10 characters long")
+    private String termsAndConditions;
+
+    @Min(value =  1, message = "Open Positions must be a positive integer")
+    private Integer openPositions;
 
     @OneToOne(mappedBy = "jobPost",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JoinColumn(name = "event_id",referencedColumnName = "eventId")
+    @JsonBackReference
     private Event event;
 
-    @ElementCollection
-    @CollectionTable(joinColumns = @JoinColumn(name = "job_post_id"))
-    @Column(name = "user_id")
-    private List<Long> hiredUsers;
+    @OneToMany(mappedBy = "jobPost", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Organizer> organizers;
 
     private boolean isActive=true;
 
-    private String jobDescription;
-
-    private Integer openPositions;
-
+    @Min(value =  0, message = "Salary must be a positive number")
     private Double salary;
 
-    private String skillsRequired;
-
-    private String termsAndConditions;
 }

@@ -2,7 +2,7 @@ import React from 'react'
 import { useEffect,useState } from 'react';
 import {useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { fetchLoggedUser } from '../../features/authSlice';
+import { fetchLoggedUser, updateLoggedUser } from '../../features/authSlice';
 
 function AddBankDetails() {
   
@@ -74,9 +74,10 @@ function AddBankDetails() {
               body: JSON.stringify(bankDetails),
             });
             if (response.ok) {
-              const data = await response.text();
+              const data = await response.json();
               dispatch(fetchLoggedUser(loggedUser.email));
               console.log('Bank details created:', data);
+              dispatch(updateLoggedUser(data.bankId))
 
               navigate(`/user/${loggedUser.userId}/bank`)
             } else {

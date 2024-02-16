@@ -1,7 +1,26 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import Modal from '../../components/Modal';
 
 function HostRequestDetails() {
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const[modalHeading,setModalHeading] = useState("")
+    const [modalContent,setModalContent] = useState("");
+    const [modalType,setModalType] = useState("");
+    const [status,setStatus] = useState("");
+    
+
+    const openModal = ({heading,content,type}) => {
+        setModalContent(content)
+        setModalHeading(heading)
+        setModalType(type)
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
 
     const {hostRequestId} = useParams();
     const [requestId,setRequestId] = useState("");
@@ -13,7 +32,6 @@ function HostRequestDetails() {
     const hostServiceURI = import.meta.env.VITE_HOST_SERVICE_BASE_URI;
 
     useEffect(() => {
-
         setRequestId(hostRequestId)
         fetch(`${hostServiceURI}/host-request/details/${hostRequestId}`)
             .then((response) => response.json())
@@ -29,21 +47,32 @@ function HostRequestDetails() {
                     setUserDetails(userData);
                 });
             });
-    }, [hostRequestId]);
+    }, [hostRequestId,status]);
 
     const approveRequest = () => {
 
         fetch(`${hostServiceURI}/host-request/approve/${hostRequestDetails.hostRequestId}`)
         .then(response => response.text())
-        .then(data => console.log(data))
+        .then(data => {
+            openModal({
+                heading: 'Approved',
+                content: 'Successfully approved the host request!',
+                type: 'success'
+            })
+            setStatus("approved")
+        })
     }
 
     const rejectRequest = () => {
         fetch(`${hostServiceURI}/host-request/disapprove/${hostRequestDetails.hostRequestId}`)
         .then(response => response.text())
         .then(data => {
-            console.log(data)
-            navigate("/admin/host-requests")
+            openModal({
+                heading: 'Rejection Completed',
+                content: 'Successfully rejected the host request!',
+                type: 'failure'
+            })
+            setStatus("rejected")
         })
     }
 
@@ -93,7 +122,13 @@ function HostRequestDetails() {
                     </dl>
                 </div>
             </div>
-        
+            <Modal
+                isOpen={isModalOpen}
+                setIsOpen={closeModal}
+                title={modalHeading}
+                message={modalContent}
+                type={modalType}
+            />
     </>
   )
 }

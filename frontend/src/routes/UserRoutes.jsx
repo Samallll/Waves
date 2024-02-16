@@ -17,6 +17,7 @@ function UserRoutes() {
             <Route path='/' element={<UserHome/>}/>
             <Route path='/home' element={<UserHome/>}/>
             <Route path='/host-registration' element={<HostRegistration/>}/>
+            <Route path='/event-details' element={<HostRegistration/>}/>
             <Route path='/:userId' element={<UserProfileLayout/>}>
               <Route path='' element={<UserProfile/>}/>
               <Route path='edit' element={<EditUserProfile/>}/>

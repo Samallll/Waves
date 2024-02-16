@@ -16,6 +16,7 @@ import OtpValidation from './components/forms/OtpValidation'
 import ConfirmPasswordForm from './components/forms/ConfirmPasswordForm'
 import HostRoutes from './routes/HostRoutes'
 import Events from './pages/Events'
+import "react-image-crop/dist/ReactCrop.css";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -41,5 +42,5 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <Provider store={store}>
       <RouterProvider router={router} />
     </Provider>
-  </React.StrictMode>,
+  </React.StrictMode>
 )

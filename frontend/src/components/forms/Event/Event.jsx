@@ -1,43 +1,64 @@
 import React from 'react'
 import { useState,useEffect } from 'react';
+import ImageComponent from '../../../components/ImageComponent';
+import Modal from '../../ImageCropper/Modal';
+import { useDispatch,useSelector } from 'react-redux';
+import { updateEvent, updateUserId } from '../../../features/eventSlice';
 
-function Event({onUpdate}) {
+function Event() {
 
-    const initialEvent = {
+  const eventServiceURI = import.meta.env.VITE_EVENT_SERVICE_BASE_URI
+
+  const eventDetails = useSelector(state=>state.event.event)
+
+  const initialEvent = !eventDetails ? {} : {
     eventId:"",
     eventName:"",
-    date:"",
-    time:"",
-    genre:"",
-    contentType:"",
-    eventMode:"",
+    eventDate:"",
+    eventTime:"",
+    genre:"Workshop",
+    contentType:"FREE",
+    eventMode:"OFFLINE",
     organizerCount:0,
     seatsAvailable:0,
-    about:"",
+    description:"",
     ticketPrice:"",
-    termsAndConditions:""
+    termsAndConditions:"",
+    eventPictureId:""
   }
 
-  const [eventDetails,setEventDetails] = useState(initialEvent);
-
-  useEffect(() => {
-    onUpdate(eventDetails);
-  }, [eventDetails]);
+  const [event,setEvent] = useState(initialEvent);
+  const [modalOpen, setModalOpen] = useState(false);
+  
+  const dispatch = useDispatch();
+  const userDetails = useSelector(state => state.auth.loggedUser)
 
   const handleChange = (e) => {
-    setEventDetails(
-        { 
-        ...eventDetails, 
-        [e.target.name]: e.target.value 
-        }
-    );
+    
+    let value = e.target.value;
+    if (e.target.name === 'contentType' || e.target.name === 'eventMode') {
+      value = value.toUpperCase();
+    }
+
+    const updatedEvent = {
+      ...event,
+      [e.target.name]: value,
+    };
+  
+    setEvent(updatedEvent);
+  
+    dispatch(updateEvent(updatedEvent));
   };
+
+  useEffect(() => {
+    dispatch(updateUserId(userDetails.userId));
+  }, [dispatch, userDetails]);
 
   return (
     <>
         <div className="space-y-12">
           <div className="border-b border-gray-900/10 pb-12">
-            <h2 className="text-2xl text-center font-semibold leading-7 text-gray-900">{eventDetails?.eventId != "" ? "Edit" : ""} Event Information</h2>
+            <h2 className="text-2xl text-center font-semibold leading-7 text-gray-900">{event?.eventId != "" ? "Edit" : ""} Event Information</h2>
             <p className="mt-1 text-sm text-center leading-6 text-gray-600">You can edit the details during the event organizing phase.</p>
 
             <div className="mt-8 grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-6">
@@ -50,7 +71,7 @@ function Event({onUpdate}) {
                     type="text"
                     name="eventName"
                     id="eventName"
-                    value={eventDetails.eventName} 
+                    value={event.eventName} 
                     onChange={(e)=>handleChange(e)}
                     autoComplete="given-name"
                     className="block px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -65,9 +86,9 @@ function Event({onUpdate}) {
                 <div className="mt-2">
                   <input
                     type="date"
-                    name="date"
-                    id="date" 
-                    value={eventDetails.date} 
+                    name="eventDate"
+                    id="eventDate" 
+                    value={event.eventDate} 
                     onChange={(e)=>handleChange(e)}
                     className="block px-2 w-full px-4 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
@@ -81,11 +102,11 @@ function Event({onUpdate}) {
                 <div className="mt-2">
                   <input
                     type="time"
-                    name="time"
-                    id="time" 
-                    value={eventDetails.time} 
+                    name="eventTime"
+                    id="eventTime" 
+                    value={event.eventTime} 
                     onChange={(e)=>handleChange(e)}
-                    autoComplete="time"
+                    autoComplete="eventTime"
                     className="px-4 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
@@ -96,15 +117,20 @@ function Event({onUpdate}) {
                   Genre
                 </label>
                 <div className="mt-2">
-                  <input
-                    type="text"
-                    name="genre"
-                    id="genre" 
-                    value={eventDetails.genre} 
+                <select
+                    id="genre"
+                    name="genre" 
+                    value={event.genre} 
                     onChange={(e)=>handleChange(e)}
                     autoComplete="genre"
-                    className="block px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  />
+                    className="block px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                  >
+                    <option>Workshop</option>
+                    <option>Other</option>
+                    <option>Music</option>
+                    <option>Comedy</option>
+                    <option>Meetup</option>
+                  </select>
                 </div>
               </div>
 
@@ -116,7 +142,7 @@ function Event({onUpdate}) {
                   <select
                     id="contentType"
                     name="contentType" 
-                    value={eventDetails.contentType} 
+                    value={event.contentType} 
                     onChange={(e)=>handleChange(e)}
                     autoComplete="contentType"
                     className="block px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
@@ -137,7 +163,7 @@ function Event({onUpdate}) {
                     disabled
                     id="eventMode"
                     name="eventMode" 
-                    value={eventDetails.eventMode} 
+                    value={event.eventMode} 
                     onChange={(e)=>handleChange(e)}
                     autoComplete="eventMode"
                     className="block px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
@@ -157,7 +183,7 @@ function Event({onUpdate}) {
                     type="text"
                     name="organizerCount"
                     id="organizerCount" 
-                    value={eventDetails.organizerCount} 
+                    value={event.organizerCount} 
                     onChange={(e)=>handleChange(e)}
                     autoComplete="organizerCount" 
                     className="block px-3 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -174,7 +200,7 @@ function Event({onUpdate}) {
                     type="text"
                     name="seatsAvailable"
                     id="seatsAvailable" 
-                    value={eventDetails.seatsAvailable} 
+                    value={event.seatsAvailable} 
                     onChange={(e)=>handleChange(e)}
                     autoComplete="seatsAvailable"
                     className="block px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -183,16 +209,16 @@ function Event({onUpdate}) {
               </div>
 
               <div className="sm:col-span-4">
-                <label htmlFor="about" className="block text-sm font-medium leading-6 text-gray-900">
-                  About the Event
+                <label htmlFor="description" className="block text-sm font-medium leading-6 text-gray-900">
+                  Description the Event
                 </label>
                 <div className="mt-2">
                   <textarea
                     type="text"
-                    name="about"
-                    id="about"
-                    autoComplete="about" 
-                    value={eventDetails.about} 
+                    name="description"
+                    id="description"
+                    autoComplete="description" 
+                    value={event.description} 
                     onChange={(e)=>handleChange(e)}
                     className="block px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
@@ -208,7 +234,7 @@ function Event({onUpdate}) {
                     type="text"
                     name="ticketPrice"
                     id="ticketPrice" 
-                    value={eventDetails.ticketPrice} 
+                    value={event.ticketPrice} 
                     onChange={(e)=>handleChange(e)}
                     autoComplete="ticketPrice"
                     className="block px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -217,6 +243,57 @@ function Event({onUpdate}) {
               </div>
             </div>
           </div>  
+        </div>
+
+        <div className="space-y-12">
+          <div className="mt-8 border-b border-gray-900/10 pb-12 flex space-x-5">
+
+            <div className='w-10/12'>
+              <h2 className="text-lg font-semibold leading-7 text-gray-900">Terms and Conditions</h2>
+              <p className="mt-1 text-sm leading-6 text-gray-600">Constraints for the users to be participating in the event. Please mention all your T&C in the below text area.</p>
+
+              <div className="mt-2 grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-6">
+
+                <div className="col-span-full">
+                  <div className="mt-2">
+                    <textarea
+                      type="text"
+                      name="termsAndConditions"
+                      id="termsAndConditions"
+                      autoComplete="termsAndConditions"
+                      value={event.termsAndConditions} 
+                      onChange={(e)=>handleChange(e)}
+                      className="block min-h-[180px] px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    />
+                  </div>
+                </div>             
+              </div>
+            </div>
+
+            <div className='flex flex-col items-center'>
+              <p className="mt-1 text-sm leading-6 text-gray-600">Event Picture</p>
+              <ImageComponent src={eventDetails.eventPictureId ? `${eventServiceURI}/get-picture/${eventDetails.eventPictureId}` : null}/>
+
+              <button
+                type="button"
+                onClick={()=>setModalOpen(true)}
+                className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mt-3"
+              >
+                Upload!
+              </button>
+
+              {modalOpen && (
+                <Modal
+                  closeModal={() => {
+                    setModalOpen(false)
+                  }}
+                  imageUploadUrl={eventServiceURI+'/add-picture'}
+                />
+              )}
+            </div>
+
+          </div> 
+
         </div>
     </>
   )

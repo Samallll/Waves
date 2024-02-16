@@ -1,58 +1,92 @@
-import React, { useState } from 'react'
-import { validateEventDetails, validateLocation } from '../../utils/validations';
+import React, { useEffect, useState } from 'react'
+import { validateEventDetails, validateLocation,validateJobPost } from '../../utils/validations';
 import Event from '../../components/forms/Event/Event';
 import Location from '../../components/forms/Event/Location';
 import JobPost from '../../components/forms/Event/JobPost';
+import {  useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import ToastContainer from '../../components/ToastContainer';
+import { resetEventDetails } from '../../features/eventSlice';
+import useToastService from '../../services/useToastService';
+
 
 function EventRegistration() {
 
+  const eventServiceURI = import.meta.env.VITE_EVENT_SERVICE_BASE_URI
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const {showToast} = useToastService();
+
   const [error,setError] = useState("");
 
-  const handleCategoryUpdate = (category, data) => {
-    
-    setFormData(prevState => ({ ...prevState, [category]: data }));
+  const eventDetails = useSelector(state=>state.event)
 
-  };
+  useEffect(()=>{
 
-  const [formData, setFormData] = useState({
-    location: {},
-    eventDetails: {},
-    jobPost:{}
-  });
+  },[eventDetails])
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
 
     e.preventDefault();
-    const validateEventResult = validateEventDetails(formData.eventDetails);
-    if (!formData.eventDetails.eventName || formData.eventDetails.eventName.length <  3) {
+
+    console.log(eventDetails)
+
+    const validateEventResult = validateEventDetails(eventDetails.event);
+    if (!eventDetails.event.eventName || eventDetails.event.eventName.length <  3) {
       setError('Event Name must be at least 3 characters long');
       return;
     }
-    // if(validateEventResult !== ""){
-    //   setError(validateEventResult)
-    //   return;
-    // }
-    // if(formData.eventDetails.eventMode === "Offline"){
-    //   const validateLocation = validateLocation(formData.location);
-    //   if(validateLocation !== ""){
-    //     setError(validateLocation)
-    //     return;
-    //   }
-    // }
-    // if(formData.eventDetails.organizerCount.trim() > 0){
-    //   const validateJobPost = validateJobPost(formData.jobPost);
-    //   if(validateJobPost !== ""){
-    //     setError(validateJobPost)
-    //     return;
-    //   }
-    // }
-    // if (!formData.eventDetails.termsAndConditions || formData.eventDetails.termsAndConditions.trim().length <   10) {
-    //   setError('Terms And Conditions must not be empty and should be at least 10 characters long');
-    //   return;
-    // }
+    if(validateEventResult !== ""){
+      setError(validateEventResult)
+      return;
+    }
+    if(eventDetails.event.eventMode === "Offline"){
+      const validateLocation = validateLocation(eventDetails.location);
+      if(validateLocation !== ""){
+        setError(validateLocation)
+        return;
+      }
+    }
+    if(eventDetails.event.organizerCount > 0){
+      const validateJobPostResult = validateJobPost(eventDetails.jobPost)
+      if(validateJobPostResult !== ""){
+        setError(validateJobPostResult)
+        return;
+      }
+    }
+    const validateLocationDetails = validateLocation(eventDetails.location);
+    if(validateLocationDetails !== ""){
+      setError(validateLocationDetails);
+      return;
+    }
+    if (!eventDetails.event.termsAndConditions || eventDetails.event.termsAndConditions.trim().length <   10) {
+      setError('Terms And Conditions must not be empty and should be at least 10 characters long');
+      return;
+    }
     setError("");
-    console.log("Success");
-  }
+    
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(eventDetails),
+    };
+
+    try {
+      const response = await fetch(`${eventServiceURI}/add-event`, requestOptions);
+      // if (!response.ok) {
+      //   throw new Error(`HTTP error! status: ${response.status}`);
+      // }
+      const data = await response.text();
+      console.log('Event added: ', data);
+      dispatch(resetEventDetails());
+      showToast('Event Registered Successfully!', { type: 'success' })
+      } catch (error) {
+        console.error('Error adding event: ', error);
+      }
+
+    }; 
+    
 
   return (
     <>
@@ -62,38 +96,17 @@ function EventRegistration() {
                     <h6 className='text-white mx-20 bg-red-600 py-2 mb-8 text-center rounded'>{error}</h6>
                     </>}
         <div>
-          <Event onUpdate={(data) => handleCategoryUpdate('eventDetails', data)}/>
+          <Event/>
         </div>
+
         <div>
-          <Location onUpdate={(data) => handleCategoryUpdate('location',data)} />
-        </div>
-
-        <div className="space-y-12">
-          <div className="mt-8 border-b border-gray-900/10 pb-12">
-            <h2 className="text-lg font-semibold leading-7 text-gray-900">Terms and Conditions</h2>
-            <p className="mt-1 text-sm leading-6 text-gray-600">Constraints for the users to be participating in the event. Please mention all your T&C in the below text area.</p>
-
-            <div className="mt-2 grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-6">
-
-              <div className="col-span-full">
-                <div className="mt-2">
-                  <textarea
-                    type="text"
-                    name="termsAndConditions"
-                    id="termsAndConditions"
-                    autoComplete="termsAndConditions"
-                    className="block px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  />
-                </div>
-              </div>             
-            </div>
-          </div>  
+          <Location/>
         </div>
 
         {
-          formData?.eventDetails?.organizerCount>0 && 
+          eventDetails?.event?.organizerCount>0 && 
           <div> 
-            <JobPost onUpdate={(data) => handleCategoryUpdate('jobPost',data)}/>
+            <JobPost/>
           </div>
         }
 
@@ -105,12 +118,20 @@ function EventRegistration() {
           >
             Save
           </button>
-          <button type="button" className="text-sm font-semibold leading-6 text-gray-900">
+          <button
+            type="button"
+            onClick={() => {
+              dispatch(resetEventDetails());
+              navigate('/');
+            }}
+            className="text-sm font-semibold leading-6 text-gray-900"
+          >
             Cancel
           </button>
         </div>
       </div>
     </section>
+    <ToastContainer/>
     </>
   )
 }
