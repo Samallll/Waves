@@ -252,3 +252,15 @@ Ievent-service/src/main/java/com/waves/eventservice/service/S3Service.java,b\d\
 Pevent-service/src/main/java/com/waves/eventservice/util/EventSpecifications.java,b\7\b76e68aaa887299f7df024fc5b37e49881d00eb4
 x
 Hevent-service/src/main/java/com/waves/eventservice/util/EventMapper.java,3\c\3c57e661800dca472bb3cc14be452f8656b6b56a
+y
+Ievent-service/src/main/java/com/waves/eventservice/model/Participant.java,8\9\897615b66e824fbd125a02da51d9fcc763de7ff3
+‡
+Wevent-service/src/main/java/com/waves/eventservice/service/Impl/ParticipantService.java,4\e\4e5de6c4d5b28f06de236cf89f7871e2c3d10a5a
+‚
+Revent-service/src/main/java/com/waves/eventservice/service/ParticipantService.java,3\3\33bd262f01a4a427c00755c5dd10a002ce07d1a3
+Š
+Zevent-service/src/main/java/com/waves/eventservice/service/Impl/ParticipantServiceImp.java,5\c\5c7c38a52fadfcbf86b4a217123f036344a18e94
+ˆ
+Xevent-service/src/main/java/com/waves/eventservice/repository/ParticipantRepository.java,e\b\eba67469eadee1e13dc48393211ba28ac4ac4055
+ˆ
+Xevent-service/src/main/java/com/waves/eventservice/controller/ParticipantController.java,1\9\194331e7565c9461e8670fa3ff201b9f4f0568d1

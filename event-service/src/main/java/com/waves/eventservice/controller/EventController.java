@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,6 +29,7 @@ public class EventController {
 
     private final EventService eventService;
 
+    @PreAuthorize("hasRole('HOST')")
     @PostMapping("/add-event")
     public ResponseEntity<String> registerEvent(@Valid @RequestBody EventDetails eventDetails,
                                                 BindingResult bindingResult){
@@ -42,6 +44,7 @@ public class EventController {
         return ResponseEntity.ok("Event Created Successfully");
     }
 
+    @PreAuthorize("hasAnyRole('USER','ADMIN','HOST')")
     @PostMapping(value = "/add-picture",
                     consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> addEventPicture(@RequestParam("file")MultipartFile file){
@@ -50,6 +53,7 @@ public class EventController {
         return ResponseEntity.ok(imageUrl);
     }
 
+    @PreAuthorize("hasAnyRole('USER','ADMIN','HOST')")
     @GetMapping(value = "/get-picture/{key}",
                 produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<byte[]> getEventPicture(@PathVariable String key){
@@ -57,7 +61,9 @@ public class EventController {
         return ResponseEntity.ok(eventService.viewImage(key));
     }
 
+
     @GetMapping("/events")
+    @PreAuthorize("hasAnyRole('USER','ADMIN','HOST')")
     public ResponseEntity<Page<Event>> getEventDetails(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
@@ -73,19 +79,22 @@ public class EventController {
         return ResponseEntity.ok(eventDetails);
     }
 
+    @PreAuthorize("hasAnyRole('USER','ADMIN','HOST')")
     @GetMapping("/{eventId}")
     public ResponseEntity<EventDetails> getEventDetails(@PathVariable Long eventId){
 
-        Optional<EventDetails> eventDetails = eventService.getEventById(eventId);
+        Optional<EventDetails> eventDetails = eventService.getEventDetailsById(eventId);
         return eventDetails.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @PreAuthorize("hasRole('HOST')")
     @PutMapping("/{eventId}")
     public ResponseEntity<EventDetails> updateEvent(@PathVariable Long eventId, @RequestBody EventDetails eventDetails) {
 
         Optional<EventDetails> updatedEventDetails = eventService.updateEvent(eventDetails);
         return updatedEventDetails.map(ResponseEntity::ok).orElseGet(()->ResponseEntity.notFound().build());
     }
+
 
     @GetMapping("/by-genre")
     public ResponseEntity<Page<Event>> getEventDetailsByGenreAndActive(
@@ -98,6 +107,7 @@ public class EventController {
         return ResponseEntity.ok(eventDetailsByGenre);
     }
 
+    @PreAuthorize("hasRole('HOST')")
     @GetMapping("/update-event-status/{eventId}/{eventStatus}")
     public ResponseEntity<String> updateEventStatus(@PathVariable("eventId") Long eventId,
                                                     @PathVariable("eventStatus") EventStatus eventStatus){
@@ -106,15 +116,17 @@ public class EventController {
         return isSuccessfull ? ResponseEntity.ok("Event Status Updated Successfully") : ResponseEntity.ok("Failed to update Event Status");
     }
 
+    @PreAuthorize("hasRole('HOST')")
     @GetMapping("/by-event-status")
-    public ResponseEntity<Page<Event>> getEventsByEventStatus(
+    public ResponseEntity<Page<Event>> getEventsByEventStatusAndHostId(
             @RequestParam(required = false) EventStatus eventStatus,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(required = false) String searchQuery
+            @RequestParam(required = false) String searchQuery,
+            @RequestParam(required = true) Long hostedByUserId
     ){
         Pageable pageable = PageRequest.of(page,size);
-        Page<Event> eventDetailsByEventStatus = eventService.getEventsByEventStatusAndSearch(eventStatus,pageable,searchQuery);
+        Page<Event> eventDetailsByEventStatus = eventService.getEventsByEventStatusAndSearch(eventStatus,pageable,searchQuery,hostedByUserId);
         return ResponseEntity.ok(eventDetailsByEventStatus);
     }
 

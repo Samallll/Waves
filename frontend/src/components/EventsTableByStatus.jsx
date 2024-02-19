@@ -3,7 +3,7 @@ import DataTable from 'react-data-table-component'
 import { Pagination } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import {convertToNormalTime,dateConverter} from '../utils/converter'
-
+import { useSelector } from 'react-redux';
 
 function EventsTableByStatus({eventStatus}) {
 
@@ -13,13 +13,14 @@ function EventsTableByStatus({eventStatus}) {
     const [totalPages, setTotalPages] = useState(0);
     const [searchData,setSearchData] = useState("");
     const eventServiceURI = import.meta.env.VITE_EVENT_SERVICE_BASE_URI
+    const loggedUser = useSelector(state=>state.auth.loggedUser)
     const navigate = useNavigate();
     
 
     const fetchEvents = async () => {
       const status = eventStatus.toUpperCase();
       try {
-        const response = await fetch(`${eventServiceURI}/by-event-status?page=${page}&size=${pageSize}&eventStatus=${status}&searchQuery=${searchData}`);
+        const response = await fetch(`${eventServiceURI}/by-event-status?page=${page}&size=${pageSize}&eventStatus=${status}&searchQuery=${searchData}&hostedByUserId=${loggedUser.userId}`);
         const data = await response.json();
         setRecords(data.content);
         setTotalPages(data.totalPages);

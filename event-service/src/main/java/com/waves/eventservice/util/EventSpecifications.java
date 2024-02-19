@@ -17,6 +17,10 @@ public class EventSpecifications {
         );
     }
 
+    public static Specification<Event> hostedByUserId(Long hostedByUserId){
+        return ((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("hostedByUserId"),hostedByUserId));
+    }
+
     public static Specification<Event> genre(String genre) {
         return (root, query, criteriaBuilder) ->
                 criteriaBuilder.equal(root.get("genre"), genre);

@@ -19,11 +19,13 @@ public interface EventService {
 
     Event registerEvent(EventDetails eventDetails);
 
+    Event saveEvent(Event event);
+
     Optional<EventDetails> updateEvent(EventDetails eventDetails);
 
-    boolean registerUserForParticipation(Long userId,Long eventId);
+    Optional<EventDetails> getEventDetailsById(Long eventId);
 
-    Optional<EventDetails> getEventById(Long eventId);
+    Optional<Event> getEventById(Long eventId);
 
     List<Event> getEventsByHost(Long hostId);
 
@@ -47,5 +49,5 @@ public interface EventService {
 
     boolean updateEventStatus(Long eventId,EventStatus eventStatus);
 
-    Page<Event> getEventsByEventStatusAndSearch(EventStatus eventStatus, Pageable pageable, String searchQuery);
+    Page<Event> getEventsByEventStatusAndSearch(EventStatus eventStatus, Pageable pageable, String searchQuery,Long hostedByUserId);
 }

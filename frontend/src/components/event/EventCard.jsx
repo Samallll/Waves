@@ -2,7 +2,6 @@ import React from 'react'
 import ImageComponent from '../ImageComponent'
 
 function EventCard({eventDetails}) {
-    console.log(eventDetails)
   return (
     <>
         <div className="py-10 lg:col-span-2 lg:col-start-1 lg:border-r lg:border-gray-200 lg:pb-16 lg:pr-8 lg:pt-6">

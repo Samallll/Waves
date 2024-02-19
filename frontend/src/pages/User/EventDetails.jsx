@@ -35,7 +35,6 @@ function EventDetails() {
             const similarEventsResponse = await axios.get(`${eventServiceURI}/by-genre?page=${page}&size=${pageSize}&genre=${genre}`);
             const similarEventsData = similarEventsResponse.data;
             const filteredData = similarEventsData.content.filter(obj => obj.eventId !== details.event.eventId && obj.eventStatus !== "EXPIRED");
-            console.log(filteredData)
             setSimilarRecords(filteredData);
         }
         catch(error){

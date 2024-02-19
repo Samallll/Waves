@@ -75,6 +75,11 @@ public class EventServiceImp implements EventService {
     }
 
     @Override
+    public Event saveEvent(Event event){
+        return eventRepository.save(event);
+    }
+
+    @Override
     public Optional<EventDetails> updateEvent(EventDetails eventDetails) {
 
         Optional<Event> existingEvent = eventRepository.findById(eventDetails.getEvent().getEventId());
@@ -124,12 +129,7 @@ public class EventServiceImp implements EventService {
     }
 
     @Override
-    public boolean registerUserForParticipation(Long userId, Long eventId) {
-        return false;
-    }
-
-    @Override
-    public Optional<EventDetails> getEventById(Long eventId) {
+    public Optional<EventDetails> getEventDetailsById(Long eventId) {
 
         Optional<Event> event = eventRepository.findById(eventId);
         EventDetails eventDetails = null;
@@ -137,6 +137,11 @@ public class EventServiceImp implements EventService {
             eventDetails = EventMapper.eventToEventDetails(event.get());
         }
         return Optional.ofNullable(eventDetails);
+    }
+
+    @Override
+    public Optional<Event> getEventById(Long eventId) {
+        return eventRepository.findById(eventId);
     }
 
     @Override
@@ -279,7 +284,10 @@ public class EventServiceImp implements EventService {
     }
 
     @Override
-    public Page<Event> getEventsByEventStatusAndSearch(EventStatus eventStatus, Pageable pageable, String searchQuery) {
+    public Page<Event> getEventsByEventStatusAndSearch(EventStatus eventStatus,
+                                                       Pageable pageable,
+                                                       String searchQuery,
+                                                       Long hostedByUserId) {
 
         Specification<Event> spec = Specification.where(null);
         if(!StringUtils.isEmpty(searchQuery)){
@@ -288,6 +296,7 @@ public class EventServiceImp implements EventService {
         if(eventStatus!=null){
             spec = spec.and(EventSpecifications.eventStatus(eventStatus));
         }
+        spec = spec.and(EventSpecifications.hostedByUserId(hostedByUserId));
         return eventRepository.findAll(spec,pageable);
     }
 }
