@@ -6,15 +6,7 @@ function Location() {
 
     const dispatch = useDispatch();
 
-    const initialLocation = {
-        streetAddress:"",
-        country:"India",
-        state:"",
-        city:"",
-        zipCode:"",
-    }
-
-    const [location,setLocation] = useState(initialLocation);
+    const location = useSelector(state=>state.event.location)
 
     const handleChange = (e) => {
     
@@ -23,8 +15,6 @@ function Location() {
           [e.target.name]: e.target.value,
         };
       
-        setLocation(updatedLocation);
-      
         dispatch(updateLocation(updatedLocation));
       };
 
@@ -32,7 +22,7 @@ function Location() {
         <>
             <div className="space-y-12">
                 <div className="mt-8 border-b border-gray-900/10 pb-12">
-                    <h2 className="text-lg font-semibold leading-7 text-gray-900">{location?.eventId === "" ? "":"Edit "}Location Details</h2>
+                    <h2 className="text-lg font-semibold leading-7 text-gray-900">Location Details</h2>
                     <p className="mt-1 text-sm leading-6 text-gray-600">The location details about the place of event hosting.</p>
                     <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-6">
 
@@ -62,6 +52,7 @@ function Location() {
                             id="country"
                             name="country"
                             autoComplete="country"
+                            value={location.country} 
                             onChange={(e)=>handleChange(e)}
                             className="block px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                         >
@@ -82,6 +73,7 @@ function Location() {
                             type="text"
                             name="city"
                             id="city"
+                            value={location.city} 
                             onChange={(e)=>handleChange(e)}
                             autoComplete="address-level2"
                             className="block px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -98,6 +90,7 @@ function Location() {
                             type="text"
                             name="state"
                             id="state"
+                            value={location.state} 
                             onChange={(e)=>handleChange(e)}
                             autoComplete="state"
                             className="block px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -114,6 +107,7 @@ function Location() {
                             type="text"
                             name="zipCode"
                             id="zipCode"
+                            value={location.zipCode} 
                             onChange={(e)=>handleChange(e)}
                             autoComplete="zipCode"
                             className="block px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"

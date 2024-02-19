@@ -1,9 +1,39 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  location: {},
-  event: {},
-  jobPost: null,
+  location: {
+    streetAddress:"",
+    country:"India",
+    state:"",
+    city:"",
+    zipCode:"",
+  },
+  event: {
+    eventId:"",
+    eventName:"",
+    eventDate:"",
+    eventTime:"",
+    genre:"Workshop",
+    contentType:"Free",
+    eventMode:"Offline",
+    organizerCount:0,
+    seatsAvailable:0,
+    description:"",
+    ticketPrice:"",
+    termsAndConditions:"",
+    eventPictureId:"",
+    participantsCount:"",
+    hostedByUserId:""
+  },
+  jobPost: {
+    eventId:"",
+    jobName:"",
+    skillsRequired:"",
+    jobDescription:"",
+    termsAndConditions:"",
+    salary:0,
+    openPositions:0
+  },
   userId: "",
 };
 
@@ -12,7 +42,15 @@ const eventSlice = createSlice({
   initialState,
   reducers: {
     addEventDetails: (state, action) => {
-      state.event = action.payload.event || {};
+      const eventPayload = action.payload.event || {};
+      if (eventPayload.contentType) {
+        eventPayload.contentType = eventPayload.contentType.charAt(0).toUpperCase() + eventPayload.contentType.slice(1).toLowerCase();
+      }
+      if (eventPayload.eventMode) {
+        eventPayload.eventMode = eventPayload.eventMode.charAt(0).toUpperCase() + eventPayload.eventMode.slice(1).toLowerCase();
+      }
+   
+      state.event = eventPayload;
       state.location = action.payload.location || {};
       state.jobPost = action.payload.jobPost || null;
       state.userId = action.payload.userId || "";

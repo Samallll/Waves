@@ -9,6 +9,7 @@ import BankDetails from '../pages/User/BankDetails'
 import EditBankDetails from '../pages/User/EditBankDetails'
 import AddBankDetails from '../pages/User/AddBankDetails'
 import HostRegistration from '../components/forms/HostRegistration'
+import EventDetails from '../pages/User/EventDetails'
 
 function UserRoutes() {
   return (
@@ -17,7 +18,7 @@ function UserRoutes() {
             <Route path='/' element={<UserHome/>}/>
             <Route path='/home' element={<UserHome/>}/>
             <Route path='/host-registration' element={<HostRegistration/>}/>
-            <Route path='/event-details' element={<HostRegistration/>}/>
+            <Route path='/event-details/:eventId' element={<EventDetails/>}/>
             <Route path='/:userId' element={<UserProfileLayout/>}>
               <Route path='' element={<UserProfile/>}/>
               <Route path='edit' element={<EditUserProfile/>}/>

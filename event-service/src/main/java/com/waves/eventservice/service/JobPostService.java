@@ -12,7 +12,7 @@ public interface JobPostService {
 
     JobPost createJobPost(JobPost jobPost);
 
-    JobPost updateJobPost(Long jobPostId);
+    JobPost updateJobPost(Long jobPostId,JobPost jobPost);
 
     List<JobPost> getAllJobPost();
 

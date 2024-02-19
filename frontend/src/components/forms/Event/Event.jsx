@@ -9,25 +9,7 @@ function Event() {
 
   const eventServiceURI = import.meta.env.VITE_EVENT_SERVICE_BASE_URI
 
-  const eventDetails = useSelector(state=>state.event.event)
-
-  const initialEvent = !eventDetails ? {} : {
-    eventId:"",
-    eventName:"",
-    eventDate:"",
-    eventTime:"",
-    genre:"Workshop",
-    contentType:"FREE",
-    eventMode:"OFFLINE",
-    organizerCount:0,
-    seatsAvailable:0,
-    description:"",
-    ticketPrice:"",
-    termsAndConditions:"",
-    eventPictureId:""
-  }
-
-  const [event,setEvent] = useState(initialEvent);
+  const eventDetails = useSelector(state=>state.event.event);
   const [modalOpen, setModalOpen] = useState(false);
   
   const dispatch = useDispatch();
@@ -35,30 +17,19 @@ function Event() {
 
   const handleChange = (e) => {
     
-    let value = e.target.value;
-    if (e.target.name === 'contentType' || e.target.name === 'eventMode') {
-      value = value.toUpperCase();
-    }
-
-    const updatedEvent = {
-      ...event,
-      [e.target.name]: value,
-    };
-  
-    setEvent(updatedEvent);
-  
-    dispatch(updateEvent(updatedEvent));
+    let value = e.target.value;  
+    dispatch(updateEvent({ [e.target.name]: value }));
   };
 
   useEffect(() => {
-    dispatch(updateUserId(userDetails.userId));
-  }, [dispatch, userDetails]);
+    dispatch(updateUserId(userDetails?.userId));
+  }, [userDetails,eventDetails]);
 
   return (
     <>
         <div className="space-y-12">
           <div className="border-b border-gray-900/10 pb-12">
-            <h2 className="text-2xl text-center font-semibold leading-7 text-gray-900">{event?.eventId != "" ? "Edit" : ""} Event Information</h2>
+            <h2 className="text-2xl text-center font-semibold leading-7 text-gray-900">{eventDetails?.eventId != "" ? "Edit" : ""} Event Information</h2>
             <p className="mt-1 text-sm text-center leading-6 text-gray-600">You can edit the details during the event organizing phase.</p>
 
             <div className="mt-8 grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-6">
@@ -71,7 +42,7 @@ function Event() {
                     type="text"
                     name="eventName"
                     id="eventName"
-                    value={event.eventName} 
+                    value={eventDetails?.eventName} 
                     onChange={(e)=>handleChange(e)}
                     autoComplete="given-name"
                     className="block px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -88,7 +59,7 @@ function Event() {
                     type="date"
                     name="eventDate"
                     id="eventDate" 
-                    value={event.eventDate} 
+                    value={eventDetails.eventDate} 
                     onChange={(e)=>handleChange(e)}
                     className="block px-2 w-full px-4 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
@@ -104,7 +75,7 @@ function Event() {
                     type="time"
                     name="eventTime"
                     id="eventTime" 
-                    value={event.eventTime} 
+                    value={eventDetails.eventTime} 
                     onChange={(e)=>handleChange(e)}
                     autoComplete="eventTime"
                     className="px-4 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -120,7 +91,7 @@ function Event() {
                 <select
                     id="genre"
                     name="genre" 
-                    value={event.genre} 
+                    value={eventDetails.genre} 
                     onChange={(e)=>handleChange(e)}
                     autoComplete="genre"
                     className="block px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
@@ -142,7 +113,7 @@ function Event() {
                   <select
                     id="contentType"
                     name="contentType" 
-                    value={event.contentType} 
+                    value={eventDetails.contentType} 
                     onChange={(e)=>handleChange(e)}
                     autoComplete="contentType"
                     className="block px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
@@ -163,7 +134,7 @@ function Event() {
                     disabled
                     id="eventMode"
                     name="eventMode" 
-                    value={event.eventMode} 
+                    value={eventDetails.eventMode} 
                     onChange={(e)=>handleChange(e)}
                     autoComplete="eventMode"
                     className="block px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
@@ -183,7 +154,7 @@ function Event() {
                     type="text"
                     name="organizerCount"
                     id="organizerCount" 
-                    value={event.organizerCount} 
+                    value={eventDetails.organizerCount} 
                     onChange={(e)=>handleChange(e)}
                     autoComplete="organizerCount" 
                     className="block px-3 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -200,7 +171,7 @@ function Event() {
                     type="text"
                     name="seatsAvailable"
                     id="seatsAvailable" 
-                    value={event.seatsAvailable} 
+                    value={eventDetails.seatsAvailable} 
                     onChange={(e)=>handleChange(e)}
                     autoComplete="seatsAvailable"
                     className="block px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -218,7 +189,7 @@ function Event() {
                     name="description"
                     id="description"
                     autoComplete="description" 
-                    value={event.description} 
+                    value={eventDetails.description} 
                     onChange={(e)=>handleChange(e)}
                     className="block px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
@@ -234,7 +205,7 @@ function Event() {
                     type="text"
                     name="ticketPrice"
                     id="ticketPrice" 
-                    value={event.ticketPrice} 
+                    value={eventDetails.ticketPrice} 
                     onChange={(e)=>handleChange(e)}
                     autoComplete="ticketPrice"
                     className="block px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -248,7 +219,7 @@ function Event() {
         <div className="space-y-12">
           <div className="mt-8 border-b border-gray-900/10 pb-12 flex space-x-5">
 
-            <div className='w-10/12'>
+            <div className='w-full'>
               <h2 className="text-lg font-semibold leading-7 text-gray-900">Terms and Conditions</h2>
               <p className="mt-1 text-sm leading-6 text-gray-600">Constraints for the users to be participating in the event. Please mention all your T&C in the below text area.</p>
 
@@ -261,7 +232,7 @@ function Event() {
                       name="termsAndConditions"
                       id="termsAndConditions"
                       autoComplete="termsAndConditions"
-                      value={event.termsAndConditions} 
+                      value={eventDetails.termsAndConditions} 
                       onChange={(e)=>handleChange(e)}
                       className="block min-h-[180px] px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     />

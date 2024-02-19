@@ -30,10 +30,26 @@ function EventRegistration() {
 
     e.preventDefault();
 
-    console.log(eventDetails)
+    let updatedEventDetails = {
+      ...eventDetails,
+      event: {
+        ...eventDetails.event,
+        contentType: eventDetails.event.contentType.toUpperCase(),
+        eventMode: eventDetails.event.eventMode.toUpperCase(),
+      },
+    };
+    
+    if(updatedEventDetails.event.organizerCount === 0){
+      updatedEventDetails = {
+        ...updatedEventDetails,
+        jobPost : null
+      }
+    }
 
-    const validateEventResult = validateEventDetails(eventDetails.event);
-    if (!eventDetails.event.eventName || eventDetails.event.eventName.length <  3) {
+    console.log(updatedEventDetails)
+
+    const validateEventResult = validateEventDetails(updatedEventDetails.event);
+    if (!updatedEventDetails.event.eventName || updatedEventDetails.event.eventName.length <  3) {
       setError('Event Name must be at least 3 characters long');
       return;
     }
@@ -41,26 +57,26 @@ function EventRegistration() {
       setError(validateEventResult)
       return;
     }
-    if(eventDetails.event.eventMode === "Offline"){
-      const validateLocation = validateLocation(eventDetails.location);
+    if(updatedEventDetails.event.eventMode === "Offline"){
+      const validateLocation = validateLocation(updatedEventDetails.location);
       if(validateLocation !== ""){
         setError(validateLocation)
         return;
       }
     }
-    if(eventDetails.event.organizerCount > 0){
-      const validateJobPostResult = validateJobPost(eventDetails.jobPost)
+    if(updatedEventDetails.event.organizerCount > 0){
+      const validateJobPostResult = validateJobPost(updatedEventDetails.jobPost)
       if(validateJobPostResult !== ""){
         setError(validateJobPostResult)
         return;
       }
     }
-    const validateLocationDetails = validateLocation(eventDetails.location);
+    const validateLocationDetails = validateLocation(updatedEventDetails.location);
     if(validateLocationDetails !== ""){
       setError(validateLocationDetails);
       return;
     }
-    if (!eventDetails.event.termsAndConditions || eventDetails.event.termsAndConditions.trim().length <   10) {
+    if (!updatedEventDetails.event.termsAndConditions || updatedEventDetails.event.termsAndConditions.trim().length <   10) {
       setError('Terms And Conditions must not be empty and should be at least 10 characters long');
       return;
     }
@@ -69,18 +85,17 @@ function EventRegistration() {
     const requestOptions = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(eventDetails),
+      body: JSON.stringify(updatedEventDetails),
     };
 
     try {
       const response = await fetch(`${eventServiceURI}/add-event`, requestOptions);
-      // if (!response.ok) {
-      //   throw new Error(`HTTP error! status: ${response.status}`);
-      // }
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
       const data = await response.text();
-      console.log('Event added: ', data);
       dispatch(resetEventDetails());
-      showToast('Event Registered Successfully!', { type: 'success' })
+      navigate("/host/event-management")
       } catch (error) {
         console.error('Error adding event: ', error);
       }
@@ -122,7 +137,7 @@ function EventRegistration() {
             type="button"
             onClick={() => {
               dispatch(resetEventDetails());
-              navigate('/');
+              navigate('/host/event-management');
             }}
             className="text-sm font-semibold leading-6 text-gray-900"
           >

@@ -39,13 +39,13 @@ function UserManagement() {
     const handleBlock = (row) => {
         lockUser(row.userId);
         console.log("blocked");
-        setToggled(!toggled);
+        setToggled(toggled => !toggled);
     }
 
     const handleUnBlock = (row) => {
         unlockUser(row.userId);
         console.log("unBlocked");
-        setToggled(!toggled);
+        setToggled(toggled => !toggled);
     }
     
     const coloumn = [

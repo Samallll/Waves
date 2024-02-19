@@ -19,27 +19,33 @@ public interface EventService {
 
     Event registerEvent(EventDetails eventDetails);
 
-    Event updateEvent(Event event);
+    Optional<EventDetails> updateEvent(EventDetails eventDetails);
 
     boolean registerUserForParticipation(Long userId,Long eventId);
 
-    Optional<Event> getEventById(Long eventId);
+    Optional<EventDetails> getEventById(Long eventId);
 
     List<Event> getEventsByHost(Long hostId);
 
-    List<Event> getEventsByGenre(String genre);
+    Page<Event> getEventsByGenre(String genre,Pageable pageable);
 
     List<Event> getEventsByEventMode(EventMode eventMode);
 
-    List<Event> getEventsByEventStatus(EventStatus eventStatus);
+    Page<Event> getEventsByEventStatus(EventStatus eventStatus,Pageable pageable);
 
     List<Event> getEventsByContentType(ContentType contentType);
 
     Optional<Event> getByJobPost(JobPost jobPost);
 
-    Page<Event> getEvents(String searchQuery,List<String> genre,List<String> contentType,List<String> eventMode,List<String> eventStatus,Pageable pageable);
+    Page<Event> getEvents(String searchQuery,List<String> genre,List<String> contentType,List<String> eventMode,List<String> eventStatus,String removeEventStatus,Pageable pageable);
 
     String uploadImage(MultipartFile file);
 
     byte[] viewImage(String key);
+
+    void updateExpiredEventsStatus();
+
+    boolean updateEventStatus(Long eventId,EventStatus eventStatus);
+
+    Page<Event> getEventsByEventStatusAndSearch(EventStatus eventStatus, Pageable pageable, String searchQuery);
 }

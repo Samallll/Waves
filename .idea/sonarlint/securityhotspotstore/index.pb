@@ -250,3 +250,5 @@ y
 Ievent-service/src/main/java/com/waves/eventservice/service/S3Service.java,b\d\bdccadaa5cdc4cf921946dcdc245b59011353f2b
 €
 Pevent-service/src/main/java/com/waves/eventservice/util/EventSpecifications.java,b\7\b76e68aaa887299f7df024fc5b37e49881d00eb4
+x
+Hevent-service/src/main/java/com/waves/eventservice/util/EventMapper.java,3\c\3c57e661800dca472bb3cc14be452f8656b6b56a

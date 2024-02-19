@@ -17,6 +17,14 @@ public class EventSpecifications {
         );
     }
 
+    public static Specification<Event> genre(String genre) {
+        return (root, query, criteriaBuilder) ->
+                criteriaBuilder.equal(root.get("genre"), genre);
+    }
+    public static Specification<Event> eventStatus(EventStatus eventStatus){
+        return ((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("eventStatus"),eventStatus));
+    }
+
     public static Specification<Event> genre(List<String> genres) {
         return (root, query, criteriaBuilder) -> root.get("genre").in(genres);
     }

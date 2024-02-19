@@ -3,10 +3,11 @@ import Image from '../assets/defaultImage.jpg'
 
 const ImageComponent = ({ src, alt, caption }) => {
   const defaultImage = Image;
-  const imageUrl = src === null || src === undefined ? defaultImage : src;
+  // const imageUrl = src === null || src === undefined ? defaultImage : src;
+  const imageUrl = defaultImage;
 
   return (
-    <figure className="max-w-lg">
+    <figure>
       <img
         className="h-auto max-w-full rounded-lg"
         src={imageUrl}

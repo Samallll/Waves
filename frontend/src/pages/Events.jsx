@@ -3,6 +3,7 @@ import UserHeader from '../components/headers/UserHeader'
 import { Pagination,Button } from '@mui/material'
 import ImageComponent from '../components/ImageComponent';
 import { dateConverter } from '../utils/converter';
+import { Link } from 'react-router-dom';
 
 function Events() {
 
@@ -23,7 +24,6 @@ function Events() {
 
     useEffect(()=>{
         fetchEventDetails()
-        console.log(filter)
     },[page,pageSize,searchData,filter])
 
     const handlePageChange = (event, value) => {
@@ -57,10 +57,10 @@ function Events() {
         const eventMode = filter.eventModeValues.map(mode => mode.toUpperCase())
         const contentType = filter.contentTypeValues.map(type => type.toUpperCase())
         const eventStatus = filter.eventStatusValues.map(status => status.toUpperCase())
+        const removeEventStatus = "EXPIRED"
         try {
-            const response = await fetch(`${eventServiceURI}/events?page=${page}&size=${pageSize}&searchQuery=${searchData}&genre=${filter.genre.join(',')}&contentType=${contentType.join(',')}&eventMode=${eventMode.join(',')}&eventStatus=${eventStatus.join(',')}`);
+            const response = await fetch(`${eventServiceURI}/events?page=${page}&size=${pageSize}&searchQuery=${searchData}&genre=${filter.genre.join(',')}&contentType=${contentType.join(',')}&eventMode=${eventMode.join(',')}&eventStatus=${eventStatus.join(',')}&removeEventStatus=${removeEventStatus}`);
             const data = await response.json();
-            console.log(data.content)
             setRecords(data.content);
             setTotalPages(data.totalPages);
         } catch (error) {
@@ -80,26 +80,7 @@ function Events() {
 
                                     <div className="flex items-center">
                                         <div className="relative inline-block text-left">
-                                            {/* <div>
-                                                <button type="button" className="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900" id="menu-button" aria-expanded="false" aria-haspopup="true">
-                                                    Sort
-                                                    <svg className="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                                    <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clipRule="evenodd" />
-                                                    </svg>
-                                                </button>
-                                            </div>
-
-
-                                            <div className="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
-                                                <div className="py-1" role="none">
-
-                                                    <a href="#" className="font-medium text-gray-900 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-0">Most Popular</a>
-                                                    <a href="#" className="text-gray-500 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-1">Best Rating</a>
-                                                    <a href="#" className="text-gray-500 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-2">Newest</a>
-                                                    <a href="#" className="text-gray-500 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-3">Price: Low to High</a>
-                                                    <a href="#" className="text-gray-500 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-4">Price: High to Low</a>
-                                                </div>
-                                            </div> */}
+                
                                         </div>
                                     </div>
                                 </div>
@@ -211,7 +192,7 @@ function Events() {
                                                         {records && records.map((record, index) => (
                                                             <div key={index} className="overflow-hidden bg-white rounded shadow">
                                                             <div className="px-5 sm:flex mx-auto">
-                                                                <div className="relative my-auto flex-shrink-0 w-72">
+                                                                <Link to={`/user/event-details/${record.eventId}`} className="relative my-auto flex-shrink-0 w-72">
                                                                     <ImageComponent
                                                                         alt={"Event Image"}
                                                                         src={record.eventPictureId ? `${eventServiceURI}/get-picture/${record.eventPictureId}` : null}
@@ -224,25 +205,25 @@ function Events() {
                                                                             </span>
                                                                         </div>
                                                                     )}
-                                                                </div>
+                                                                </Link>
                                                                 <div className='sm:p-5 sm:ms-5'>
                                                                     <span className="block mt-6 text-sm font-semibold tracking-widest text-gray-500 uppercase">
                                                                         {dateConverter(record.eventDate)}
                                                                     </span>
                                                                     <p className="mt-5 text-2xl font-semibold">
-                                                                        <a href="#" title="" className="text-black">
+                                                                        <Link to={`/user/event-details/${record.eventId}`} title="" className="text-black">
                                                                             {record.eventName}
-                                                                        </a>
+                                                                        </Link>
                                                                     </p>
                                                                     <p className="mt-4 text-base text-gray-600 max-w-xl line-clamp-4">
                                                                         {record.description}
                                                                     </p>
-                                                                    <a href="#" title="" className="inline-flex items-center justify-center pb-5 mt-5 text-base font-semibold text-blue-600 transition-all duration-200 border-b-2 border-transparent hover:border-blue-600 focus:border-blue-600">
+                                                                    <Link to={`/user/event-details/${record.eventId}`} title="" className="inline-flex items-center justify-center pb-5 mt-5 text-base font-semibold text-blue-600 transition-all duration-200 border-b-2 border-transparent hover:border-blue-600 focus:border-blue-600">
                                                                         View More
                                                                         <svg className="w-5 h-5 ml-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                                                             <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
                                                                         </svg>
-                                                                    </a>
+                                                                    </Link>
                                                                 </div>
                                                             </div>
                                                         </div>

@@ -3,6 +3,8 @@ export const validateEventDetails = (eventDetails) => {
 
     let errors = "";
 
+    console.log(eventDetails)
+
     const eventDateRegex = /^\d{4}-\d{2}-\d{2}$/;
     const today = new Date();
     today.setHours(0,  0,  0,  0); 
@@ -43,11 +45,15 @@ export const validateEventDetails = (eventDetails) => {
       errors = 'About the Event must be more than 10 characters long';
     }
   
-    const ticketPriceRegex = /^[0-9]+(\.[0-9]{1,2})?$/;
-    if (!eventDetails.ticketPrice || !ticketPriceRegex.test(eventDetails.ticketPrice)) {
+    // const ticketPriceRegex = /^[0-9]+(\.[0-9]{1,2})?$/;
+    // if (!eventDetails.ticketPrice || !ticketPriceRegex.test(eventDetails.ticketPrice)) {
+    //   errors = 'Ticket price must be a valid amount format';
+    // }
+
+    if (isNaN(eventDetails.ticketPrice) || parseFloat(eventDetails.ticketPrice) < 0) {
       errors = 'Ticket price must be a valid amount format';
     }
-
+  
     if (!eventDetails.eventPictureId) {
       errors = 'Please upload event picture';
     }

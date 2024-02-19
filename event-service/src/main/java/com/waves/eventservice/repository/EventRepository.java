@@ -11,6 +11,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,4 +36,6 @@ public interface EventRepository extends JpaRepository<Event,Long> {
     Page<Event> findByEventNameContaining(String eventName, Pageable pageable);
 
     Page<Event> findAll(Specification<Event> spec, Pageable pageable);
+
+    List<Event> findByEventDateAndEventTimeBeforeAndEventStatusNot(LocalDate now, LocalTime now1, EventStatus eventStatus);
 }

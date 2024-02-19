@@ -6,6 +6,7 @@ import com.waves.eventservice.model.Organizer;
 import com.waves.eventservice.repository.JobPostRepository;
 import com.waves.eventservice.service.JobPostService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class JobPostServiceImp implements JobPostService {
 
@@ -24,7 +26,22 @@ public class JobPostServiceImp implements JobPostService {
     }
 
     @Override
-    public JobPost updateJobPost(Long jobPostId) {
+    public JobPost updateJobPost(Long jobPostId,JobPost jobPost) {
+
+        Optional<JobPost> updatedJobPost = jobPostRepository.findById(jobPostId);
+        if(updatedJobPost.isPresent()){
+            JobPost editedJobPost = updatedJobPost.get();
+            editedJobPost.setEvent(jobPost.getEvent());
+            editedJobPost.setJobDescription(jobPost.getJobDescription());
+            editedJobPost.setJobName(jobPost.getJobName());
+            editedJobPost.setActive(jobPost.isActive());
+            editedJobPost.setOpenPositions(jobPost.getOpenPositions());
+            editedJobPost.setSalary(jobPost.getSalary());
+            editedJobPost.setSkillsRequired(jobPost.getSkillsRequired());
+            editedJobPost.setTermsAndConditions(jobPost.getTermsAndConditions());
+            return jobPostRepository.save(editedJobPost);
+        }
+        log.debug("JobPost updated successfully");
         return null;
     }
 

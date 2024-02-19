@@ -77,4 +77,6 @@ public class Event {
     @NotNull(message = "Event Picture should not null")
     private String eventPictureId;
 
+    private Long participantsCount=0L;
+
 }

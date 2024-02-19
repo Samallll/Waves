@@ -15,6 +15,6 @@ public interface LocationService {
 
     Location registerLocation(Location location);
 
-    Location updateLocation(Location location);
+    Location updateLocation(Long locationId,Location location);
 
 }
