@@ -1,6 +1,6 @@
 package com.waves.userservice.controller;
 
-import com.waves.userservice.model.UserDto;
+import com.waves.userservice.model.dto.UserDto;
 import com.waves.userservice.services.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;

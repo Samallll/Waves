@@ -23,16 +23,30 @@ public class JobRequest {
     private Long userId;
 
     @Enumerated(EnumType.STRING)
-    private JobRequestStatus jobRequestStatus;
+    private JobRequestStatus jobRequestStatus = JobRequestStatus.PENDING;
 
     @Size(min =  10, message = "About the Job Request must be more than 10 characters long")
     private String about;
 
-    @Size(min =  13, message = "Designation must be more than 10 characters long")
+    @Size(min =  5, message = "Designation must be more than 5 characters long")
     private String designation;
 
     @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "job_post_id")
     private JobPost jobPost;
+
+    @NotNull(message = "AadharNumber must not be null")
+    @Size(min =  12, message = "AadharNumber should be 12 characters long")
+    private String aadharNumber;
+
+    @NotNull(message = "DietaryPreference should not be null")
+    private String dietaryPreference;
+
+    @NotNull(message = "Full Name should not be null")
+    private String fullName;
+
+    @NotNull(message = "Email Id should not be null")
+    private String emailId;
+
 }

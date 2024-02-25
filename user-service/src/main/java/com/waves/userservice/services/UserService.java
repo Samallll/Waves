@@ -1,7 +1,7 @@
 package com.waves.userservice.services;
 
 import com.waves.userservice.model.User;
-import com.waves.userservice.model.UserDto;
+import com.waves.userservice.model.dto.UserDto;
 import com.waves.userservice.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -117,6 +117,18 @@ public class UserService implements UserDetailsService {
     public Optional<UserDto> getuserDetailsByEmail(String email) {
 
         Optional<User> user = userRepository.findByEmailId(email);
+        if(user.isPresent()){
+            UserDto userDto = userToUserDtoMapper(user.get());
+            log.debug("UserService : User Mapped to UserDto");
+            return Optional.of(userDto);
+        }
+        log.error("User not found");
+        return Optional.empty();
+    }
+
+    public Optional<UserDto> getuserDetailsByUserId(Long userId) {
+
+        Optional<User> user = userRepository.findById(userId);
         if(user.isPresent()){
             UserDto userDto = userToUserDtoMapper(user.get());
             log.debug("UserService : User Mapped to UserDto");

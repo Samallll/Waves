@@ -5,13 +5,15 @@ import { useDispatch,useSelector } from 'react-redux';
 function JobPost() {
 
   const dispatch = useDispatch();
+  const loggedUser = useSelector(state=>state.auth.loggedUser);
   const jobPost = useSelector(state => state.event.jobPost) || {
     jobName: "",
     skillsRequired: "",
     jobDescription: "",
     termsAndConditions: "",
     salary: "",
-    openPositions: ""
+    openPositions: "",
+    postedByUserId: loggedUser.userId
   };
   
     const handleChange = (e) => {
@@ -31,6 +33,7 @@ function JobPost() {
             <h2 className="text-lg font-semibold leading-7 text-gray-900">Job Post Details</h2>
               <p className="mt-1 text-sm leading-6 text-gray-600">You can hire a team for organizing the event. Note: Salary for free events are optional.</p>
                 <input type='hidden' value={jobPost?.jobPostId}/>
+                <input type='hidden' name='postedByUserId' value={loggedUser?.userId}/>
               <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-6">
                 <div className="sm:col-span-3">
                   <label htmlFor="jobName" className="block text-sm font-medium leading-6 text-gray-900">

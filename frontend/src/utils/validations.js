@@ -151,3 +151,37 @@ export const validateEventDetails = (eventDetails) => {
 
     return errors;
   }
+
+
+  export const validateJobRequest = (jobRequest) =>{
+
+    console.log(jobRequest)
+    let errors ="";
+
+    if (jobRequest.about.length <=  10) {
+      errors =  "About should be more than  10 characters" 
+    }
+
+    if (jobRequest.designation.length <=  5) {
+      errors = "Designation should be more than  5 characters"
+    }
+
+    
+    const aadharNumberRegex = /^\d{12}$/;
+    if (!aadharNumberRegex.test(jobRequest.aadharNumber)) {
+      errors = "Aadhar Number should be a  12-digit number" 
+    }
+
+    if (jobRequest.dietaryPreference !== 'Vegetarian' && jobRequest.dietaryPreference !== 'Non-Vegetarian') {
+      errors = "Dietary Preference should be either 'Vegetarian' or 'Non-Vegetarian'"
+    }
+
+    if (!jobRequest.userId) {
+      errors = "Please Login to the webiste" 
+    }
+    if (!jobRequest.bankId) {
+      errors =  "Please add Bank Details in the Profile section"
+    }
+
+    return errors;
+  }

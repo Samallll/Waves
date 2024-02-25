@@ -18,21 +18,6 @@ public class LocationServiceImp implements LocationService {
     private final LocationRepository locationRepository;
 
     @Override
-    public List<Location> getAllLocations() {
-        return null;
-    }
-
-    @Override
-    public Optional<Location> getByEventId(Long eventId) {
-        return Optional.empty();
-    }
-
-    @Override
-    public Optional<Location> getByLocationId(Long locationId) {
-        return Optional.empty();
-    }
-
-    @Override
     public Location registerLocation(Location location) {
         return locationRepository.save(location);
     }

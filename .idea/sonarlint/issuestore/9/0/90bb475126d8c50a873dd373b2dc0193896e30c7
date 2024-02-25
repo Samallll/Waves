@@ -1,10 +1,10 @@
 
+p
+java:S2259\"UA "NullPointerException" could be thrown; "authorizedUserPrincipal" is nullable here.(µ™Ò­þÿÿÿÿ
 i
 java:S2259L"NA "NullPointerException" could be thrown; "registeredClient" is nullable here.(ûÁõúùÿÿÿÿ
 `
 java:S2259P"JA "NullPointerException" could be thrown; "getClientId()" can return null.(¾ÿü¿
-p
-java:S2259\"UA "NullPointerException" could be thrown; "authorizedUserPrincipal" is nullable here.(µ™Ò­þÿÿÿÿ
 m
 java:S37764"RRefactor this method to reduce its Cognitive Complexity from 26 to the 15 allowed.(ºãðîøÿÿÿÿ
 Q	java:S125:"<This block of commented-out lines of code should be removed.(÷ÓüÈ

@@ -1,6 +1,6 @@
 package com.waves.emailservice.controller;
 
-import com.waves.emailservice.model.EmailDto;
+import com.waves.emailservice.dto.EmailDto;
 import com.waves.emailservice.services.EmailService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

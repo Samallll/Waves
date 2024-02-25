@@ -1,5 +1,6 @@
 package com.waves.eventservice.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.waves.eventservice.model.Enum.ContentType;
 import com.waves.eventservice.model.Enum.EventMode;
 import com.waves.eventservice.model.Enum.EventStatus;
@@ -19,7 +20,6 @@ import java.time.LocalTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 public class Event {
 
     @Id
@@ -69,6 +69,7 @@ public class Event {
 
     @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinColumn(name = "jobPost_id",referencedColumnName = "jobPostId")
+    @JsonBackReference
     private JobPost jobPost;
 
     @NotNull(message = "Ticket Price should not be null")

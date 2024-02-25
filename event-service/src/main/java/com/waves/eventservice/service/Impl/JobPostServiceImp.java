@@ -4,9 +4,17 @@ import com.waves.eventservice.model.Event;
 import com.waves.eventservice.model.JobPost;
 import com.waves.eventservice.model.Organizer;
 import com.waves.eventservice.repository.JobPostRepository;
+import com.waves.eventservice.service.EventService;
 import com.waves.eventservice.service.JobPostService;
+import com.waves.eventservice.util.JobPostSpecifications;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.BooleanUtils;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,7 +39,6 @@ public class JobPostServiceImp implements JobPostService {
         Optional<JobPost> updatedJobPost = jobPostRepository.findById(jobPostId);
         if(updatedJobPost.isPresent()){
             JobPost editedJobPost = updatedJobPost.get();
-            editedJobPost.setEvent(jobPost.getEvent());
             editedJobPost.setJobDescription(jobPost.getJobDescription());
             editedJobPost.setJobName(jobPost.getJobName());
             editedJobPost.setActive(jobPost.isActive());
@@ -45,15 +52,6 @@ public class JobPostServiceImp implements JobPostService {
         return null;
     }
 
-    @Override
-    public List<JobPost> getAllJobPost() {
-        return jobPostRepository.findAll();
-    }
-
-    @Override
-    public Optional<JobPost> getByEvent(Event event) {
-        return Optional.empty();
-    }
 
     @Override
     public Set<Organizer> hiredUsersForEvent(Long jobPostId) {
@@ -62,6 +60,28 @@ public class JobPostServiceImp implements JobPostService {
 
     @Override
     public Optional<JobPost> getByPostId(Long jobPostId) {
-        return Optional.empty();
+        return jobPostRepository.findById(jobPostId);
+    }
+
+    @Override
+    public Page<JobPost> getJobPostForHost(Boolean isActive,Long postedByUserId, int page, int size, String searchQuery, Pageable pageable) {
+
+        Specification<JobPost> spec = Specification.where(null);
+        if(!StringUtils.isEmpty(searchQuery)){
+            spec = JobPostSpecifications.search(searchQuery);
+        }
+        if(postedByUserId != null){
+            spec = JobPostSpecifications.postedByUserId(postedByUserId);
+        }
+        Page<JobPost> jobPosts = jobPostRepository.findAll(spec,pageable);
+
+        if(isActive!=null){
+            List<JobPost> list = jobPosts.getContent().stream()
+                    .filter(jobPost -> jobPost.isActive() == isActive)
+                    .toList();
+            jobPosts = new PageImpl<>(list,pageable,list.size());
+        }
+        log.debug("Job Post Details fetched from repository");
+        return jobPosts;
     }
 }

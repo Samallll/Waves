@@ -2,12 +2,13 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { cancelEvent, makeLive } from '../utils/eventMethods';
 import useToastService from '../services/useToastService';
+import { useSelector } from 'react-redux';
 
 function HostEventActions({event}) {
 
     const navigate = useNavigate();
     const {showToast} = useToastService();
-    
+    const loggedUser = useSelector(state=>state.auth.loggedUser)
     const cancel = () => {
 
       const currentDate = new Date();
@@ -47,7 +48,7 @@ function HostEventActions({event}) {
   return (
     <>
     {
-      event?.eventStatus === 'ORGANIZING' &&
+      event?.eventStatus === 'ORGANIZING' && loggedUser?.role === 'HOST' &&
       <>
         <button title="" className="flex items-center justify-center w-full px-4 py-2 mt-5 text-base font-semibold text-white transition-all duration-200 bg-green-600 border-2 border-transparent rounded-md hover:bg-green-800 focus:bg-blue-700" role="button"
           onClick={goLive}
@@ -62,7 +63,7 @@ function HostEventActions({event}) {
       </>
     }       
     {
-      event?.eventStatus !== 'EXPIRED' &&
+      event?.eventStatus === 'ORGANIZING' && loggedUser.role === 'HOST' &&
       <button title="" className="flex items-center justify-center w-full px-4 py-2 mt-5 text-base font-semibold text-white transition-all duration-200 bg-red-600 border-2 border-transparent rounded-md hover:bg-red-800 focus:bg-blue-700" role="button"
         onClick={cancel}
         >

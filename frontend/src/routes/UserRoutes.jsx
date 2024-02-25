@@ -10,6 +10,8 @@ import EditBankDetails from '../pages/User/EditBankDetails'
 import AddBankDetails from '../pages/User/AddBankDetails'
 import HostRegistration from '../components/forms/HostRegistration'
 import EventDetails from '../pages/User/EventDetails'
+import OrganizeCheckout from '../pages/User/OrganizeCheckout'
+import ParticipateCheckout from '../pages/User/ParticipateCheckout'
 
 function UserRoutes() {
   return (
@@ -26,6 +28,9 @@ function UserRoutes() {
               <Route path='bank/edit' element={<EditBankDetails/>}/>
               <Route path='bank/add' element={<AddBankDetails/>}/>
             </Route>
+            <Route path='/job-request/:jobRequestId' element={<OrganizeCheckout/>}/>
+            <Route path='/organize-event/:eventId' element={<OrganizeCheckout/>}/>
+            <Route path='/participate-event/:eventId' element={<ParticipateCheckout/>}/>
         </Route>
     </Routes>
   )

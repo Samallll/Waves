@@ -1,21 +1,24 @@
 package com.waves.eventservice.service;
 
+import com.waves.eventservice.model.Dto.JobRequestDto;
 import com.waves.eventservice.model.JobRequest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface JobRequestService {
 
-    JobRequest applyForJob(Long userId,Long eventId);
+    JobRequest applyForJob(Long jobPostId, JobRequestDto jobRequestDto);
 
     boolean approveJobRequest(Long jobRequestId);
 
     boolean rejectJobRequest(Long jobRequestId);
 
-    JobRequest updateJobRequest(Long jobRequestId);
+    Page<JobRequest> getAllJobRequestsByJobPost(Long jobPostId, Pageable pageable);
 
-    List<JobRequest> getAllJobRequests();
+    Page<JobRequest> getAllJobRequestsByUserId(Long userId, Pageable pageable);
 
-    Optional<JobRequest> getByRequestId(Long jobRequestId);
+    Optional<JobRequest> getByRequestDetailsById(Long jobRequestId);
 }

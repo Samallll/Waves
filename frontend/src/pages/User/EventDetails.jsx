@@ -7,6 +7,7 @@ import { convertToNormalTime } from '../../utils/converter';
 import HostEventActions from '../../components/HostEventActions';
 import UserEventActions from '../../components/UserEventActions';
 import EventCard from '../../components/event/EventCard';
+import ToastContainer from '../../components/ToastContainer';
 
 function EventDetails() {
 
@@ -18,6 +19,7 @@ function EventDetails() {
     const eventServiceURI = import.meta.env.VITE_EVENT_SERVICE_BASE_URI
 
     const [eventDetails,setEventDetails] = useState();
+    localStorage.removeItem('participationData');
 
     useEffect(()=>{
         fetchEventDetails(eventId);
@@ -29,8 +31,6 @@ function EventDetails() {
             const response = await axios.get(`${eventServiceURI}/${eventId}`)
             const details = await response.data;
             setEventDetails(details)
-
-            // Fetch similar events
             const genre = details.event.genre;
             const similarEventsResponse = await axios.get(`${eventServiceURI}/by-genre?page=${page}&size=${pageSize}&genre=${genre}`);
             const similarEventsData = similarEventsResponse.data;
@@ -63,6 +63,10 @@ function EventDetails() {
                                 <ul role="list" className="list-disc space-y-2 pl-4 text-sm mt-4 text-gray-600">
                                     <li><span className="text-gray-800">Date : {dateConverter(eventDetails?.event.eventDate)}</span></li>
                                     <li><span className="text-gray-800">Time : {convertToNormalTime(eventDetails?.event?.eventTime)}</span></li>
+                                    {
+                                        eventDetails?.event?.ticketPrice > 0 && 
+                                        <li><span className="text-green-600 font-medium text-md">Ticket Price : {eventDetails?.event?.ticketPrice} Rs</span></li>
+                                    }
                                 </ul>
 
                                 {
@@ -88,10 +92,11 @@ function EventDetails() {
                     </div>
                 </div>
 
-                <div className='mx-auto max-w-2xl px-4 bg-gray-200 shadow pb-16 sm:px-6 lg:max-w-7xl lg:pb-5 mb-10 rounded-[20px]'>
+                <div className='mx-auto max-w-2xl px-4 bg-gray-800 shadow pb-16 sm:px-6 lg:max-w-7xl lg:pb-5 mb-10 rounded-[20px]'>
                     <RowPost data={similarRecords} title={"People Also Searched for"}/>
                 </div>
             </div>
+            <ToastContainer/>
         </div>
     </>
   )

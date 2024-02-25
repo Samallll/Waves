@@ -30,4 +30,9 @@ public class Participant {
     @NotNull(message = "User Id must not be null")
     private Long userId;
 
+    @NotNull(message = "Full Name should not be null")
+    private String fullName;
+
+    @NotNull(message = "EmailId should not be null")
+    private String emailId;
 }

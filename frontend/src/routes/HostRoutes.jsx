@@ -6,6 +6,8 @@ import EventRegistration from '../pages/Host/EventRegistration'
 import EventDetails from '../pages/User/EventDetails'
 import EventManagement from '../pages/Host/EventManagement'
 import EventUpdation from '../pages/Host/EventUpdation'
+import JobManagement from '../pages/Host/JobManagement'
+import JobPostDetails from '../pages/Host/JobPostDetails'
 
 function HostRoutes() {
   return (
@@ -18,6 +20,8 @@ function HostRoutes() {
             <Route path='/event/:eventId' element={<EventDetails/>}/>
             <Route path='/update-event/:eventId' element={<EventUpdation/>}/>
             <Route path='/event-management' element={<EventManagement/>}/>
+            <Route path='/job-management' element={<JobManagement/>}/>
+            <Route path='/job-post/:jobPostId' element={<JobPostDetails/>}/>
         </Route>
     </Routes>
   )

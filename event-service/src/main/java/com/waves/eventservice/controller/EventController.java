@@ -1,8 +1,10 @@
 package com.waves.eventservice.controller;
 
 import com.waves.eventservice.model.Dto.EventDetails;
+import com.waves.eventservice.model.Dto.ParticipantDto;
 import com.waves.eventservice.model.Enum.EventStatus;
 import com.waves.eventservice.model.Event;
+import com.waves.eventservice.model.Participant;
 import lombok.extern.slf4j.Slf4j;
 import com.waves.eventservice.service.EventService;
 import jakarta.validation.Valid;
@@ -89,8 +91,13 @@ public class EventController {
 
     @PreAuthorize("hasRole('HOST')")
     @PutMapping("/{eventId}")
-    public ResponseEntity<EventDetails> updateEvent(@PathVariable Long eventId, @RequestBody EventDetails eventDetails) {
+    public ResponseEntity<EventDetails> updateEvent(@PathVariable Long eventId,
+                                                    @Valid @RequestBody EventDetails eventDetails,
+                                                    BindingResult bindingResult) {
 
+        if(bindingResult.hasErrors()){
+            return ResponseEntity.notFound().build();
+        }
         Optional<EventDetails> updatedEventDetails = eventService.updateEvent(eventDetails);
         return updatedEventDetails.map(ResponseEntity::ok).orElseGet(()->ResponseEntity.notFound().build());
     }
@@ -130,4 +137,10 @@ public class EventController {
         return ResponseEntity.ok(eventDetailsByEventStatus);
     }
 
+    @PostMapping("/register-participant")
+    public ResponseEntity<Participant> registerParticipant(@RequestBody ParticipantDto participantDto){
+
+        Optional<Participant> participant = eventService.registerParticipant(participantDto.getEventId(),participantDto);
+        return participant.map(ResponseEntity::ok).orElseGet(()->ResponseEntity.notFound().build());
+    }
 }

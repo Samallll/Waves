@@ -1,6 +1,7 @@
 package com.waves.emailservice.config;
 
-import com.waves.emailservice.model.EmailDto;
+import com.waves.emailservice.dto.EmailDto;
+import com.waves.emailservice.dto.ParticipationDto;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,13 +31,6 @@ class KafkaConfig {
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
-//        JsonDeserializer<EmailDto> payloadJsonDeserializer = new JsonDeserializer<>();
-//        payloadJsonDeserializer.addTrustedPackages("*");
-//        return new DefaultKafkaConsumerFactory<>(
-//                props,
-//                new StringDeserializer(),
-//                payloadJsonDeserializer
-//        );
         return new DefaultKafkaConsumerFactory<>(
                 props,
                 new StringDeserializer(),
@@ -56,6 +50,37 @@ class KafkaConfig {
         factory.setCommonErrorHandler(commonErrorHandler);
         return factory;
     }
+
+    @Bean
+    ConsumerFactory<String, ParticipationDto> participationConsumerFactory(
+            @Value("${spring.kafka.consumer.bootstrap-servers}") String bootstrapServers
+    ) {
+        Map<String, Object> props = new HashMap<>();
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, "email");
+        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
+        return new DefaultKafkaConsumerFactory<>(
+                props,
+                new StringDeserializer(),
+                new JsonDeserializer<>(ParticipationDto.class)
+                        .ignoreTypeHeaders()
+                        .trustedPackages("*")
+        );
+    }
+
+    @Bean
+    ConcurrentKafkaListenerContainerFactory<String, ParticipationDto> participationKafkaListenerContainerFactory(
+            ConsumerFactory<String, ParticipationDto> participationConsumerFactory,
+            CommonErrorHandler commonErrorHandler
+    ) {
+        var factory = new ConcurrentKafkaListenerContainerFactory<String, ParticipationDto>();
+        factory.setConsumerFactory(participationConsumerFactory);
+        factory.setCommonErrorHandler(commonErrorHandler);
+        return factory;
+    }
+
 
     @Bean
     CommonErrorHandler kafkaErrorHandler() {

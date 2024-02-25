@@ -189,7 +189,7 @@ function Events() {
 
                                                     <div className="grid max-w-md grid-cols-1 gap-6 mx-auto lg:grid-cols-1 lg:max-w-full">
 
-                                                        {records && records.map((record, index) => (
+                                                        {records ? records.map((record, index) => (
                                                             <div key={index} className="overflow-hidden bg-white rounded shadow">
                                                             <div className="px-5 sm:flex mx-auto">
                                                                 <Link to={`/user/event-details/${record.eventId}`} className="relative my-auto flex-shrink-0 w-72">
@@ -228,9 +228,11 @@ function Events() {
                                                             </div>
                                                         </div>
                                                         
-                                                        
-                                                        
-                                                        ))}
+                                                        )):
+
+                                                        null
+                                                    
+                                                    }
                                                         
                                                     </div>
 
@@ -246,18 +248,10 @@ function Events() {
                                                 </div>
                                             </section>
                                         </div>
-                                        
-
-
                                     </div>
                                 </section>
                             </main>                       
                     </div>
-
-
-
-
-                                    
         </>
   )
 }

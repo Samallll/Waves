@@ -1,23 +1,26 @@
 package com.waves.eventservice.service.Impl;
 
 import com.waves.eventservice.model.Dto.EventDetails;
+import com.waves.eventservice.model.Dto.ParticipantDto;
+import com.waves.eventservice.model.Dto.ParticipationDto;
 import com.waves.eventservice.model.Enum.ContentType;
 import com.waves.eventservice.model.Enum.EventMode;
 import com.waves.eventservice.model.Enum.EventStatus;
 import com.waves.eventservice.model.Event;
 import com.waves.eventservice.model.JobPost;
 import com.waves.eventservice.model.Location;
+import com.waves.eventservice.model.Participant;
+import com.waves.eventservice.producer.EmailProducer;
 import com.waves.eventservice.repository.EventRepository;
-import com.waves.eventservice.service.EventService;
-import com.waves.eventservice.service.JobPostService;
-import com.waves.eventservice.service.LocationService;
-import com.waves.eventservice.service.S3Service;
+import com.waves.eventservice.service.*;
 import com.waves.eventservice.util.EventMapper;
 import com.waves.eventservice.util.EventSpecifications;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -47,10 +50,10 @@ public class EventServiceImp implements EventService {
 
     private final S3Service s3Service;
 
-    @Override
-    public List<Event> getAllEvents() {
-        return eventRepository.findAll();
-    }
+    private final ParticipantService participantService;
+
+    private final EmailProducer emailProducer;
+
 
     @Override
     @Transactional
@@ -66,6 +69,7 @@ public class EventServiceImp implements EventService {
         if(eventDetails.getJobPost()!=null){
             JobPost jobPost = jobPostService.createJobPost(eventDetails.getJobPost());
             jobPost.setEvent(event);
+            jobPost.setPostedByUserId(eventDetails.getEvent().getHostedByUserId());
             jobPost = jobPostService.createJobPost(jobPost);
             event.setJobPost(jobPost);
         }
@@ -75,57 +79,56 @@ public class EventServiceImp implements EventService {
     }
 
     @Override
-    public Event saveEvent(Event event){
-        return eventRepository.save(event);
-    }
-
-    @Override
     public Optional<EventDetails> updateEvent(EventDetails eventDetails) {
-
         Optional<Event> existingEvent = eventRepository.findById(eventDetails.getEvent().getEventId());
         if(existingEvent.isPresent()){
-            Event updatedEvent = existingEvent.get();
-
-            updatedEvent.setEventId(eventDetails.getEvent().getEventId());
-            updatedEvent.setEventName(eventDetails.getEvent().getEventName());
-            updatedEvent.setContentType(eventDetails.getEvent().getContentType());
-            updatedEvent.setEventDate(eventDetails.getEvent().getEventDate());
-            updatedEvent.setEventTime(eventDetails.getEvent().getEventTime());
-            updatedEvent.setDescription(eventDetails.getEvent().getDescription());
-            updatedEvent.setEventMode(eventDetails.getEvent().getEventMode());
-            updatedEvent.setEventStatus(eventDetails.getEvent().getEventStatus());
-            updatedEvent.setGenre(eventDetails.getEvent().getGenre());
-            updatedEvent.setHostedByUserId(eventDetails.getUserId()); // Assuming the userId is the host
-            updatedEvent.setProfit(eventDetails.getEvent().getProfit());
-            updatedEvent.setParticipantsCount(eventDetails.getEvent().getParticipantsCount());
-            updatedEvent.setSeatsAvailable(eventDetails.getEvent().getSeatsAvailable());
-            updatedEvent.setOrganizerCount(eventDetails.getEvent().getOrganizerCount());
-            updatedEvent.setTermsAndConditions(eventDetails.getEvent().getTermsAndConditions());
-            updatedEvent.setTicketPrice(eventDetails.getEvent().getTicketPrice());
-            updatedEvent.setEventPictureId(eventDetails.getEvent().getEventPictureId());
-
-            if(eventDetails.getJobPost()!=null){
-                new JobPost();
-                JobPost editedJobPost;
-                if(eventDetails.getJobPost().getJobPostId()==null){
-                    editedJobPost = jobPostService.createJobPost(eventDetails.getJobPost());
-                }
-                else{
-                    editedJobPost = jobPostService.updateJobPost(eventDetails.getJobPost().getJobPostId(),eventDetails.getJobPost());
-                }
-                updatedEvent.setJobPost(editedJobPost);
-            }
-            if(eventDetails.getLocation()!=null){
-                Location editedLocation = locationService.updateLocation(eventDetails.getLocation().getLocationId(),eventDetails.getLocation());
-                updatedEvent.setLocation(editedLocation);
-            }
-
-            EventDetails eventDetails1 = EventMapper.eventToEventDetails(eventRepository.save(updatedEvent));
+            Event updatedEvent = updateEventData(existingEvent.get(), eventDetails);
+            updateJobPost(eventDetails.getJobPost());
+            updateLocation(eventDetails.getLocation());
+            EventDetails eventDetails1 = EventMapper.eventToEventDetails(updatedEvent);
             log.debug("Event Details updated successfully");
             return Optional.of(eventDetails1);
         }
         log.debug("Failed to update event details");
         return Optional.empty();
+    }
+
+    private Event updateEventData(Event existingEvent, EventDetails eventDetails) {
+        existingEvent.setEventId(eventDetails.getEvent().getEventId());
+        existingEvent.setEventName(eventDetails.getEvent().getEventName());
+        existingEvent.setContentType(eventDetails.getEvent().getContentType());
+        existingEvent.setEventDate(eventDetails.getEvent().getEventDate());
+        existingEvent.setEventTime(eventDetails.getEvent().getEventTime());
+        existingEvent.setDescription(eventDetails.getEvent().getDescription());
+        existingEvent.setEventMode(eventDetails.getEvent().getEventMode());
+        existingEvent.setEventStatus(eventDetails.getEvent().getEventStatus());
+        existingEvent.setGenre(eventDetails.getEvent().getGenre());
+        existingEvent.setHostedByUserId(eventDetails.getUserId());
+        existingEvent.setProfit(eventDetails.getEvent().getProfit());
+        existingEvent.setParticipantsCount(eventDetails.getEvent().getParticipantsCount());
+        existingEvent.setSeatsAvailable(eventDetails.getEvent().getSeatsAvailable());
+        existingEvent.setOrganizerCount(eventDetails.getEvent().getOrganizerCount());
+        existingEvent.setTermsAndConditions(eventDetails.getEvent().getTermsAndConditions());
+        existingEvent.setTicketPrice(eventDetails.getEvent().getTicketPrice());
+        existingEvent.setEventPictureId(eventDetails.getEvent().getEventPictureId());
+        return existingEvent;
+    }
+
+    private void updateJobPost(JobPost jobPost) {
+        if(jobPost != null){
+            if(jobPost.getJobPostId()==null){
+                jobPostService.createJobPost(jobPost);
+            }
+            else{
+                jobPostService.updateJobPost(jobPost.getJobPostId(), jobPost);
+            }
+        }
+    }
+
+    private void updateLocation(Location location) {
+        if(location != null){
+            locationService.updateLocation(location.getLocationId(), location);
+        }
     }
 
     @Override
@@ -140,16 +143,6 @@ public class EventServiceImp implements EventService {
     }
 
     @Override
-    public Optional<Event> getEventById(Long eventId) {
-        return eventRepository.findById(eventId);
-    }
-
-    @Override
-    public List<Event> getEventsByHost(Long hostId) {
-        return null;
-    }
-
-    @Override
     public Page<Event> getEventsByGenre(String genre,Pageable pageable) {
         Specification<Event> spec = Specification.where(null);
         if (!StringUtils.isEmpty(genre)) {
@@ -157,11 +150,6 @@ public class EventServiceImp implements EventService {
         }
         spec.and(EventSpecifications.eventStatus(EventStatus.LIVE));
         return eventRepository.findAll(spec,pageable);
-    }
-
-    @Override
-    public List<Event> getEventsByEventMode(EventMode eventMode) {
-        return null;
     }
 
     @Override
@@ -173,17 +161,16 @@ public class EventServiceImp implements EventService {
     }
 
     @Override
-    public List<Event> getEventsByContentType(ContentType contentType) {
-        return null;
+    public Page<Event> getEvents(String searchQuery, List<String> genre, List<String> contentType, List<String> eventMode, List<String> eventStatus, String removeEventStatus, Pageable pageable) {
+        Specification<Event> spec = createSpecification(searchQuery, genre, contentType, eventMode, eventStatus);
+        Page<Event> eventDetails = eventRepository.findAll(spec, pageable);
+        eventDetails = removeEventStatus(eventDetails, removeEventStatus);
+        log.debug("Event Details fetched from repository");
+        return eventDetails;
     }
 
-    @Override
-    public Optional<Event> getByJobPost(JobPost jobPost) {
-        return Optional.empty();
-    }
-
-    @Override
-    public Page<Event> getEvents(String searchQuery,List<String> genre,List<String> contentType,List<String> eventMode,List<String> eventStatus,String removeEventStatus,Pageable pageable) {
+    private Specification<Event> createSpecification(String searchQuery, List<String> genre, List<String> contentType, List<String> eventMode, List<String> eventStatus) {
+        Specification<Event> spec = Specification.where(null);
 
         List<ContentType> contentTypes = contentType.stream()
                 .map(type -> ContentType.valueOf(type.toUpperCase()))
@@ -197,37 +184,35 @@ public class EventServiceImp implements EventService {
                 .map(status -> EventStatus.valueOf(status.toUpperCase()))
                 .toList();
 
-        Specification<Event> spec = Specification.where(null);
         if (!StringUtils.isEmpty(searchQuery)) {
             spec = spec.and(EventSpecifications.search(searchQuery));
         }
         if (!CollectionUtils.isEmpty(genre)) {
             spec = spec.and(EventSpecifications.genre(genre));
         }
-        if (!CollectionUtils.isEmpty(contentTypes)) {
+        if (!CollectionUtils.isEmpty(contentType)) {
             spec = spec.and(EventSpecifications.contentType(contentTypes));
         }
-        if (!CollectionUtils.isEmpty(eventModes)) {
+        if (!CollectionUtils.isEmpty(eventMode)) {
             spec = spec.and(EventSpecifications.eventMode(eventModes));
         }
-        if (!CollectionUtils.isEmpty(eventStatuses)) {
+        if (!CollectionUtils.isEmpty(eventStatus)) {
             spec = spec.and(EventSpecifications.eventStatus(eventStatuses));
         }
+        return spec;
+    }
 
-        Page<Event> eventDetails = eventRepository.findAll(spec, pageable);
-
+    private Page<Event> removeEventStatus(Page<Event> eventDetails, String removeEventStatus) {
         if(!StringUtils.isEmpty(removeEventStatus)){
             EventStatus status = EventStatus.valueOf(removeEventStatus.toUpperCase());
             List<Event> events = eventDetails.getContent().stream()
                     .filter(event -> !event.getEventStatus().equals(status))
                     .toList();
-
-            eventDetails = new PageImpl<>(events, pageable, events.size());
+            return new PageImpl<>(events, eventDetails.getPageable(), events.size());
         }
-
-        log.debug("Event Details fetched from repository");
         return eventDetails;
     }
+
 
     @Override
     public String uploadImage(MultipartFile file) {
@@ -258,6 +243,11 @@ public class EventServiceImp implements EventService {
         expiredEvents.removeAll(organizingEvents);
         expiredEvents.forEach(event -> {
             event.setEventStatus(EventStatus.EXPIRED);
+            if(event.getJobPost()!=null){
+                JobPost jobPost = event.getJobPost();
+                jobPost.setActive(false);
+                jobPostService.createJobPost(jobPost);
+            }
             eventRepository.save(event);
         });
     }
@@ -268,7 +258,7 @@ public class EventServiceImp implements EventService {
         Optional<Event> event = eventRepository.findById(eventId);
         if(event.isPresent()){
             event.get().setEventStatus(eventStatus);
-            if(event.get().getJobPost()!=null && eventStatus.equals(EventStatus.EXPIRED)){
+            if(event.get().getJobPost()!=null && !eventStatus.equals(EventStatus.ORGANIZING)){
                 Optional<JobPost> jobPost = jobPostService.getByPostId(event.get().getJobPost().getJobPostId());
                 if(jobPost.isPresent()){
                     jobPost.get().setActive(false);
@@ -298,5 +288,38 @@ public class EventServiceImp implements EventService {
         }
         spec = spec.and(EventSpecifications.hostedByUserId(hostedByUserId));
         return eventRepository.findAll(spec,pageable);
+    }
+
+    @Override
+    public Optional<Participant> registerParticipant(Long eventId, ParticipantDto participantDto) {
+
+        try {
+            Optional<Event> event = eventRepository.findById(eventId);
+            if (event.isPresent()) {
+                Participant participant = new Participant();
+                participant.setAbout(participantDto.getAbout());
+                participant.setDesignation(participantDto.getDesignation());
+                participant.setUserId(participantDto.getUserId());
+                participant.setDietaryPreference(participantDto.getDietaryPreference());
+                participant.setEmailId(participantDto.getEmailId());
+                participant.setFullName(participantDto.getFullName());
+                Optional<Participant> savedParticipant = participantService.registerParticipant(event.get(), participant);
+                if (savedParticipant.isPresent()) {
+                    event.get().setParticipantsCount(event.get().getParticipantsCount() +  1);
+                    Event savedEvent = eventRepository.save(event.get());
+                    log.info("Participant added to the event:{}", eventId);
+                    ParticipationDto participationDto = EventMapper.generateParticipationData(participant, savedEvent);
+                    emailProducer.sendMimeMailTask(participationDto);
+                    return savedParticipant;
+                } else {
+                    throw new IllegalStateException("Failed to save participant for event: " + eventId);
+                }
+            } else {
+                throw new IllegalArgumentException("Event not found with ID: " + eventId);
+            }
+        } catch (Exception e) {
+            log.error("Error registering participant for event:{}", eventId, e);
+            return Optional.empty();
+        }
     }
 }

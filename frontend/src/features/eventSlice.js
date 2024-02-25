@@ -32,7 +32,9 @@ const initialState = {
     jobDescription:"",
     termsAndConditions:"",
     salary:0,
-    openPositions:0
+    openPositions:0,
+    postedByUserId:"",
+    active:true
   },
   userId: "",
 };

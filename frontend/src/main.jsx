@@ -17,6 +17,7 @@ import ConfirmPasswordForm from './components/forms/ConfirmPasswordForm'
 import HostRoutes from './routes/HostRoutes'
 import Events from './pages/Events'
 import "react-image-crop/dist/ReactCrop.css";
+import PaymentSucces from './components/PaymentSucces'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -33,14 +34,13 @@ const router = createBrowserRouter(
         <Route path='/otpValidate' element={<OtpValidation />} />
         <Route path='/password-confirmation' element={<ConfirmPasswordForm/>}/>
         <Route path='/events' element={<Events/>}/>
+        <Route path="/payment-successfull" element={<PaymentSucces/>} />
       </Route>
   )
 )
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
     <Provider store={store}>
       <RouterProvider router={router} />
     </Provider>
-  </React.StrictMode>
 )

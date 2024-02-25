@@ -1,9 +1,11 @@
 package com.waves.eventservice.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
@@ -16,7 +18,6 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 public class JobPost {
 
     @Id
@@ -41,9 +42,9 @@ public class JobPost {
     @Min(value =  1, message = "Open Positions must be a positive integer")
     private Integer openPositions;
 
-    @OneToOne(mappedBy = "jobPost",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "jobPost",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinColumn(name = "event_id",referencedColumnName = "eventId")
-    @JsonBackReference
+    @JsonManagedReference
     private Event event;
 
     @OneToMany(mappedBy = "jobPost", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -53,5 +54,8 @@ public class JobPost {
 
     @Min(value =  0, message = "Salary must be a positive number")
     private Double salary;
+
+    @NotNull(message = "Posted by User Id must not be null")
+    private Long postedByUserId;
 
 }

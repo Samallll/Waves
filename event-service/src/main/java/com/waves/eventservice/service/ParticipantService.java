@@ -8,9 +8,6 @@ import java.util.Optional;
 
 public interface ParticipantService {
 
-    Optional<Participant> registerParticipant(Long eventId,Participant participant);
+    Optional<Participant> registerParticipant(Event event,Participant participant);
 
-    Optional<Participant> getParticipantById(Long participantId);
-
-    List<Participant> getParticipantsByEvent(Event event);
 }

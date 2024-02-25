@@ -5,6 +5,7 @@ import com.waves.eventservice.model.Participant;
 import com.waves.eventservice.repository.ParticipantRepository;
 import com.waves.eventservice.service.EventService;
 import com.waves.eventservice.service.ParticipantService;
+import com.waves.eventservice.service.SharedService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,30 +21,13 @@ public class ParticipantServiceImp implements ParticipantService {
 
     private final ParticipantRepository participantRepository;
 
-    private final EventService eventService;
-
     @Override
-    @Transactional
-    public Optional<Participant> registerParticipant(Long eventId,Participant participant) {
+    public Optional<Participant> registerParticipant(Event event,Participant participant) {
 
-        Optional<Event> event = eventService.getEventById(eventId);
-        if(event.isPresent()){
-            participant.setEvent(event.get());
-            event.get().setParticipantsCount(event.get().getParticipantsCount()+1);
-            eventService.saveEvent(event.get());
-            log.debug("Participant added to the event:{}",eventId);
+        if(event != null){
+            participant.setEvent(event);
             return Optional.of(participantRepository.save(participant));
         }
         return Optional.empty();
-    }
-
-    @Override
-    public Optional<Participant> getParticipantById(Long participantId) {
-        return participantRepository.findById(participantId);
-    }
-
-    @Override
-    public List<Participant> getParticipantsByEvent(Event event) {
-        return participantRepository.findAllByEvent(event);
     }
 }
