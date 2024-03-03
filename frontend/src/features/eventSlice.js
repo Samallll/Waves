@@ -27,6 +27,7 @@ const initialState = {
   },
   jobPost: {
     eventId:"",
+    jobPostId:"",
     jobName:"",
     skillsRequired:"",
     jobDescription:"",
@@ -34,7 +35,8 @@ const initialState = {
     salary:0,
     openPositions:0,
     postedByUserId:"",
-    active:true
+    active:true,
+    organizers:[]
   },
   userId: "",
 };

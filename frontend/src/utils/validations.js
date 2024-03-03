@@ -3,8 +3,6 @@ export const validateEventDetails = (eventDetails) => {
 
     let errors = "";
 
-    console.log(eventDetails)
-
     const eventDateRegex = /^\d{4}-\d{2}-\d{2}$/;
     const today = new Date();
     today.setHours(0,  0,  0,  0); 
@@ -89,7 +87,6 @@ export const validateEventDetails = (eventDetails) => {
 
   export const validateJobPost = (jobPost) => {
 
-    
     let errors = "";
 
     if(!jobPost){

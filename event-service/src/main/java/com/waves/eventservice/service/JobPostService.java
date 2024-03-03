@@ -18,6 +18,8 @@ public interface JobPostService {
 
     Set<Organizer> hiredUsersForEvent(Long jobPostId);
 
+    void addOrganizer(Long jobPostId,Organizer organizer);
+
     Optional<JobPost> getByPostId(Long jobPostId);
 
     Page<JobPost> getJobPostForHost(Boolean isActive,Long hostedByUserId, int page, int size, String searchQuery, Pageable pageable);

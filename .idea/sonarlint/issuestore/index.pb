@@ -302,3 +302,17 @@ w
 Ghost-service/src/main/java/com/waves/hostservice/model/dto/HostDto.java,9\1\916e63476d9f6270fdf0c5ca7f212f4e80a01ba9
 ~
 Nhost-service/src/main/java/com/waves/hostservice/model/dto/HostRequestDto.java,e\9\e980a2376ef95f032055a63039bd53464269318b
+|
+Lchat-service/src/main/java/com/waves/chatservice/ChatServiceApplication.java,a\8\a8ce55142d4e72384c6dc3e4f00f896cbeadc22d
+y
+Ichat-service/src/main/java/com/waves/chatservice/chat/ChatController.java,0\6\065cdf42772fa2db2f049c587d8a3163966cf7fa
+y
+Ichat-service/src/main/java/com/waves/chatservice/user/UserController.java,d\a\da2b4bea1d27d91ffd6764893a888bf611c40898
+|
+Lchat-service/src/main/java/com/waves/chatservice/config/WebSocketConfig.java,1\4\1465d9cce6aff86d6e13826a1648951ada173e53
+w
+Gchat-service/src/main/java/com/waves/chatservice/config/CorsConfig.java,5\f\5f6b8cd34759148f222be6ea5d2918c3d3652f75
+v
+Fchat-service/src/main/java/com/waves/chatservice/user/UserService.java,b\a\ba78834da55d8ff46c1cd1b327835302901f4c57
+o
+?chat-service/src/main/java/com/waves/chatservice/user/User.java,c\7\c7f25fff4f7e4ca2ac26e6832e6b8e1dea9eff26

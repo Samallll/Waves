@@ -3,13 +3,21 @@ package com.waves.eventservice.service.Impl;
 import com.waves.eventservice.model.JobPost;
 import com.waves.eventservice.model.JobRequest;
 import com.waves.eventservice.model.Organizer;
+import com.waves.eventservice.repository.OrganizerRepository;
 import com.waves.eventservice.service.OrganizerService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
+@Slf4j
+@RequiredArgsConstructor
 public class OrganizerServiceImp implements OrganizerService {
+
+    private final OrganizerRepository organizerRepository;
+
     @Override
     public Optional<Organizer> getOrganizerById(Long organizerId) {
         return Optional.empty();
@@ -31,8 +39,8 @@ public class OrganizerServiceImp implements OrganizerService {
     }
 
     @Override
-    public Organizer registerOrganizer(Long userId, JobPost jobPost, JobRequest jobRequest) {
-        return null;
+    public Organizer createOrganizer(Organizer organizer) {
+        return organizerRepository.save(organizer);
     }
 
     @Override

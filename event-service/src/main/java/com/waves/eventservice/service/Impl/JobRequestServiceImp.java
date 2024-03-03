@@ -1,16 +1,20 @@
 package com.waves.eventservice.service.Impl;
 
 import com.waves.eventservice.client.UserClient;
+import com.waves.eventservice.model.Dto.EmailDto;
 import com.waves.eventservice.model.Dto.JobRequestDto;
 import com.waves.eventservice.model.Dto.UserDto;
 import com.waves.eventservice.model.Enum.JobRequestStatus;
 import com.waves.eventservice.model.Event;
 import com.waves.eventservice.model.JobPost;
 import com.waves.eventservice.model.JobRequest;
+import com.waves.eventservice.model.Organizer;
+import com.waves.eventservice.producer.EmailProducer;
 import com.waves.eventservice.repository.JobRequestRepository;
 import com.waves.eventservice.service.EventService;
 import com.waves.eventservice.service.JobPostService;
 import com.waves.eventservice.service.JobRequestService;
+import com.waves.eventservice.service.OrganizerService;
 import com.waves.eventservice.util.JobRequestSpecifications;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +26,9 @@ import org.springframework.stereotype.Service;
 
 import javax.swing.text.html.Option;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +40,10 @@ public class JobRequestServiceImp implements JobRequestService {
     private final JobRequestRepository jobRequestRepository;
 
     private final UserClient userClient;
+
+    private final EmailProducer emailProducer;
+
+    private final OrganizerService organizerService;
 
     @Override
     @Transactional
@@ -64,20 +74,78 @@ public class JobRequestServiceImp implements JobRequestService {
     }
 
     @Override
-    public boolean approveJobRequest(Long jobRequestId) {
+    @Transactional
+    public JobRequest approveJobRequest(Long jobRequestId) {
 
-        Optional<JobRequest> jobRequest = jobRequestRepository.findById(jobRequestId);
-        // userId already for userId already exists
-        if(jobRequest.isPresent()){
-            UserDto userDto = userClient.getUserDetails(jobRequest.get().getUserId()).getBody();
-            System.out.println(userDto.toString());
+        JobRequest jobRequest = jobRequestRepository.findById(jobRequestId).orElseThrow(
+                ()-> new NoSuchElementException("Job request not found with ID: " + jobRequestId)
+        );
+
+        JobPost jobPost = jobRequest.getJobPost();
+        Set<Organizer> organizerSet = jobPostService.hiredUsersForEvent(jobPost.getJobPostId());
+        boolean isUserPartOfOrganizerSet = organizerSet.stream()
+                .anyMatch(organizer -> organizer.getUserId().equals(jobRequest.getJobRequestId()));
+        if(isUserPartOfOrganizerSet){
+            throw new IllegalStateException("User is part of the organizers set");
         }
-        return false;
+
+        jobRequest.setJobRequestStatus(JobRequestStatus.APPROVED);
+        jobRequestRepository.save(jobRequest);
+
+        Organizer organizer = Organizer.builder()
+                .jobPost(jobRequest.getJobPost())
+                .jobRequest(jobRequest)
+                .userId(jobRequest.getUserId())
+                .build();
+
+        Organizer savedOrganizer = organizerService.createOrganizer(organizer);
+        // Add organizer to the event chat group //
+        jobPostService.addOrganizer(jobPost.getJobPostId(),savedOrganizer);
+        
+        Event event = jobPost.getEvent();
+        StringBuilder emailBodyBuilder = new StringBuilder();
+        emailBodyBuilder.append("Dear ").append(jobRequest.getFullName()).append(",\n\n");
+        emailBodyBuilder.append("Congratulations! We are pleased to inform you that you have been selected to be a part of the organizing team for the event \"")
+                .append(event.getEventName()).append("\".\n\n");
+        emailBodyBuilder.append("Event Details:\n");
+        emailBodyBuilder.append("Event Name: ").append(event.getEventName()).append("\n");
+        emailBodyBuilder.append("Event Date: ").append(event.getEventDate()).append("\n");
+        emailBodyBuilder.append("Best regards,\nThe Organizing Team");
+
+        EmailDto emailDto = new EmailDto(
+                "Acceptance of Job Request",
+                jobRequest.getEmailId(),
+                emailBodyBuilder.toString()
+        );
+        emailProducer.sendEmail(emailDto);
+        return jobRequest;
     }
 
     @Override
-    public boolean rejectJobRequest(Long jobRequestId) {
-        return false;
+    public JobRequest rejectJobRequest(Long jobRequestId,String reason) {
+
+        JobRequest jobRequest = jobRequestRepository.findById(jobRequestId).orElseThrow(
+                ()->new NoSuchElementException("Job request not found with ID: " + jobRequestId)
+        );
+        jobRequest.setJobRequestStatus(JobRequestStatus.REJECTED);
+
+        StringBuilder emailBodyBuilder = new StringBuilder();
+        emailBodyBuilder.append("Dear ").append(jobRequest.getFullName()).append(",\n\n");
+        emailBodyBuilder.append("We regret to inform you that you have not been selected to be a part of the organizing team.\n\n");
+        emailBodyBuilder.append("Job Request Id:\n");
+        emailBodyBuilder.append(jobRequestId).append("\n\n");
+        emailBodyBuilder.append("Rejection Reason:\n");
+        emailBodyBuilder.append(reason).append("\n\n");
+        emailBodyBuilder.append("We appreciate your interest and thank you for your application.\n\n");
+        emailBodyBuilder.append("Best regards,\nThe Organizing Team");
+        EmailDto emailDto = new EmailDto(
+                "Rejection of Job Request",
+                jobRequest.getEmailId(),
+                emailBodyBuilder.toString()
+        );
+        emailProducer.sendEmail(emailDto);
+
+        return jobRequestRepository.save(jobRequest);
     }
 
     @Override
@@ -102,13 +170,9 @@ public class JobRequestServiceImp implements JobRequestService {
     }
 
     @Override
-    public Optional<JobRequest> getByRequestDetailsById(Long jobRequestId) {
+    public JobRequest getJobRequestById(Long jobRequestId) {
 
-        Optional<JobRequest> jobRequest = jobRequestRepository.findById((jobRequestId));
-        if(jobRequest.isPresent()){
-            UserDto userDto = userClient.getUserDetails(jobRequest.get().getUserId()).getBody();
-            System.out.println(userDto.toString());
-        }
-        return Optional.empty();
+        return jobRequestRepository.findById(jobRequestId)
+                .orElseThrow(()-> new NoSuchElementException("Job Request not found with Id: "+ jobRequestId));
     }
 }

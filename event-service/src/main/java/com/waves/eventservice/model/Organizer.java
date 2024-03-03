@@ -3,10 +3,7 @@ package com.waves.eventservice.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Objects;
 
@@ -15,13 +12,14 @@ import java.util.Objects;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Organizer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long organizerId;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "job_request_id", referencedColumnName = "jobRequestId")
     private JobRequest jobRequest;
 

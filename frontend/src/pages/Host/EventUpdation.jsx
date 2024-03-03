@@ -32,8 +32,6 @@ function EventUpdation() {
       },
     };
 
-    console.log(updatedEventDetails)
-
     const validateEventResult = validateEventDetails(updatedEventDetails.event);
     if (!updatedEventDetails.event.eventName || updatedEventDetails.event.eventName.length <  3) {
       setError('Event Name must be at least 3 characters long');
@@ -73,7 +71,6 @@ function EventUpdation() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(updatedEventDetails),
     };
-
     try {
       const response = await fetch(`${eventServiceURI}/${updatedEventDetails.event.eventId}`, requestOptions);
       if (!response.ok) {

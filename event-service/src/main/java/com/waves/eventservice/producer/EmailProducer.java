@@ -1,5 +1,6 @@
 package com.waves.eventservice.producer;
 
+import com.waves.eventservice.model.Dto.EmailDto;
 import com.waves.eventservice.model.Dto.ParticipantDto;
 import com.waves.eventservice.model.Dto.ParticipationDto;
 import lombok.RequiredArgsConstructor;
@@ -14,11 +15,13 @@ import java.util.concurrent.CompletableFuture;
 @RequiredArgsConstructor
 public class EmailProducer {
 
-    private final KafkaTemplate<String, ParticipationDto> kafkaTemplate;
+    private final KafkaTemplate<String, ParticipationDto> kafkaJsonParticipationTemplate;
 
-    public void sendMimeMailTask(ParticipationDto participationDto){
+    private final KafkaTemplate<String,EmailDto> kafkaJsonEmailTemplate;
+
+    public void sendParticipationMail(ParticipationDto participationDto){
         try{
-            CompletableFuture<SendResult<String,ParticipationDto>> future = kafkaTemplate.send("participation-email",participationDto);
+            CompletableFuture<SendResult<String,ParticipationDto>> future = kafkaJsonParticipationTemplate.send("participation-email",participationDto);
             future.whenComplete((result,ex) -> {
                 if(ex == null){
                     log.info("Sent message=[" + participationDto.toString() +
@@ -32,6 +35,24 @@ public class EmailProducer {
         }
         catch(Exception exception){
             log.info("ERROR : "+ exception.getMessage());
+        }
+    }
+
+    public void sendEmail(EmailDto emailDto) {
+        try {
+            CompletableFuture<SendResult<String, EmailDto>> future = kafkaJsonEmailTemplate.send("email", emailDto);
+            future.whenComplete((result, ex) -> {
+                if (ex == null) {
+                    log.info("Sent message=[" + emailDto.getToList() +
+                            "] with offset=[" + result.getRecordMetadata().offset() + "]");
+                } else {
+                    log.info("Unable to send message=[" +
+                            emailDto.getToList() + "] due to : " + ex.getMessage());
+                }
+            });
+
+        } catch (Exception ex) {
+            log.info("ERROR : "+ ex.getMessage());
         }
     }
 }

@@ -30,7 +30,6 @@ function JobPostDetails() {
         <div className='mt-24 mx-20'>
             <JobPostWithEvent jobPost={jobPost} event={jobPost?.event}/>
         </div>
-        {/* Place for job request details showing up */}
         <div className='mx-20 mt-15 mb-10'>
             <JobRequestsTable jobPostId={jobPostId}/>
         </div>

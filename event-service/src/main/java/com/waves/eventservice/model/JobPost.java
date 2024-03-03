@@ -1,6 +1,7 @@
 package com.waves.eventservice.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
@@ -18,6 +19,7 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class JobPost {
 
     @Id
@@ -47,7 +49,7 @@ public class JobPost {
     @JsonManagedReference
     private Event event;
 
-    @OneToMany(mappedBy = "jobPost", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "jobPost", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Organizer> organizers;
 
     private boolean isActive=true;

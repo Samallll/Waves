@@ -16,7 +16,7 @@ public interface OrganizerService {
 
     Optional<Organizer> getOrganizerByUserId(Long userId);
 
-    Organizer registerOrganizer(Long userId, JobPost jobPost,JobRequest jobRequest);
+    Organizer createOrganizer(Organizer organizer);
 
     Organizer updateOrganizer(Organizer organizer);
 

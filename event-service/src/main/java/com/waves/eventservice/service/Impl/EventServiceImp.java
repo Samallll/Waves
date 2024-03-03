@@ -34,6 +34,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -236,6 +237,9 @@ public class EventServiceImp implements EventService {
     @Scheduled(fixedRate = 900000)
     public void updateExpiredEventsStatus() {
 
+        // TODO -- make chat room as read only
+        // TODO -- calculate profit for the event
+
         List<Event> expiredEvents = eventRepository.findByEventDateAndEventTimeBeforeAndEventStatusNot(
                 LocalDate.now(), LocalTime.now(),EventStatus.EXPIRED
         );
@@ -309,7 +313,7 @@ public class EventServiceImp implements EventService {
                     Event savedEvent = eventRepository.save(event.get());
                     log.info("Participant added to the event:{}", eventId);
                     ParticipationDto participationDto = EventMapper.generateParticipationData(participant, savedEvent);
-                    emailProducer.sendMimeMailTask(participationDto);
+                    emailProducer.sendParticipationMail(participationDto);
                     return savedParticipant;
                 } else {
                     throw new IllegalStateException("Failed to save participant for event: " + eventId);
@@ -321,5 +325,12 @@ public class EventServiceImp implements EventService {
             log.error("Error registering participant for event:{}", eventId, e);
             return Optional.empty();
         }
+    }
+
+    @Override
+    public Event getEvent(Long eventId) {
+        return eventRepository.findById(eventId).orElseThrow(
+                () -> new NoSuchElementException("Event not found with ID :" + eventId)
+        );
     }
 }

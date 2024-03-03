@@ -18,6 +18,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
 
@@ -55,7 +56,21 @@ public class JobPostServiceImp implements JobPostService {
 
     @Override
     public Set<Organizer> hiredUsersForEvent(Long jobPostId) {
-        return null;
+        return jobPostRepository.findById(jobPostId).map(JobPost::getOrganizers).orElseThrow(
+                ()-> new IllegalStateException("Job post not found with ID: " + jobPostId)
+        );
+    }
+
+    @Override
+    public void addOrganizer(Long jobPostId, Organizer organizer) {
+
+        JobPost jobPost = jobPostRepository.findById(jobPostId).orElseThrow(
+                () -> new NoSuchElementException("Job Post not found with ID: " + jobPostId)
+        );
+
+        jobPost.getOrganizers().add(organizer);
+        jobPostRepository.save(jobPost);
+
     }
 
     @Override

@@ -1,7 +1,7 @@
 import React from 'react'
 import logo from '../../assets/square-logo.jpg'
 import { Link } from 'react-router-dom'
-
+ 
 function Logo() {
   return (
     <Link to="/" className="flex items-center text-2xl font-semibold text-black">

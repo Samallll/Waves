@@ -2,7 +2,6 @@ import React, { useState,useEffect } from 'react'
 import DataTable from 'react-data-table-component'
 import { Pagination } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import axiosHelper from '../../utils/axiosHelper';
 
 function JobRequestsTable({jobPostId}) {
@@ -13,7 +12,6 @@ function JobRequestsTable({jobPostId}) {
     const [totalPages, setTotalPages] = useState(0);
     const eventServiceURI = import.meta.env.VITE_EVENT_SERVICE_BASE_URI
     const userServiceURI = import.meta.env.VITE_USER_SERVICE_BASE_URI
-    const loggedUser = useSelector(state=>state.auth.loggedUser)
     const navigate = useNavigate();
     
 
@@ -21,6 +19,7 @@ function JobRequestsTable({jobPostId}) {
         try {
             const response = await axiosHelper.get(`${eventServiceURI}/job-request/by-job-post?page=${page}&size=${pageSize}&jobPostId=${jobPostId}`);
             const records = response.data.content;
+            console.log(records)
             const recordsWithUserDetails = await Promise.all(records.map(async (record) => {
                 const userResponse = await axiosHelper.get(`${userServiceURI}/${record.userId}`);
                 return {
@@ -61,11 +60,16 @@ function JobRequestsTable({jobPostId}) {
       sortable : true
     },
     {
+      name:"Status",
+      selector : row=>row.jobRequestStatus,
+      sortable : true
+    },
+    {
       name: "Action",
       cell: (row) => {
         return ( 
           <button className= "bg-transparent hover:bg-blue-700 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded" onClick={() =>{ 
-            navigate(`/user/job-request/${row.jobRequestId}`)
+            navigate(`/user/job-post/${jobPostId}/job-request/${row.jobRequestId}`)
           }}>View Details</button>
         );
       },

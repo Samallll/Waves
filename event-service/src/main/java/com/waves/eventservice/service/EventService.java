@@ -40,4 +40,6 @@ public interface EventService {
     Page<Event> getEventsByEventStatusAndSearch(EventStatus eventStatus, Pageable pageable, String searchQuery,Long hostedByUserId);
 
     Optional<Participant> registerParticipant(Long eventId, ParticipantDto participantDto);
+
+    Event getEvent(Long eventId);
 }

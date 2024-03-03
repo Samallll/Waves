@@ -12,6 +12,10 @@ import HostRegistration from '../components/forms/HostRegistration'
 import EventDetails from '../pages/User/EventDetails'
 import OrganizeCheckout from '../pages/User/OrganizeCheckout'
 import ParticipateCheckout from '../pages/User/ParticipateCheckout'
+import ChatPage from '../pages/ChatPage'
+import JobRequestCheckout from '../pages/User/JobRequstCheckout'
+import TestedChatwithFewBugs from '../pages/TestedChatwithFewBugs'
+import Test from '../pages/Test'
 
 function UserRoutes() {
   return (
@@ -28,9 +32,12 @@ function UserRoutes() {
               <Route path='bank/edit' element={<EditBankDetails/>}/>
               <Route path='bank/add' element={<AddBankDetails/>}/>
             </Route>
-            <Route path='/job-request/:jobRequestId' element={<OrganizeCheckout/>}/>
+            <Route path='/job-post/:jobPostId/job-request/:jobRequestId' element={<JobRequestCheckout/>}/>
             <Route path='/organize-event/:eventId' element={<OrganizeCheckout/>}/>
             <Route path='/participate-event/:eventId' element={<ParticipateCheckout/>}/>
+            <Route path='/chats' element={<ChatPage/>}/>
+            <Route path='/chats1' element={<TestedChatwithFewBugs/>}/>
+            <Route path='/chats2' element={<Test/>}/>
         </Route>
     </Routes>
   )

@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -45,8 +46,8 @@ public class JobRequestController {
     @GetMapping("/{jobRequestId}")
     public ResponseEntity<JobRequest> getJobRequestDetails(@PathVariable Long jobRequestId){
 
-        Optional<JobRequest> jobRequest = jobRequestService.getByRequestDetailsById(jobRequestId);
-        return jobRequest.map(ResponseEntity::ok).orElseGet(()->ResponseEntity.notFound().build());
+        JobRequest jobRequest = jobRequestService.getJobRequestById(jobRequestId);
+        return ResponseEntity.ok(jobRequest);
     }
 
     @GetMapping("/by-job-post")
@@ -69,10 +70,16 @@ public class JobRequestController {
     }
 
     @GetMapping("/approve/{jobRequestId}")
-    public ResponseEntity<String> approveJobRequest(@PathVariable Long jobRequestId){
+    public ResponseEntity<JobRequest> approveJobRequest(@PathVariable Long jobRequestId) {
+        JobRequest jobRequest = jobRequestService.approveJobRequest(jobRequestId);
+        return ResponseEntity.ok(jobRequest);
+    }
 
-        //send request to user-service and test it.
-        boolean isSuccessfull = jobRequestService.approveJobRequest(jobRequestId);
-        return ResponseEntity.notFound().build();
+    @PostMapping("/reject/{jobRequestId}")
+    public ResponseEntity<JobRequest> rejectJobRequest(@PathVariable Long jobRequestId,
+                                                       @RequestBody Map<String, Object> payload) {
+        String reason = (String) payload.get("reason");
+        JobRequest jobRequest = jobRequestService.rejectJobRequest(jobRequestId,reason);
+        return ResponseEntity.ok(jobRequest);
     }
 }
