@@ -40,6 +40,10 @@ spring:
           uri: http://localhost:8096
           predicates:
             - Path=/api/v1/payment/**
+        - id: chat-service-router
+          uri: http://localhost:8097
+          predicates:
+            - Path=/api/v1/chat/**
         - id: react-app
           uri: http://localhost:3000/
           predicates:

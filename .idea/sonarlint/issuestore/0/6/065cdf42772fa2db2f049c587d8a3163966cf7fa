@@ -1,7 +1,5 @@
 
-L	java:S106"+Replace this use of System.out by a logger.(ÕİàÍûÿÿÿÿ8²åõÏß1
-L	java:S106"+Replace this use of System.out by a logger.(£ó¶ğÿÿÿÿÿ8³åõÏß1
-h
-java:S1128"KRemove this unused import 'com.waves.chatservice.chatroom.ChatRoomService'.(«ÀÄ÷8½åõÏß1
-q
-java:S1128"TRemove this unused import 'org.springframework.messaging.handler.annotation.SendTo'.(÷æéñ8½åõÏß1
+a
+java:S1128"KRemove this unused import 'com.waves.chatservice.chatroom.ChatRoomService'.(«ÀÄ÷
+j
+java:S1128"TRemove this unused import 'org.springframework.messaging.handler.annotation.SendTo'.(÷æéñ

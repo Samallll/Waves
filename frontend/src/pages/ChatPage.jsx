@@ -3,6 +3,7 @@ import { over } from "stompjs";
 import SockJS from "sockjs-client";
 import axiosHelper from "../utils/axiosHelper";
 import '../scrollbarStyles.css'
+import { useSelector } from "react-redux";
 
 const ChatPage = () => {
 
@@ -11,6 +12,10 @@ const ChatPage = () => {
   const [error, setError] = useState("");
   const [messages, setMessages] = useState([]);
   const [draftMessage,setDraftMessage] = useState("");
+  const loggedUser = useSelector((state) => state.auth.loggedUser)
+  const messagesEndRef = useRef(null);
+
+  const chatServiceURI = import.meta.env.VITE_CHAT_SERVICE_BASE_URI
 
   const stompClientRef = useRef(null);
 
@@ -27,10 +32,15 @@ const ChatPage = () => {
     }
   },[selectedChatRoom])
 
-    
+  useEffect(() => {
+    if (messagesEndRef.current) {
+       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+   }, [messages]);     
+
   const getAllChatRoomsForUser = () => {
-    const userId = 2; 
-    axiosHelper.get(`http://localhost:8080/chat-rooms/${userId}`)
+    const userId = loggedUser.userId; 
+    axiosHelper.get(`${chatServiceURI}/chat-rooms/${userId}`)
         .then(response => {
             const data = response.data;
             setChatRooms(data);
@@ -43,7 +53,7 @@ const ChatPage = () => {
 
   const connectAndSubscribe = (chatRooms) => {
       if (chatRooms.length > 0) {
-          let Sock = new SockJS("http://localhost:8080/ws");
+          let Sock = new SockJS(`${chatServiceURI}/ws`);
           stompClientRef.current = over(Sock);
           stompClientRef.current.connect({}, ()=>onConnected(chatRooms), onError);
       } else {
@@ -60,8 +70,6 @@ const ChatPage = () => {
           );
       });
   };
-
-
 
   const onError = () => {
       setError(
@@ -90,8 +98,8 @@ const ChatPage = () => {
           chatId: selectedChatRoom.chatId,
           eventId: selectedChatRoom.eventId,
           eventName: selectedChatRoom.eventName,
-          userId: 2,
-          fullName: "user",
+          userId: loggedUser.userId,
+          fullName: loggedUser.fullName,
           content: draftMessage,
           timestamp: new Date()
       };
@@ -102,7 +110,7 @@ const ChatPage = () => {
 
   const fetchAndDisplayGroupChat = async () => {
     const response = await axiosHelper.get(
-      `http://localhost:8080/messages/${selectedChatRoom.eventId}/${selectedChatRoom.eventName}`
+      `${chatServiceURI}/messages/${selectedChatRoom.eventId}/${selectedChatRoom.eventName}`
     );
     const data = response.data;
     setMessages(data);
@@ -114,84 +122,71 @@ const ChatPage = () => {
 
   return (
     <>
-      <div className='min-h-screen flex bg-gray-900 flex-col md:flex-row p-16 mt-8'>
+      <div className='min-h-screen flex bg-gray-900 flex-col md:flex-row p-16 mt-5'>
         <div className='bg-blue-600 md:w-1/4 p-4 rounded-xl md:mx-2 my-2 sm:mx-0 sm:my-0 '>
-          <div className='text-2xl text-start ps-3 text-white mb-4'>Your Groups</div>
-          <ul className='text-lg text-white rounded-lg overflow-auto h-4/6 custom-scrollbar'>
+          <div className='text-2xl text-center ps-3 text-white my-1 font-medium'>Your Groups</div>
+          <ul className='text-md text-white rounded-lg overflow-auto h-4/6 custom-scrollbar'>
             {chatRooms && chatRooms.map((chatRoom, index) => (
               <li
                 key={index}
-                className={`py-2 my-2 pl-4 border-gray-300 hover:bg-gray-200 hover:text-gray-800 transition duration-300 rounded truncate`}
+                className={`py-2 my-2 pl-4 border-gray-300 hover:bg-gray-200 hover:text-gray-800 transition duration-300 rounded truncate border-b-2 border-b-slate-700`}
                 onClick={() => handleListItemClick(chatRoom)}
               >
                 {chatRoom.eventName}
               </li>
             ))}
           </ul>
-          <button className='text-center mt-4 bg-white text-blue-600 py-2 px-4 rounded-md w-full' onClick={onLogout}>
-            Disconnect
-          </button>
         </div>
         <div className='bg-white md:w-3/4 p-4 relative rounded-xl'>
-          <div className='text-xl mb-4 bg-blue-200 py-2 ps-5 border shadow-md rounded-lg truncate'>Event Name</div>
-          <div className='h-96 overflow-y-auto custom-scrollbar' style={{ direction: 'ltr', textAlign: 'start' }}>
+          {
+            selectedChatRoom && 
+            <div className='text-xl font-medium mb-5 bg-blue-500 py-3 ps-5 border shadow-md rounded-lg truncate'>{selectedChatRoom.eventName}</div>
+          }
+            <div className='h-96 mx-4 overflow-y-auto custom-scrollbar' style={{ direction: 'ltr', textAlign: 'start' }}>
             {
-              messages?.length > 0 ? (
-                messages.map((msg) => (
-                  <div
-                    key={msg.timestamp}
-                    className={`${msg.fullName === "user" ? 'text-right' : 'text-left'} mb-4`}
-                  >
-                    {
-                      msg.fullName ==! "user" ? <div className='text-xl font-bold mb-1'>{msg.fullName}</div> : null
-                    }
-                    <div className='bg-gray-200 rounded-lg p-3 inline-block text-left'>
-                      {msg.content}
-                    </div>
-                  </div>
-                ))
-              ) :
-              (
-                <div className="flex justify-center items-center h-full text-center">
-                    <p>Start a new conversation</p>
-                  </div>
-              )
-            }
-            {/* {
-              Array.from(messages.entries()).map(([senderId, messagesForSender]) => (
-                <div key={senderId}>
-                  {messagesForSender.map((msg) => (
+                messages?.length > 0 ? (
+                  messages.map((msg, index) => (
                     <div
                       key={msg.timestamp}
-                      className={`${msg.senderId === userData.nickName ? 'text-right' : 'text-left'} mb-4`}
+                      className={`${msg.fullName === loggedUser.fullName ? 'text-right mr-4' : 'text-left'} mb-2`}
                     >
-                      <div className='text-xl font-bold mb-1'>{msg.senderId}</div>
-                      <div className='bg-gray-200 rounded-lg p-3 inline-block text-left'>
+                      {
+                        msg.fullName !== loggedUser.fullName ? <div className='mb-1 text-sm font-semibold text-gray-900'>{msg.fullName}</div> : null
+                      }
+                      <div className='bg-blue-100 border-gray-300 rounded-lg py-2 px-3 inline-block text-left'>
                         {msg.content}
                       </div>
                     </div>
-                  ))}
-                </div>
-              ))
-            } */}
+                  ))
+                ) :
+                (
+                  <div className="flex justify-center items-center h-full text-center text-lg">
+                      <p>Start a new conversation</p>
+                    </div>
+                )
+            }
+            <div ref={messagesEndRef} />
           </div>
-          <div className='absolute bottom-4 left-0 w-full px-8'>
-            <form className='flex items-center' onSubmit={sendMessage}>
-              <input
-                type='text'
-                value={draftMessage}
-                onChange={(e)=>setDraftMessage(e.target.value)}
-                className='flex-grow border rounded-md py-2 px-4 mr-2 bg-slate-300 text-black'
-                placeholder='Type your message...'
-              />
-              <button
-                className='bg-blue-600 text-white py-2 px-4 rounded-md'
-                type="submit"
-              >
-                Send
-              </button>
-            </form>
-          </div>
+          {
+            selectedChatRoom?.writeAccess && 
+            <div className='absolute bottom-4 left-0 w-full px-8'>
+              <form className='flex items-center' onSubmit={sendMessage}>
+                <input
+                  type='text'
+                  value={draftMessage}
+                  onChange={(e)=>setDraftMessage(e.target.value)}
+                  className='flex-grow border rounded-md py-2 px-4 mr-2 bg-slate-600 text-white'
+                  placeholder='Type your message...'
+                />
+                <button
+                  className='bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-800'
+                  type="submit"
+                >
+                  Send
+                </button>
+              </form>
+            </div>
+          }
         </div>
       </div>
     </>

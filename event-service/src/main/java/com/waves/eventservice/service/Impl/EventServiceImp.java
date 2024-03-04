@@ -1,6 +1,7 @@
 package com.waves.eventservice.service.Impl;
 
 import com.waves.eventservice.model.Dto.EventDetails;
+import com.waves.eventservice.model.Dto.EventDto;
 import com.waves.eventservice.model.Dto.ParticipantDto;
 import com.waves.eventservice.model.Dto.ParticipationDto;
 import com.waves.eventservice.model.Enum.ContentType;
@@ -10,6 +11,7 @@ import com.waves.eventservice.model.Event;
 import com.waves.eventservice.model.JobPost;
 import com.waves.eventservice.model.Location;
 import com.waves.eventservice.model.Participant;
+import com.waves.eventservice.producer.ChatProducer;
 import com.waves.eventservice.producer.EmailProducer;
 import com.waves.eventservice.repository.EventRepository;
 import com.waves.eventservice.service.*;
@@ -43,6 +45,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class EventServiceImp implements EventService {
 
+    public static final double PLATFORM_CHARGE_PERCENTAGE = 5;
+
     private final JobPostService jobPostService;
 
     private final LocationService locationService;
@@ -54,6 +58,8 @@ public class EventServiceImp implements EventService {
     private final ParticipantService participantService;
 
     private final EmailProducer emailProducer;
+
+    private final ChatProducer chatProducer;
 
 
     @Override
@@ -75,8 +81,13 @@ public class EventServiceImp implements EventService {
             event.setJobPost(jobPost);
         }
         event.setLocation(location);
+        Event savedEvent = eventRepository.save(event);
+        EventDto eventDto = new EventDto();
+        eventDto.setEventId(savedEvent.getEventId());
+        eventDto.setEventName(savedEvent.getEventName());
+        chatProducer.createChatRoom(eventDto);
         log.debug("Event has been created");
-        return eventRepository.save(event);
+        return savedEvent;
     }
 
     @Override
@@ -86,6 +97,7 @@ public class EventServiceImp implements EventService {
             Event updatedEvent = updateEventData(existingEvent.get(), eventDetails);
             updateJobPost(eventDetails.getJobPost());
             updateLocation(eventDetails.getLocation());
+            chatProducer.updateChatRoom(new EventDto(updatedEvent.getEventName(),updatedEvent.getEventId(),true));
             EventDetails eventDetails1 = EventMapper.eventToEventDetails(updatedEvent);
             log.debug("Event Details updated successfully");
             return Optional.of(eventDetails1);
@@ -231,14 +243,12 @@ public class EventServiceImp implements EventService {
 
     /**
      * Runs every 15 minutes to expiry events which are crossed scheduled date and time.
+     * Tasks : expiry events, make the chat room write access false and calculate profit;
      */
     @Override
     @Transactional
     @Scheduled(fixedRate = 900000)
     public void updateExpiredEventsStatus() {
-
-        // TODO -- make chat room as read only
-        // TODO -- calculate profit for the event
 
         List<Event> expiredEvents = eventRepository.findByEventDateAndEventTimeBeforeAndEventStatusNot(
                 LocalDate.now(), LocalTime.now(),EventStatus.EXPIRED
@@ -247,13 +257,22 @@ public class EventServiceImp implements EventService {
         expiredEvents.removeAll(organizingEvents);
         expiredEvents.forEach(event -> {
             event.setEventStatus(EventStatus.EXPIRED);
+            Double profitAfterPlatformCharges = calculateProfitBeforeSalaryDeduction(event);
             if(event.getJobPost()!=null){
                 JobPost jobPost = event.getJobPost();
                 jobPost.setActive(false);
                 jobPostService.createJobPost(jobPost);
+                profitAfterPlatformCharges -= jobPost.getSalary();
             }
+            event.setProfit(profitAfterPlatformCharges);
             eventRepository.save(event);
+            chatProducer.updateChatRoom(new EventDto(event.getEventName(), event.getEventId(), false));
         });
+    }
+
+    private static Double calculateProfitBeforeSalaryDeduction(Event event) {
+        double seatPrice = event.getSeatsAvailable()* event.getTicketPrice();
+        return seatPrice * (PLATFORM_CHARGE_PERCENTAGE /100);
     }
 
     @Override
@@ -295,6 +314,7 @@ public class EventServiceImp implements EventService {
     }
 
     @Override
+    @Transactional
     public Optional<Participant> registerParticipant(Long eventId, ParticipantDto participantDto) {
 
         try {

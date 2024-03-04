@@ -11,9 +11,9 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ChatUser {
 
-    private Integer userId;
+    private Long userId;
     private String fullName;
     private String emailId;
-    private Integer eventId;
+    private Long eventId;
     private String eventName;
 }

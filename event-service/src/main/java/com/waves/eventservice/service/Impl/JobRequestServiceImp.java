@@ -1,6 +1,7 @@
 package com.waves.eventservice.service.Impl;
 
 import com.waves.eventservice.client.UserClient;
+import com.waves.eventservice.model.Dto.ChatUser;
 import com.waves.eventservice.model.Dto.EmailDto;
 import com.waves.eventservice.model.Dto.JobRequestDto;
 import com.waves.eventservice.model.Dto.UserDto;
@@ -9,6 +10,7 @@ import com.waves.eventservice.model.Event;
 import com.waves.eventservice.model.JobPost;
 import com.waves.eventservice.model.JobRequest;
 import com.waves.eventservice.model.Organizer;
+import com.waves.eventservice.producer.ChatProducer;
 import com.waves.eventservice.producer.EmailProducer;
 import com.waves.eventservice.repository.JobRequestRepository;
 import com.waves.eventservice.service.EventService;
@@ -39,11 +41,11 @@ public class JobRequestServiceImp implements JobRequestService {
 
     private final JobRequestRepository jobRequestRepository;
 
-    private final UserClient userClient;
-
     private final EmailProducer emailProducer;
 
     private final OrganizerService organizerService;
+
+    private final ChatProducer chatProducer;
 
     @Override
     @Transactional
@@ -99,7 +101,14 @@ public class JobRequestServiceImp implements JobRequestService {
                 .build();
 
         Organizer savedOrganizer = organizerService.createOrganizer(organizer);
-        // Add organizer to the event chat group //
+        ChatUser chatUser = ChatUser.builder()
+                .userId(organizer.getUserId())
+                .fullName(jobRequest.getFullName())
+                .emailId(jobRequest.getEmailId())
+                .eventId(jobPost.getEvent().getEventId())
+                .eventName(jobPost.getEvent().getEventName())
+                .build();
+        chatProducer.createChatUser(chatUser);
         jobPostService.addOrganizer(jobPost.getJobPostId(),savedOrganizer);
         
         Event event = jobPost.getEvent();

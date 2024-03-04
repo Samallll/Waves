@@ -13,10 +13,12 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
 @Controller
+@RequestMapping("/api/v1/chat")
 @RequiredArgsConstructor
 public class ChatController {
 
@@ -26,9 +28,6 @@ public class ChatController {
 
     @MessageMapping("/event/{eventId}")
     public void processMessage(@DestinationVariable Long eventId, @Payload ChatMessage chatMessage) {
-
-        System.out.println("Event id: " + eventId);
-        System.out.println("ChatMessage:" + chatMessage.toString());
 
         ChatMessage savedMsg = chatMessageService.save(chatMessage);
         messagingTemplate.convertAndSend(
@@ -43,11 +42,6 @@ public class ChatController {
                         savedMsg.getTimestamp()
                 )
         );
-    }
-
-    @MessageMapping("/message")
-    public ChatMessage receiveMessage(@Payload ChatMessage chatMessage){
-        return chatMessage;
     }
 
     @GetMapping("/messages/{eventId}/{eventName}")

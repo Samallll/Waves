@@ -1,6 +1,7 @@
 package com.waves.chatservice.chatroom;
 
 import com.waves.chatservice.user.ChatUser;
+import com.waves.chatservice.user.EventDto;
 import com.waves.chatservice.user.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -64,6 +65,17 @@ public class ChatRoomService {
         }
         return chatRoomRepository.save(savedChatRoom);
     }
+
+    public ChatRoom updateChatRoomEvent(EventDto eventDto) {
+        return chatRoomRepository.findByEventId(eventDto.getEventId())
+                .map(chatRoom -> {
+                    chatRoom.setEventName(eventDto.getEventName());
+                    chatRoom.setWriteAccess(eventDto.getWriteAccess());
+                    return chatRoomRepository.save(chatRoom);
+                })
+                .orElseThrow(() -> new NoSuchElementException("Chat Room not found for event id: " + eventDto.getEventId()));
+    }
+
 
     public ChatRoom findByChatId(String chatId) {
         return chatRoomRepository.findByChatId(chatId);

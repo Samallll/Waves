@@ -23,6 +23,7 @@ public class ChatRoom {
     private String chatId; // to get the details of the chat
     private Long eventId;
     private String eventName;
+    private Boolean writeAccess;
 
     @DBRef
     private Set<User> users;

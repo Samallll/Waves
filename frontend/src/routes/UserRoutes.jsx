@@ -14,8 +14,7 @@ import OrganizeCheckout from '../pages/User/OrganizeCheckout'
 import ParticipateCheckout from '../pages/User/ParticipateCheckout'
 import ChatPage from '../pages/ChatPage'
 import JobRequestCheckout from '../pages/User/JobRequstCheckout'
-import TestedChatwithFewBugs from '../pages/TestedChatwithFewBugs'
-import Test from '../pages/Test'
+
 
 function UserRoutes() {
   return (
@@ -36,8 +35,6 @@ function UserRoutes() {
             <Route path='/organize-event/:eventId' element={<OrganizeCheckout/>}/>
             <Route path='/participate-event/:eventId' element={<ParticipateCheckout/>}/>
             <Route path='/chats' element={<ChatPage/>}/>
-            <Route path='/chats1' element={<TestedChatwithFewBugs/>}/>
-            <Route path='/chats2' element={<Test/>}/>
         </Route>
     </Routes>
   )

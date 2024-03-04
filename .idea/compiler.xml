@@ -13,6 +13,7 @@
         <module name="email-service" />
         <module name="api-gateway" />
         <module name="registration-service" />
+        <module name="chat-service" />
         <module name="user-service" />
         <module name="host-service" />
         <module name="service-registry" />
@@ -26,6 +27,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="api-gateway" options="-parameters" />
       <module name="authorization-server" options="-parameters" />
+      <module name="chat-service" options="-parameters" />
       <module name="email-service" options="-parameters" />
       <module name="event-service" options="-parameters" />
       <module name="host-service" options="-parameters" />
