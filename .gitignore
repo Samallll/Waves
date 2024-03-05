@@ -1,2 +1,4 @@
 HELP.md
 node_modules/
+
+.idea/sonarlint
