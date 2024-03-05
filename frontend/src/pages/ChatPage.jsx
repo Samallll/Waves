@@ -4,6 +4,7 @@ import SockJS from "sockjs-client";
 import axiosHelper from "../utils/axiosHelper";
 import '../scrollbarStyles.css'
 import { useSelector } from "react-redux";
+import { chatTimeStampConverter } from "../utils/converter";
 
 const ChatPage = () => {
 
@@ -156,6 +157,9 @@ const ChatPage = () => {
                       <div className='bg-blue-100 border-gray-300 rounded-lg py-2 px-3 inline-block text-left'>
                         {msg.content}
                       </div>
+                      <div className="mt-1">
+                        <p className="text-sm">{chatTimeStampConverter(msg.timestamp)}</p>
+                      </div>
                     </div>
                   ))
                 ) :
@@ -168,7 +172,7 @@ const ChatPage = () => {
             <div ref={messagesEndRef} />
           </div>
           {
-            selectedChatRoom?.writeAccess && 
+            selectedChatRoom?.writeAccess ? 
             <div className='absolute bottom-4 left-0 w-full px-8'>
               <form className='flex items-center' onSubmit={sendMessage}>
                 <input
@@ -185,6 +189,11 @@ const ChatPage = () => {
                   Send
                 </button>
               </form>
+            </div>
+            :
+            selectedChatRoom !== "" &&
+            <div className="absolute bottom-4 left-0 w-full px-8 pb-5 text-center text-lg">
+              <p>Event has been cancelled/expired</p>
             </div>
           }
         </div>

@@ -1,5 +1,6 @@
 package com.waves.eventservice.service;
 
+import com.waves.eventservice.model.Dto.ChatUser;
 import com.waves.eventservice.model.Dto.EventDetails;
 import com.waves.eventservice.model.Dto.ParticipantDto;
 import com.waves.eventservice.model.Enum.ContentType;
@@ -42,4 +43,6 @@ public interface EventService {
     Optional<Participant> registerParticipant(Long eventId, ParticipantDto participantDto);
 
     Event getEvent(Long eventId);
+
+    void addHostToChatRoom(ChatUser chatUser);
 }

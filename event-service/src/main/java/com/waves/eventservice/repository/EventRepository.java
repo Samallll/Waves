@@ -35,6 +35,8 @@ public interface EventRepository extends JpaRepository<Event,Long> {
 
     Page<Event> findByEventNameContaining(String eventName, Pageable pageable);
 
+    Optional<Event> findByEventName(String eventName);
+
     Page<Event> findAll(Specification<Event> spec, Pageable pageable);
 
     List<Event> findByEventDateAndEventTimeBeforeAndEventStatusNot(LocalDate now, LocalTime now1, EventStatus eventStatus);

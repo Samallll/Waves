@@ -1,7 +1,8 @@
 
 g
-java:S1128"JRemove this unused import 'com.waves.eventservice.model.Enum.ContentType'.(È’¹Õ8àŠŞ¤İ1
+java:S1128"JRemove this unused import 'com.waves.eventservice.model.Enum.ContentType'.(È’¹Õ8àŠŞ¤İ1
 j
-java:S1128"HRemove this unused import 'com.waves.eventservice.model.Enum.EventMode'.(ş®úäÿÿÿÿÿ8áŠŞ¤İ1
+java:S1128"HRemove this unused import 'com.waves.eventservice.model.Enum.EventMode'.(ş®úäÿÿÿÿÿ8áŠŞ¤İ1
 c
-java:S1128	"ARemove this unused import 'com.waves.eventservice.model.JobPost'.(óĞã§ûÿÿÿÿ8áŠŞ¤İ1
+java:S1128
+"ARemove this unused import 'com.waves.eventservice.model.JobPost'.(óĞã§ûÿÿÿÿ8áŠŞ¤İ1

@@ -1,7 +1,5 @@
 
-^
-java:S1854K"ARemove this useless assignment to local variable "isSuccessfull".(Üˆ÷Ñ8´ÖË¬Ü1
-O
-java:S1481K"2Remove this unused "isSuccessfull" local variable.(Üˆ÷Ñ8¶ÖË¬Ü1
 M
 java:S1128"+Remove this unused import 'brave.Response'.(è£òÒùÿÿÿÿ8•®Š¯Ü1
+Q
+java:S1128"/Remove this unused import 'java.util.Optional'.(¨˜ëİüÿÿÿÿ8–¶îîà1

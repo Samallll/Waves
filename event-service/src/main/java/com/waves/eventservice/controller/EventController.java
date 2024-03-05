@@ -1,5 +1,6 @@
 package com.waves.eventservice.controller;
 
+import com.waves.eventservice.model.Dto.ChatUser;
 import com.waves.eventservice.model.Dto.EventDetails;
 import com.waves.eventservice.model.Dto.ParticipantDto;
 import com.waves.eventservice.model.Enum.EventStatus;
@@ -142,5 +143,12 @@ public class EventController {
 
         Optional<Participant> participant = eventService.registerParticipant(participantDto.getEventId(),participantDto);
         return participant.map(ResponseEntity::ok).orElseGet(()->ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("/add-chat-user")
+    public ResponseEntity<String> addHostToChatRoom(@RequestBody ChatUser chatUser){
+
+        eventService.addHostToChatRoom(chatUser);
+        return ResponseEntity.ok("Host added to chat room");
     }
 }

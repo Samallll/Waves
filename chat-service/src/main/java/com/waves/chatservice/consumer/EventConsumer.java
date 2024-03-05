@@ -21,19 +21,19 @@ public class EventConsumer {
         this.chatRoomService = chatRoomService;
     }
 
-    @KafkaListener(topics = "add-chat-user")
-    public void consumeUserAddingTask(ChatUser chatUser){
-        log.info("consumer consume the events {} ", chatUser.toString());
+    @KafkaListener(topics = "add-chat-user", containerFactory = "chatUserKafkaListenerContainerFactory")
+    public void consumeUserAddingTask(ChatUser chatUser) {
+        log.info("Raw message: {}", chatUser.toString());
         userService.addUserToChatRoom(chatUser);
     }
 
-    @KafkaListener(topics = "create-chat-room")
+    @KafkaListener(topics = "create-chat-room", containerFactory = "kafkaListenerContainerFactory")
     public void consumeCreateChatRoom(EventDto eventDto){
         log.info("Consumed task to create chat room for {} ", eventDto.toString());
         chatRoomService.getChatRoomId(eventDto.getEventId(),eventDto.getEventName(),true);
     }
 
-    @KafkaListener(topics = "update-chat-room")
+    @KafkaListener(topics = "update-chat-room", containerFactory = "kafkaListenerContainerFactory")
     public void consumeUpdateChatRoom(EventDto eventDto){
         log.info("Consumed task to update chat room for {} ", eventDto.toString());
         chatRoomService.updateChatRoomEvent(eventDto);

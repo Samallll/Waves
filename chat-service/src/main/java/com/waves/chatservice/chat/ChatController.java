@@ -2,6 +2,8 @@ package com.waves.chatservice.chat;
 
 import com.waves.chatservice.chatroom.ChatRoom;
 import com.waves.chatservice.chatroom.ChatRoomService;
+import com.waves.chatservice.user.ChatUser;
+import com.waves.chatservice.user.EventDto;
 import com.waves.chatservice.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;

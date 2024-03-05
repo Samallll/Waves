@@ -20,3 +20,12 @@ export const convertToNormalTime = (timeString) => {
     date.setSeconds(parseInt(seconds,  10));
     return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
 }
+
+export const chatTimeStampConverter = (dateString) => {
+    const date = new Date(dateString);
+    const hours = date.getHours() % 12 || 12;
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const amPm = date.getHours() >= 12 ? 'PM' : 'AM';
+    
+    return `${hours}:${minutes} ${amPm}`;
+}

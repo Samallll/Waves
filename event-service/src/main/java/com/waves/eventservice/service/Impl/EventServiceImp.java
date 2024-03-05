@@ -1,9 +1,6 @@
 package com.waves.eventservice.service.Impl;
 
-import com.waves.eventservice.model.Dto.EventDetails;
-import com.waves.eventservice.model.Dto.EventDto;
-import com.waves.eventservice.model.Dto.ParticipantDto;
-import com.waves.eventservice.model.Dto.ParticipationDto;
+import com.waves.eventservice.model.Dto.*;
 import com.waves.eventservice.model.Enum.ContentType;
 import com.waves.eventservice.model.Enum.EventMode;
 import com.waves.eventservice.model.Enum.EventStatus;
@@ -85,6 +82,7 @@ public class EventServiceImp implements EventService {
         EventDto eventDto = new EventDto();
         eventDto.setEventId(savedEvent.getEventId());
         eventDto.setEventName(savedEvent.getEventName());
+        eventDto.setWriteAccess(true);
         chatProducer.createChatRoom(eventDto);
         log.debug("Event has been created");
         return savedEvent;
@@ -262,7 +260,7 @@ public class EventServiceImp implements EventService {
                 JobPost jobPost = event.getJobPost();
                 jobPost.setActive(false);
                 jobPostService.createJobPost(jobPost);
-                profitAfterPlatformCharges -= jobPost.getSalary();
+                profitAfterPlatformCharges -= jobPost.getSalary() * jobPost.getOrganizers().size();
             }
             event.setProfit(profitAfterPlatformCharges);
             eventRepository.save(event);
@@ -287,6 +285,8 @@ public class EventServiceImp implements EventService {
                     jobPost.get().setActive(false);
                     jobPostService.createJobPost(jobPost.get());
                 }
+                EventDto eventDto = new EventDto(event.get().getEventName(),event.get().getEventId(),false);
+                chatProducer.updateChatRoom(eventDto);
             }
             eventRepository.save(event.get());
             log.debug("Event Status updated successfully for eventId: {}", eventId);
@@ -352,5 +352,19 @@ public class EventServiceImp implements EventService {
         return eventRepository.findById(eventId).orElseThrow(
                 () -> new NoSuchElementException("Event not found with ID :" + eventId)
         );
+    }
+
+    @Override
+    public void addHostToChatRoom(ChatUser chatUser) {
+        Optional<Event> eventOptional = eventRepository.findByEventName(chatUser.getEventName());
+        if (eventOptional.isPresent()) {
+            Event event = eventOptional.get();
+            chatUser.setEventId(event.getEventId());
+            chatUser.setEventName(event.getEventName());
+            chatUser.setUserId(event.getHostedByUserId());
+            chatProducer.createChatUser(chatUser);
+        } else {
+            throw new NoSuchElementException("Event not found for event name: " + chatUser.getEventName());
+        }
     }
 }
