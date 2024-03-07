@@ -2,3 +2,5 @@ HELP.md
 node_modules/
 
 .idea/sonarlint
+
+chat-service/src/main/resources/application.yml

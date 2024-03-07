@@ -1,5 +1,4 @@
 import React from 'react';
-import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined';
 
 const Modal = ({ isOpen, setIsOpen, title, message, type }) => {
   const bgColorClass = () => {

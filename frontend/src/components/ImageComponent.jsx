@@ -3,8 +3,8 @@ import Image from '../assets/defaultImage.jpg'
 
 const ImageComponent = ({ src, alt, caption }) => {
   const defaultImage = Image;
-  // const imageUrl = src === null || src === undefined ? defaultImage : src;
-  const imageUrl = defaultImage;
+  const imageUrl = src === null || src === undefined ? defaultImage : src;
+  // const imageUrl = defaultImage;
 
   return (
     <figure>
