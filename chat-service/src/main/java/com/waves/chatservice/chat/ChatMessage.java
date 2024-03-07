@@ -19,8 +19,9 @@ public class ChatMessage {
     private String chatId;
     private Long eventId;
     private Long userId;
-    private String fullName; // Full Name of the User
+    private String fullName;
     private String content;
     private String eventName;
     private Date timestamp;
+    private String type;
 }

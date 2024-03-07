@@ -19,4 +19,5 @@ public class ChatNotification {
     private String eventName;
     private String content;
     private Date timestamp;
+    private String type;
 }
