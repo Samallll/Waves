@@ -1,11 +1,11 @@
 import React from 'react'
 import { Link, Outlet } from 'react-router-dom'
-import logo from '../assets/square-logo.jpg'
 
 
 function AdminLayout() {
 
   const logoutURI = import.meta.env.VITE_LOGOUT_URI
+  
 
   function logout(){
     window.location.href = logoutURI
@@ -24,7 +24,7 @@ function AdminLayout() {
                     </svg>
                 </button>
                 <Link to="/" className="ms-2 md:me-24 flex items-center font-semibold text-white">
-                  <img className="w-12 h-18 mr-3 rounded-xl" src={logo} alt="logo"/>
+                  <img className="w-12 h-18 mr-3 rounded-xl" src="/assets/square-logo.jpg" alt="logo"/>
                   <span className="text-lg tracking-wide">CrowdCraft</span>      
                 </Link>
               </div>

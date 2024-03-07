@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import logo from '../../assets/square-logo.jpg'
 import { Link, useNavigate } from 'react-router-dom';
 import OtpTimer from '../OtpTimer';
 import { useSelector } from 'react-redux';
@@ -67,7 +66,7 @@ function OtpForm() {
     <section className="bg-white">
         <div className="flex flex-col items-center justify-center px-6 py-6 mx-auto md:my-20">
             <Link to="/" className="flex items-center mb-6 text-2xl font-semibold text-black">
-                <img className="w-16 h-18 mr-2 rounded-xl" src={logo} alt="logo"/>
+                <img className="w-16 h-18 mr-2 rounded-xl" src="/assets/square-logo.jpg" alt="logo"/>
                 CrowdCraft      
             </Link>
             <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">

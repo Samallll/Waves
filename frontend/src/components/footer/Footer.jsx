@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import logo from '../../assets/square-logo.jpg'
 
 export default function Footer() {
+    
     return (
         <footer className="bg-white border-y">
             <div className="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
@@ -10,7 +10,7 @@ export default function Footer() {
                     <div className="mb-6 md:mb-0">
                         <Link to="/" className="flex items-center">
                             <img
-                                src={logo}
+                                src="/assets/square-logo.jpg"
                                 className="h-20"
                                 alt="Logo"
                             />
