@@ -58,6 +58,13 @@ function EventCard({ eventDetails }) {
                   Seats Available: {eventDetails?.event.seatsAvailable}
                 </span>
               </li>
+              <li className="text-gray-400">
+                {eventDetails?.event?.profit && eventDetails?.eventStatus === "EXPIRED" ? (
+                  <span className={`text-${eventDetails?.event?.profit > 0 ? 'green' : 'red'}-600`}>
+                    Profit : {eventDetails?.event.profit} Rs
+                  </span>
+                ) : null}
+              </li>
             </ul>
           </div>
         </div>
