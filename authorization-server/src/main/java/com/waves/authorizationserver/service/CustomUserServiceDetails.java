@@ -1,8 +1,10 @@
 package com.waves.authorizationserver.service;
 
 import com.waves.authorizationserver.entity.User;
+import com.waves.authorizationserver.entity.dto.UserRegisterDto;
 import com.waves.authorizationserver.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AccountExpiredException;
@@ -22,6 +24,7 @@ import java.util.Optional;
 
 @Service
 @Transactional
+@Slf4j
 public class CustomUserServiceDetails implements UserDetailsService {
 
     private final UserRepository userRepository;
@@ -49,6 +52,40 @@ public class CustomUserServiceDetails implements UserDetailsService {
         return new BCryptPasswordEncoder(11);
     }
 
+
+    public boolean changePassword(String email, String newPassword) {
+        User user = userRepository.findByEmailId(email);
+        if (user != null) {
+            user.setPassword(passwordEncoder().encode(newPassword));
+            userRepository.save(user);
+            log.trace("User found in Database");
+            return true;
+        }
+        log.debug("User not found!");
+        return false;
+    }
+
+    public User getUserByEmailId(String emailId){
+        return userRepository.findByEmailId(emailId);
+    }
+
+    public User registerUser(UserRegisterDto userRegisterDto) {
+
+        User newUser = new User();
+        newUser.setRole("USER");
+        User user = getUserByEmailId(userRegisterDto.getEmailId());
+        if(user != null){
+            return new User();
+        }
+        newUser.setPassword(passwordEncoder().encode(userRegisterDto.getPassword()));
+        newUser.setEmailId(userRegisterDto.getEmailId());
+        newUser.setFullName(userRegisterDto.getFullName());
+//        String welcomeMessage = "Welcome aboard, "+ userRegisterDto.getFullName() +"! Your email has been verified and you're now officially part of the CrowdCraft family.";
+//        String subject = "The CrowdCraft crew welcomes you, "+userRegisterDto.getFullName() +"!";
+//        emailClient.sendEmail(new EmailDto(userRegisterDto.getEmailId(),subject,welcomeMessage));
+        return userRepository.save(newUser);
+
+    }
 
     @Bean
     ApplicationRunner clientsRunner(UserRepository userRepository,
