@@ -1,35 +1,33 @@
 package com.waves.authorizationserver.service;
 
 import com.waves.authorizationserver.entity.User;
+import com.waves.authorizationserver.entity.dto.EmailDto;
 import com.waves.authorizationserver.entity.dto.UserRegisterDto;
+import com.waves.authorizationserver.producer.EmailProducer;
 import com.waves.authorizationserver.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AccountExpiredException;
-import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
 import org.springframework.stereotype.Service;
-
-import javax.security.auth.login.AccountLockedException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
 
 @Service
 @Transactional
 @Slf4j
 public class CustomUserServiceDetails implements UserDetailsService {
 
+    private final EmailProducer emailProducer;
+
     private final UserRepository userRepository;
 
-    public CustomUserServiceDetails(UserRepository userRepository) {
+    public CustomUserServiceDetails(EmailProducer emailProducer, UserRepository userRepository) {
+        this.emailProducer = emailProducer;
         this.userRepository = userRepository;
     }
 
@@ -80,9 +78,13 @@ public class CustomUserServiceDetails implements UserDetailsService {
         newUser.setPassword(passwordEncoder().encode(userRegisterDto.getPassword()));
         newUser.setEmailId(userRegisterDto.getEmailId());
         newUser.setFullName(userRegisterDto.getFullName());
-//        String welcomeMessage = "Welcome aboard, "+ userRegisterDto.getFullName() +"! Your email has been verified and you're now officially part of the CrowdCraft family.";
-//        String subject = "The CrowdCraft crew welcomes you, "+userRegisterDto.getFullName() +"!";
-//        emailClient.sendEmail(new EmailDto(userRegisterDto.getEmailId(),subject,welcomeMessage));
+        String welcomeMessage = "Welcome aboard, "+ userRegisterDto.getFullName() +"! \n Your email has been verified and you're now officially part of the CrowdCraft family.";
+        String subject = "The CrowdCraft crew welcomes you, "+userRegisterDto.getFullName() +"!";
+        EmailDto emailDto = new EmailDto();
+        emailDto.setToList(userRegisterDto.getEmailId());
+        emailDto.setBody(welcomeMessage);
+        emailDto.setSubject(subject);
+        emailProducer.sendEmail(emailDto);
         return userRepository.save(newUser);
 
     }
