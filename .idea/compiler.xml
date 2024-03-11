@@ -12,7 +12,6 @@
         <module name="event-service" />
         <module name="email-service" />
         <module name="api-gateway" />
-        <module name="registration-service" />
         <module name="chat-service" />
         <module name="user-service" />
         <module name="host-service" />
@@ -20,6 +19,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="registration-service" target="17" />
       <module name="resource-server" target="17" />
     </bytecodeTargetLevel>
   </component>

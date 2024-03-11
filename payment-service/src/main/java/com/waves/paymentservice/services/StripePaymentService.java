@@ -64,15 +64,16 @@ public class StripePaymentService implements PaymentService{
 
     @Override
     public String getPaymentDetials(String sessionId) {
-
         initializeStripe();
         try {
             Session session = Session.retrieve(sessionId);
+            String paymentStatus = session.getPaymentStatus();
+            long amount = session.getAmountTotal();
+            String currency = session.getCurrency();
+            return "Payment Status: " + paymentStatus + ", Amount: " + amount + ", Currency: " + currency;
         } catch (StripeException e) {
             log.debug("Failed to fetch the payment details from the server: {}", e.getMessage());
             return "Failed to fetch the payment details from the server";
         }
-        log.info("Successfully fetched Payment Details from stripe");
-        return "Successfully fetched details";
     }
 }
