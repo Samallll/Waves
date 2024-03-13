@@ -97,6 +97,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<finalName>authorization-server</finalName>
 	</build>
 
 </project>
