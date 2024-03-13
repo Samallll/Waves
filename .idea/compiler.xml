@@ -7,6 +7,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="config-server" />
         <module name="payment-service" />
         <module name="authorization-server" />
         <module name="event-service" />
@@ -28,6 +29,7 @@
       <module name="api-gateway" options="-parameters" />
       <module name="authorization-server" options="-parameters" />
       <module name="chat-service" options="-parameters" />
+      <module name="config-server" options="-parameters" />
       <module name="email-service" options="-parameters" />
       <module name="event-service" options="-parameters" />
       <module name="host-service" options="-parameters" />
