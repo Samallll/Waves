@@ -8,12 +8,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/event/job-post")
+@EnableMethodSecurity
 public class JobPostController {
 
     private final JobPostService jobPostService;
@@ -25,7 +27,7 @@ public class JobPostController {
         this.sharedService = sharedService;
     }
 
-    @PreAuthorize("hasAnyRole('HOST')")
+    @PreAuthorize("hasAnyRole('HOST','ADMIN')")
     @GetMapping("/all")
     public ResponseEntity<Page<JobPost>> getJobPostsForHost(
             @RequestParam(required = true) Long postedByUserId,
@@ -48,6 +50,7 @@ public class JobPostController {
         return jobPost.map(ResponseEntity::ok).orElseGet(()->ResponseEntity.notFound().build());
     }
 
+    @PreAuthorize("hasAnyRole('HOST','ADMIN')")
     @GetMapping("/by-eventId/{eventId}")
     public ResponseEntity<JobPost> getJobPostByEventId(@PathVariable Long eventId){
 

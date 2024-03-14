@@ -1,10 +1,8 @@
 package com.waves.hostservice.controller;
 
 import com.waves.hostservice.model.HostRequest;
-import com.waves.hostservice.model.dto.EmailDto;
-import com.waves.hostservice.model.dto.HostRequestDto;
 import com.waves.hostservice.model.RequestStatus;
-import com.waves.hostservice.producer.EmailProducer;
+import com.waves.hostservice.model.dto.HostRequestDto;
 import com.waves.hostservice.services.HostRequestService;
 import com.waves.hostservice.services.Impl.HostRequestServiceImp;
 import org.springframework.data.domain.Page;
@@ -12,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +28,7 @@ public class HostRequestController {
         this.hostRequestService = hostRequestServiceImp;
     }
 
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/register")
     public ResponseEntity<?> registerHostRequest(@RequestBody HostRequest hostRequest) {
         try {
@@ -39,11 +39,13 @@ public class HostRequestController {
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/all-requests")
     public ResponseEntity<List<HostRequestDto>> getAllRequests(){
         return ResponseEntity.ok(hostRequestService.getAllRequests());
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','USER','HOST')")
     @GetMapping("/all")
     public ResponseEntity<Page<HostRequestDto>> getUsersByPaginationAndSearch(
             @RequestParam(defaultValue = "0") int page,
@@ -55,6 +57,7 @@ public class HostRequestController {
         return ResponseEntity.ok(usersPage);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','USER','HOST')")
     @GetMapping("/details/{hostRequestId}")
     public ResponseEntity<HostRequestDto> getAllRequestsById(@PathVariable Long hostRequestId) {
 
@@ -64,8 +67,9 @@ public class HostRequestController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','USER','HOST')")
     @GetMapping("/{userId}")
-    public ResponseEntity<HostRequestDto> getAllRequestsByUserId(@PathVariable Long userId) {
+    public ResponseEntity<HostRequestDto> getRequestsByUserId(@PathVariable Long userId) {
         Optional<HostRequestDto> hostRequestOptional = hostRequestService.getRequestByUserId(userId);
         return hostRequestOptional
                 .map(ResponseEntity::ok)
@@ -73,7 +77,8 @@ public class HostRequestController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<HostRequestDto> checkForHostRequest(@RequestParam Long userId,
+    @PreAuthorize("hasAnyRole('ADMIN','USER','HOST')")
+    public ResponseEntity<HostRequestDto> checkUserIdWithStatus(@RequestParam Long userId,
                                        @RequestParam RequestStatus status){
 
         Optional<HostRequestDto> isUnique = hostRequestService.fidHostRequestByIdAndStatus(userId,status);
@@ -81,6 +86,7 @@ public class HostRequestController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/approve/{hostRequestId}")
     public ResponseEntity<String> approveHostRequest(@PathVariable Long hostRequestId){
 
@@ -93,6 +99,7 @@ public class HostRequestController {
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/disapprove/{hostRequestId}")
     public ResponseEntity<String> disapproveHostRequest(@PathVariable Long hostRequestId){
 
