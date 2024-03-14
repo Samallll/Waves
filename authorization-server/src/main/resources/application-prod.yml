@@ -26,3 +26,7 @@ management:
   tracing:
     sampling:
       probability: 1.0
+
+gateway:
+  baseURI: ${API_GATEWAY_URL:http://127.0.0.1:8090}
+  login-endPoint: ${LOGIN_ENDPOINT:/login/oauth2/code/gateway}

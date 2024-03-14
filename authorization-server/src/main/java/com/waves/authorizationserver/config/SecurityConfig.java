@@ -6,6 +6,7 @@ import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -61,6 +62,12 @@ public class SecurityConfig {
     private final CustomAuthenticationProvider customAuthenticationProvider;
 
     private final PasswordEncoder encoder;
+
+    @Value("${gateway.baseURI}")
+    private String apiGatewayBaseUri;
+
+    @Value("${gateway.login-endPoint}")
+    private String loginEndpoint;
 
     public SecurityConfig(CustomAuthenticationProvider customAuthenticationProvider, PasswordEncoder encoder) {
         this.customAuthenticationProvider = customAuthenticationProvider;
@@ -130,8 +137,8 @@ public class SecurityConfig {
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
-                .redirectUri("http://127.0.0.1:8090/login/oauth2/code/gateway")
-                .postLogoutRedirectUri("http://127.0.0.1:8090/logged-out")
+                .redirectUri(apiGatewayBaseUri + loginEndpoint)
+                .postLogoutRedirectUri(apiGatewayBaseUri + "/logged-out")
                 .scope(OidcScopes.OPENID)
                 .scope(OidcScopes.PROFILE)
                 .clientSettings(ClientSettings.builder()
