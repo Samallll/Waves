@@ -1,0 +1,78 @@
+eureka:
+  client:
+    register-with-eureka: false
+
+spring:
+  application:
+    name: cloud-gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      default-filters:
+        - CustomTokenRelay=
+      routes:
+        - id: email-service-router
+          uri: ${EMAIL_SERVICE_URL}
+          predicates:
+            - Path=/api/v1/email/**
+        - id: user-service-router
+          uri: ${USER_SERVICE_URL}
+          predicates:
+            - Path=/api/v1/user/**
+        - id: registration-service-router
+          uri: ${AUTHORIZATION_SERVER_URL}
+          predicates:
+            - Path=/api/v1/register/**
+        - id: host-service-router
+          uri: ${HOST_SERVICE_URL}
+          predicates:
+            - Path=/api/v1/host/**
+        - id: event-service-router
+          uri: ${EVENT_SERVICE_URL}
+          predicates:
+            - Path=/api/v1/event/**
+        - id: payment-service-router
+          uri: ${PAYMENT_SERVICE_URL}
+          predicates:
+            - Path=/api/v1/payment/**
+        - id: chat-service-router
+          uri: ${CHAT_SERVICE_URL}
+          predicates:
+            - Path=/api/v1/chat/**
+        - id: react-app
+          uri: ${REACT_APP_URL:http}
+          predicates:
+            - Path=/**
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: ${REACT_APP_URL}
+            allowedMethods: "*"
+            allowedHeaders: "*"
+  security:
+    oauth2:
+      client:
+        registration:
+          gateway:
+            provider: spring
+            client-id: client
+            client-secret: secret
+            scope: openid, profile
+            authorization-grant-type: authorization_code
+            redirect-uri: http://127.0.0.1:8090/login/oauth2/code/gateway
+        provider:
+          spring:
+            issuer-uri: ${AUTHORIZATION_SERVER_URL}
+
+logging:
+  level:
+    org:
+      springframework:
+        security: INFO
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
