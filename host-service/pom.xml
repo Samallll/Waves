@@ -119,6 +119,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<finalName>host-service</finalName>
 	</build>
 
 </project>
