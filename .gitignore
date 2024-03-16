@@ -2,3 +2,5 @@ HELP.md
 node_modules/
 
 .idea
+
+k8s/secrets.yml
