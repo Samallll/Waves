@@ -10,7 +10,7 @@ data:
 apiVersion: v1
 kind: Config
 metadata:
-  name: config-auth
+  name: auth-cm
 data:
   mysql_db_url: mysql-server-svc
   kafka_server_url: kafka-server-svc

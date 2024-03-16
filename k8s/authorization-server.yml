@@ -6,7 +6,7 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app:
+      app: authorization-server-svc
     template:
       metadata:
         app: authorization-server-app
@@ -22,7 +22,7 @@ spec:
           - name: DB_MYSQL_HOST
             valueFrom:
               configMapKeyRef:
-                name: config-auth
+                name: auth-cm
                 key: mysql_db_url
           - name: DB_MYSQL_USERNAME
             valueFrom:
@@ -37,10 +37,26 @@ spec:
           - name: KAFKA_SERVER_URL
             valueFrom:
               configMapKeyRef:
-                name: config-auth
+                name: auth-cm
                 key: kafka_server_url
           - name: API_GATEWAY_URL
             valueFrom:
               configMapKeyRef:
-                name: config-auth
+                name: auth-cm
                 key: api_gateway_url
+
+---
+
+apiVersion: v1
+kind: Service
+meta:
+  app: authorization-server-svc
+spec:
+  selector:
+    app: authorization-server-app
+  ports:
+    - port: 80
+      targetPort: 9000
+      nodePort: 30007
+
+
