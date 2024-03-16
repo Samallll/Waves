@@ -4,3 +4,14 @@ metadata:
   name: config-cm
 data:
   config_url: "http://config-server-svc"
+
+---
+
+apiVersion: v1
+kind: Config
+metadata:
+  name: config-auth
+data:
+  mysql_db_url: mysql-server-svc
+  kafka_server_url: kafka-server-svc
+  api_gateway_url: "http://127.0.0.1:8090"

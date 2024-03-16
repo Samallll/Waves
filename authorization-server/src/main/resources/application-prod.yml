@@ -2,7 +2,7 @@ spring:
   application:
     name: authorization-server
   datasource:
-    url: jdbc:mysql://${DB_MYSQL_HOST:localhost}:3306/user_details
+    url: jdbc:mysql://${DB_MYSQL_HOST}:3306/user_details
     username: ${DB_MYSQL_USERNAME}
     password: ${DB_MYSQL_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -12,7 +12,7 @@ spring:
       ddl-auto: update
   kafka:
     producer:
-      bootstrap-servers: ${ KAFKA_SERVER_URL:localhost }:9092
+      bootstrap-servers: ${KAFKA_SERVER_URL}:9092
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
@@ -28,5 +28,5 @@ management:
       probability: 1.0
 
 gateway:
-  baseURI: ${API_GATEWAY_URL:http://127.0.0.1:8090}
-  login-endPoint: ${LOGIN_ENDPOINT:/login/oauth2/code/gateway}
+  baseURI: ${API_GATEWAY_URL}
+  login-endPoint: "/login/oauth2/code/gateway"
