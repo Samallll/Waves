@@ -1,15 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
-meta:
-  app: authorization-server-app
+metadata:
+  name: authorization-server-dep
+  labels:
+    app: authorization-server-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: authorization-server-svc
+      app: authorization-server-app
     template:
       metadata:
-        app: authorization-server-app
+        labels:
+          app: authorization-server-app
       spec:
         containers:
         - name: authorization-server-app
@@ -18,7 +21,7 @@ spec:
           - containerPort: 9000
           env:
           - name: PROFILE
-            value: "prod"
+            value: prod
           - name: DB_MYSQL_HOST
             valueFrom:
               configMapKeyRef:
@@ -49,14 +52,13 @@ spec:
 
 apiVersion: v1
 kind: Service
-meta:
-  app: authorization-server-svc
+metadata:
+  name: authorization-server-svc
 spec:
   selector:
     app: authorization-server-app
   ports:
     - port: 80
       targetPort: 9000
-      nodePort: 30007
 
 

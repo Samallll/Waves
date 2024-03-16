@@ -1,12 +1,14 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: chat-service-app
+  name: chat-service-dep
+  labels:
+    app: authorization-server-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: chat-service-svc
+      app: chat-service-app
     template:
       metadata:
         labels:
