@@ -27,3 +27,25 @@ data:
     CREATE DATABASE IF NOT EXISTS orderdb;
     CREATE DATABASE IF NOT EXISTS paymentdb;
     CREATE DATABASE IF NOT EXISTS productdb;
+
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kafka-cm
+data:
+  zookeeper_connect_url: "zookeeper-svc.default:2181"
+
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kafka-init-cm
+data:
+  server.properties: |  
+    listeners=PLAINTEXT://:9092
+    advertised.listeners=PLAINTEXT://kafka-broker:9092
+
+

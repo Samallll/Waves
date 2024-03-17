@@ -10,8 +10,9 @@ spec:
   storageClassName: manual
   hostPath:
     path: "/mnt/data"  # - for Unix/Linux
-#    path: "/run/desktop/mnt/host/c/temp/testfiles" for windows
+    #    path: "/run/desktop/mnt/host/c/temp/testfiles" for windows
     type: DirectoryOrCreate
+
 ---
 
 apiVersion: v1
@@ -25,7 +26,6 @@ spec:
   storageClassName: manual
   accessModes:
     - ReadWriteOnce
-
 ---
 
 apiVersion: apps/v1
