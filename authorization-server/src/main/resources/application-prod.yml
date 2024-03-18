@@ -12,7 +12,7 @@ spring:
       ddl-auto: update
   kafka:
     producer:
-      bootstrap-servers: ${KAFKA_SERVER_URL}:9092
+      bootstrap-servers: ${KAFKA_SERVER_URL}
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 

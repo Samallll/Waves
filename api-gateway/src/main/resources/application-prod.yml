@@ -42,7 +42,7 @@ spring:
           predicates:
             - Path=/api/v1/chat/**
         - id: react-app
-          uri: ${REACT_APP_URL:http}
+          uri: ${REACT_APP_URL}+"/"
           predicates:
             - Path=/**
       globalcors:
@@ -61,7 +61,7 @@ spring:
             client-secret: secret
             scope: openid, profile
             authorization-grant-type: authorization_code
-            redirect-uri: http://127.0.0.1:8090/login/oauth2/code/gateway
+            redirect-uri: http://${API_GATEWAY_URL}/login/oauth2/code/gateway
         provider:
           spring:
             issuer-uri: ${AUTHORIZATION_SERVER_URL}

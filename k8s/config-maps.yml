@@ -5,16 +5,26 @@ metadata:
 data:
   config_url: "http://config-server-svc"
 
-#---
-#
-#apiVersion: v1
-#kind: Config
-#metadata:
-#  name: auth-cm
-#data:
-#  mysql_db_url: mysql
-#  kafka_server_url: kafka-server-svc
-#  api_gateway_url: "http://127.0.0.1:8090"
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: eureka-cm
+data:
+  eureka_service_address: "http://eureka-0.eureka:8761/eureka"
+
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: auth-cm
+data:
+  mysql_db_url: "mysql-0.mysql"
+  kafka_server_url: kafka-server-svc
+  api_gateway_url: api-gateway-svc
+  eureka_server_url: eureka-server-svc
 
 ---
 
@@ -24,9 +34,12 @@ metadata:
   name: mysql-initdb-cm
 data:
   init.sql: |
-    CREATE DATABASE IF NOT EXISTS orderdb;
-    CREATE DATABASE IF NOT EXISTS paymentdb;
-    CREATE DATABASE IF NOT EXISTS productdb;
+    CREATE DATABASE IF NOT EXISTS user_details;
+    CREATE DATABASE IF NOT EXISTS event_details;
+    CREATE DATABASE IF NOT EXISTS host_details;
+    CREATE DATABASE IF NOT EXISTS payment_details;
+    CREATE USER 'admin'@'%' IDENTIFIED BY 'admin';
+    GRANT ALL PRIVILEGES ON *.* TO 'admin'@'%';
 
 ---
 
@@ -47,5 +60,22 @@ data:
   server.properties: |  
     listeners=PLAINTEXT://:9092
     advertised.listeners=PLAINTEXT://kafka-broker:9092
+
+---
+
+#apiVersion: v1
+#kind: ConfigMap
+#metadata:
+#  name: api-gateway-cm
+#data:
+#  email_service_url: email-service-svc
+#  user_service_url: user-service-svc
+#  host_service_url: host-service-svc
+#  event_service_url: event-service-svc
+#  payment_service_url: payment-service-svc
+#  chat_service_url: chat-service-svc
+#  react_app_url: react-app-svc
+#  authorization_server_url: authorization-server-svc
+#  api_gateway_url: api-gateway-svc
 
 

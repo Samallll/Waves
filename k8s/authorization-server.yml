@@ -1,52 +1,55 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: authorization-server-dep
+  name: authorization-server
   labels:
-    app: authorization-server-app
+    app: authorization-server
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: authorization-server-app
-    template:
-      metadata:
-        labels:
-          app: authorization-server-app
-      spec:
-        containers:
-        - name: authorization-server-app
-          image: samal024/authorization-server
-          ports:
-          - containerPort: 9000
-          env:
-          - name: PROFILE
-            value: prod
-          - name: DB_MYSQL_HOST
-            valueFrom:
-              configMapKeyRef:
-                name: auth-cm
-                key: mysql_db_url
-          - name: DB_MYSQL_USERNAME
-            valueFrom:
-              secretKeyRef:
-                name: mysql-secret
-                key: username
-          - name: DB_MYSQL_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: mysql-secret
-                key: password
-          - name: KAFKA_SERVER_URL
-            valueFrom:
-              configMapKeyRef:
-                name: auth-cm
-                key: kafka_server_url
-          - name: API_GATEWAY_URL
-            valueFrom:
-              configMapKeyRef:
-                name: auth-cm
-                key: api_gateway_url
+      app: authorization-server
+  template:
+    metadata:
+      labels:
+        app: authorization-server
+    spec:
+      containers:
+      - name: authorization-server
+        image: samal024/authorization-server
+        ports:
+        - containerPort: 9000
+        env:
+        - name: PROFILE
+          value: prod
+        - name: DB_MYSQL_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: auth-cm
+              key: mysql_db_url
+        - name: DB_MYSQL_USERNAME
+          value: "root"
+#          valueFrom:
+#            secretKeyRef:
+#              name: mysql-secret
+#              key: username
+        - name: DB_MYSQL_PASSWORD
+          value: "root"
+#          valueFrom:
+#            secretKeyRef:
+#              name: mysql-secret
+#              key: password
+        - name: KAFKA_SERVER_URL
+          valueFrom:
+            configMapKeyRef:
+              name: auth-cm
+              key: kafka_server_url
+        - name: API_GATEWAY_URL
+          valueFrom:
+            configMapKeyRef:
+              name: auth-cm
+              key: api_gateway_url
+
 
 ---
 

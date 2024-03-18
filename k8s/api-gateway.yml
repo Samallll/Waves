@@ -1,0 +1,85 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-gateway
+spec:
+  selector:
+    matchLabels:
+      app: api-gateway
+  template:
+    metadata:
+      labels:
+        app: api-gateway
+    spec:
+      containers:
+        - name: api-gateway
+          image: samal024/api-gateway
+          ports:
+            - containerPort: 9090
+          env:
+            - name: PROFILE
+              value: "prod"
+            - name: EMAIL_SERVICE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: api-gateway-cm
+                  key: email_service_url
+            - name: USER_SERVICE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: api-gateway-cm
+                  key: user_service_url
+            - name: AUTHORIZATION_SERVER_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: api-gateway-cm
+                  key: authorization_server_url
+            - name: HOST_SERVICE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: api-gateway-cm
+                  key: host_service_url
+            - name: EVENT_SERVICE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: api-gateway-cm
+                  key: event_service_url
+            - name: PAYMENT_SERVICE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: api-gateway-cm
+                  key: payment_service_url
+            - name: CHAT_SERVICE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: api-gateway-cm
+                  key: chat_service_url
+            - name: REACT_APP_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: api-gateway-cm
+                  key: react_app_url
+            - name: API_GATEWAY_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: api-gateway-cm
+                  key: api_gateway_url
+            - name: AUTHORIZATION_SERVER_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: api-gateway-cm
+                  key: authorization_server_url
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-gateway-svc
+spec:
+  type: LoadBalancer
+  selector:
+    app: api-gateway-app
+  ports:
+    - port: 80
+      targetPort: 9090
