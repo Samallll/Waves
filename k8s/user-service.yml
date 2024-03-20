@@ -18,6 +18,8 @@ spec:
           ports:
             - containerPort: 8092
           env:
+            - name: PROFILE
+              value: prod
             - name: AUTHORIZATION_SERVER_URL
               valueFrom:
                 configMapKeyRef:
