@@ -1,5 +1,23 @@
+
 spring:
   application:
     name: user-service
+  kafka:
+    consumer:
+      bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVER:localhost}:9092
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://${AUTHORIZATION_SERVER:localhost}:9000
+  datasource:
+    url: jdbc:mysql://${DB_MYSQL_HOST:localhost}:3306/user_details
+    username: ${DB_MYSQL_USERNAME:root}
+    password: ${DB_MYSQL_PASSWORD:samal}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
   config:
-    import: configserver:${CONFIG_SERVER_URL:http://localhost:8088}
+    import: configserver:http://${CONFIG_SERVER_URL:localhost}:8088

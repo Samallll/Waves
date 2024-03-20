@@ -21,12 +21,13 @@ spec:
             - name: EUREKA_SERVER_URL
               valueFrom:
                 configMapKeyRef:
-                  name: eureka-cm
-                  key: eureka_service_address
-            - name: AUTHORIZATION_SERVER_URL
+                  name: user-service-cm
+                  key: eureka_server_url
+            - name: ZIPKIN_SERVER_URL
               valueFrom:
                 configMapKeyRef:
-                  name: auth-cm
+                  name: config-cm
+                  key: zipkin_server_url
 
 ---
 
@@ -40,3 +41,5 @@ spec:
   ports:
     - port: 8088
       targetPort: 8088
+
+

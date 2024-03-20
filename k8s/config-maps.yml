@@ -5,6 +5,7 @@ metadata:
 data:
   config_url: "http://config-server-svc:8088"
   eureka_server_url: "eureka-0.eureka"
+  zipkin_server_url: "zipkin-svc"
 
 ---
 
@@ -88,9 +89,10 @@ kind: ConfigMap
 metadata:
   name: user-service-cm
 data:
-  eureka_server_url: "http://eureka-0.eureka:8761/eureka"
+  eureka_server_url: "eureka-0.eureka"
   mysql_db_url: "mysql-0.mysql"
   kafka_server_url: "kafka-0.kafka-svc"
-  config_url: "http://config-server-svc:8088"
+  config_url: "config-server-svc"
+  authorization_server_url: "authorization-server-0.authorization-server-svc"
 
 ---
