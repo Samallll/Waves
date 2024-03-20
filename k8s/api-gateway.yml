@@ -1,11 +1,42 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: api-gateway-pv
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: manual
+  hostPath:
+    path: "/mnt/data"
+    type: DirectoryOrCreate
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: api-gateway-pvc
+spec:
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+
+---
+
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: api-gateway
 spec:
   selector:
     matchLabels:
       app: api-gateway
+  serviceName: api-gateway-svc
   template:
     metadata:
       labels:
@@ -14,8 +45,9 @@ spec:
       containers:
         - name: api-gateway
           image: samal024/api-gateway
+          imagePullPolicy: Always
           ports:
-            - containerPort: 9090
+            - containerPort: 8090
           env:
             - name: PROFILE
               value: "prod"
@@ -64,11 +96,18 @@ spec:
                 configMapKeyRef:
                   name: api-gateway-cm
                   key: api_gateway_url
-            - name: AUTHORIZATION_SERVER_URL
+            - name: EUREKA_SERVER_URL
               valueFrom:
                 configMapKeyRef:
                   name: api-gateway-cm
-                  key: authorization_server_url
+                  key: eureka_server_url
+          volumeMounts:
+            - name: api-gateway-persistent-storage
+              mountPath: /var/lib/api-gateway
+      volumes:
+        - name: api-gateway-persistent-storage
+          persistentVolumeClaim:
+            claimName: api-gateway-pvc
 
 ---
 
@@ -82,4 +121,4 @@ spec:
     app: api-gateway-app
   ports:
     - port: 80
-      targetPort: 9090
+      targetPort: 8090

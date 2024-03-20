@@ -12,9 +12,11 @@ spring:
       ddl-auto: update
   kafka:
     producer:
-      bootstrap-servers: ${KAFKA_SERVER_URL}
+      bootstrap-servers: ${KAFKA_SERVER_URL}:9092
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+  zipkin:
+    base-url: http://${ZIPKIN_SERVER_URL}:9411
 
 logging:
   level:
@@ -26,7 +28,12 @@ management:
   tracing:
     sampling:
       probability: 1.0
+  zipkin:
+    tracing:
+      endpoint: http://${ZIPKIN_SERVER_URL}:9411/api/v2/spans
 
 gateway:
-  baseURI: ${API_GATEWAY_URL}
+  baseURI: http://${API_GATEWAY_URL}:8090
   login-endPoint: "/login/oauth2/code/gateway"
+
+

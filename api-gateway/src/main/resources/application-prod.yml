@@ -1,6 +1,10 @@
 eureka:
+  instance:
+    prefer-ip-address: true
   client:
     register-with-eureka: false
+    service-url:
+      defaultZone: http://${EUREKA_SERVER_URL}:8761/eureka
 
 spring:
   application:
@@ -14,41 +18,41 @@ spring:
         - CustomTokenRelay=
       routes:
         - id: email-service-router
-          uri: ${EMAIL_SERVICE_URL}
+          uri: http://${EMAIL_SERVICE_URL}:8091
           predicates:
             - Path=/api/v1/email/**
         - id: user-service-router
-          uri: ${USER_SERVICE_URL}
+          uri: http://${USER_SERVICE_URL}:8092
           predicates:
             - Path=/api/v1/user/**
         - id: registration-service-router
-          uri: ${AUTHORIZATION_SERVER_URL}
+          uri: http://${AUTHORIZATION_SERVER_URL}:9000
           predicates:
             - Path=/api/v1/register/**
         - id: host-service-router
-          uri: ${HOST_SERVICE_URL}
+          uri: http://${HOST_SERVICE_URL}:8094
           predicates:
             - Path=/api/v1/host/**
         - id: event-service-router
-          uri: ${EVENT_SERVICE_URL}
+          uri: http://${EVENT_SERVICE_URL}:8095
           predicates:
             - Path=/api/v1/event/**
         - id: payment-service-router
-          uri: ${PAYMENT_SERVICE_URL}
+          uri: http://${PAYMENT_SERVICE_URL}:8096
           predicates:
             - Path=/api/v1/payment/**
         - id: chat-service-router
-          uri: ${CHAT_SERVICE_URL}
+          uri: http://${CHAT_SERVICE_URL}:8097
           predicates:
             - Path=/api/v1/chat/**
         - id: react-app
-          uri: ${REACT_APP_URL}+"/"
+          uri: http://${REACT_APP_URL}:3000/
           predicates:
             - Path=/**
       globalcors:
         cors-configurations:
           '[/**]':
-            allowedOrigins: ${REACT_APP_URL}
+            allowedOrigins: http://${REACT_APP_URL}:3000
             allowedMethods: "*"
             allowedHeaders: "*"
   security:
@@ -61,10 +65,12 @@ spring:
             client-secret: secret
             scope: openid, profile
             authorization-grant-type: authorization_code
-            redirect-uri: http://${API_GATEWAY_URL}/login/oauth2/code/gateway
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+#            redirect-uri: http://127.0.0.1:8090/login/oauth2/code/gateway
+#            redirect-uri-template: "{baseUrl}/login/oauth2/code/{registrationId}"
         provider:
           spring:
-            issuer-uri: ${AUTHORIZATION_SERVER_URL}
+            issuer-uri: http://${AUTHORIZATION_SERVER_URL}:9000
 
 logging:
   level:
