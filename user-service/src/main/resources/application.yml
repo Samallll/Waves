@@ -21,3 +21,13 @@ spring:
       ddl-auto: update
   config:
     import: configserver:http://${CONFIG_SERVER_URL:localhost}:8088
+
+server:
+  port: 8092
+
+logging:
+  level:
+    root: INFO
+    org:
+      springframework:
+        security: INFO

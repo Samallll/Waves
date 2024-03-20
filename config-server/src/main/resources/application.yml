@@ -4,8 +4,12 @@ server:
 spring:
   application:
     name: config-server
-  profiles:
-    active: native
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/Samallll/Waves-Conifg-App
+          clone-on-start: true
 
 eureka:
   instance:

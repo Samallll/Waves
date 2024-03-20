@@ -12,7 +12,7 @@ spec:
         app: config-server
     spec:
       containers:
-        - name: config-server-app
+        - name: config-server
           image: samal024/config-server
           imagePullPolicy: Always
           ports:
@@ -21,7 +21,7 @@ spec:
             - name: EUREKA_SERVER_URL
               valueFrom:
                 configMapKeyRef:
-                  name: user-service-cm
+                  name: config-cm
                   key: eureka_server_url
             - name: ZIPKIN_SERVER_URL
               valueFrom:
