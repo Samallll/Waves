@@ -1,13 +1,13 @@
-FROM node:18-alpine
+FROM node:18-alpine as BUILD_IMAGE
 
-WORKDIR /app
-
-COPY package.json package-lock.json ./
-
-RUN npm install
+WORKDIR /app/react-app
 
 COPY . .
 
+RUN npm install
+
+RUN npm run build
+
 EXPOSE 3000
 
-ENTRYPOINT ["npm", "run", "dev"]
+CMD [ "npm","run","preview" ]

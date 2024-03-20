@@ -96,3 +96,19 @@ data:
   authorization_server_url: "authorization-server-0.authorization-server-svc"
 
 ---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: react-app-cm
+data:
+  api_gateway_base_uri  : "http://api-gateway-0.api-gateway-svc:8090"
+  email_service_base_uri  : "http://api-gateway-0.api-gateway-svc:8090/api/v1/email"
+  user_service_base_uri  : "http://api-gateway-0.api-gateway-svc:8090/api/v1/user"
+  registration_service_base_uri  : "http://api-gateway-0.api-gateway-svc:8090/api/v1/register"
+  host_service_base_uri  : "http://api-gateway-0.api-gateway-svc:8090/api/v1/host"
+  payment_service_base_uri  : "http://api-gateway-0.api-gateway-svc:8090/api/v1/payment"
+  event_service_base_uri  : "http://api-gateway-0.api-gateway-svc:8090/api/v1/event"
+  chat_service_base_uri  : "http://api-gateway-0.api-gateway-svc:8090/api/v1/chat"
+  login_uri  : "http://api-gateway-0.api-gateway-svc:8090/oauth2/authorization/gateway"
+  logout_uri  : "http://api-gateway-0.api-gateway-svc:8090/logout"
