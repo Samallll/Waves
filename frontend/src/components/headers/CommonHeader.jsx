@@ -6,7 +6,6 @@ import Logo from './Logo'
 export default function CommonHeader() {
 
     const loginURI = import.meta.env.VITE_LOGIN_URI;
-
     return (
         <header className="shadow sticky z-50 top-0">
             <nav className="bg-white border-gray-200 px-4 lg:px-6 py-2.5">

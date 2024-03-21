@@ -18,62 +18,9 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 3000
-          env:
-            - name: VITE_API_GATEWAY_BASE_URI
-              valueFrom:
-                configMapKeyRef:
-                  name: react-app-cm
-                  key: api_gateway_base_uri
-            - name: VITE_EMAIL_SERVICE_BASE_URI
-              valueFrom:
-                configMapKeyRef:
-                  name: react-app-cm
-                  key: email_service_base_uri
-            - name: VITE_USER_SERVICE_BASE_URI
-              valueFrom:
-                configMapKeyRef:
-                  name: react-app-cm
-                  key: user_service_base_uri
-            - name: VITE_REGISTRATION_SERVICE_BASE_URI
-              valueFrom:
-                configMapKeyRef:
-                  name: react-app-cm
-                  key: registration_service_base_uri
-            - name: VITE_HOST_SERVICE_BASE_URI
-              valueFrom:
-                configMapKeyRef:
-                  name: react-app-cm
-                  key: host_service_base_uri
-            - name: VITE_PAYMENT_SERVICE_BASE_URI
-              valueFrom:
-                configMapKeyRef:
-                  name: react-app-cm
-                  key: payment_service_base_uri
-            - name: VITE_EVENT_SERVICE_BASE_URI
-              valueFrom:
-                configMapKeyRef:
-                  name: react-app-cm
-                  key: event_service_base_uri
-            - name: VITE_CHAT_SERVICE_BASE_URI
-              valueFrom:
-                configMapKeyRef:
-                  name: react-app-cm
-                  key: payment_service_base_uri
-            - name: VITE_LOGOUT_URI
-              valueFrom:
-                configMapKeyRef:
-                  name: react-app-cm
-                  key: logout_uri
-            - name: VITE_LOGIN_URI
-              valueFrom:
-                configMapKeyRef:
-                  name: react-app-cm
-                  key: login_uri
-            - name: VITE_STRIPE_PUBLIC_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: react-app-secret
-                  key: stripe_public_key
+          envFrom:
+            - configMapRef:
+                name: react-app-cm
 
 ---
 

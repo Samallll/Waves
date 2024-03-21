@@ -1,4 +1,4 @@
-FROM node:18-alpine as BUILD_IMAGE
+FROM node:18-alpine
 
 WORKDIR /app/react-app
 
@@ -10,4 +10,4 @@ RUN npm run build
 
 EXPOSE 3000
 
-CMD [ "npm","run","preview" ]
+CMD [ "npm","run","dev" ]

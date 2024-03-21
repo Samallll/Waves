@@ -118,7 +118,7 @@ metadata:
 spec:
   type: LoadBalancer
   selector:
-    app: api-gateway-app
+    app: api-gateway
   ports:
-    - port: 80
+    - port: 8090
       targetPort: 8090
