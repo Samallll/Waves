@@ -1,4 +1,7 @@
 spring:
+  output:
+    ansi:
+      enabled: ALWAYS
   application:
     name: authorization-server
   datasource:
@@ -33,7 +36,7 @@ management:
       endpoint: http://${ZIPKIN_SERVER_URL}:9411/api/v2/spans
 
 gateway:
-  baseURI: http://${API_GATEWAY_URL}:8090
+  baseURI: "http://api-gateway-lb.default.svc.cluster.local:80"
   login-endPoint: "/login/oauth2/code/gateway"
 
 

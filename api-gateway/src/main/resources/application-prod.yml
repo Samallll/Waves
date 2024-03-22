@@ -7,6 +7,9 @@ eureka:
       defaultZone: http://${EUREKA_SERVER_URL}:8761/eureka
 
 spring:
+  output:
+    ansi:
+      enabled: ALWAYS
   application:
     name: cloud-gateway
   cloud:
@@ -65,11 +68,14 @@ spring:
             client-secret: secret
             scope: openid, profile
             authorization-grant-type: authorization_code
+#            redirect-uri: "http://api-gateway-lb.default.svc.cluster.local:80/login/oauth2/code/gateway"
+#            redirect-uri: "http://146.190.11.80:80/login/oauth2/code/{registrationId}"
             redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
 #            redirect-uri: http://127.0.0.1:8090/login/oauth2/code/gateway
 #            redirect-uri-template: "{baseUrl}/login/oauth2/code/{registrationId}"
         provider:
           spring:
+#            issuer-uri: "http://authorization-server-lb.default.svc.cluster.local:9000"
             issuer-uri: http://${AUTHORIZATION_SERVER_URL}:9000
 
 logging:
@@ -82,3 +88,6 @@ management:
   tracing:
     sampling:
       probability: 1.0
+  zipkin:
+    tracing:
+      endpoint: http://${ZIPKIN_SERVER_URL}:9411/api/v2/spans
