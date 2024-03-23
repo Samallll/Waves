@@ -36,7 +36,7 @@ management:
       endpoint: http://${ZIPKIN_SERVER_URL}:9411/api/v2/spans
 
 gateway:
-  baseURI: "http://api-gateway-lb.default.svc.cluster.local:80"
+  baseURI: http://${API_GATEWAY_URL}:80
   login-endPoint: "/login/oauth2/code/gateway"
 
 

@@ -44,3 +44,16 @@ data:
   eureka_server_url: "eureka-0.eureka.micro-services"
   zipkin_server_url: "zipkin-svc.micro-services"
 
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: auth-cm
+  namespace: authorization
+data:
+  mysql_db_url: "mysql-0.mysql.store"
+  kafka_server_url: "kafka-0.kafka-svc.store"
+  api_gateway_url: "api-gateway-lb.micro-services.svc.cluster.local"
+  eureka_server_url: "eureka-0.eureka.micro-services"
+  zipkin_server_url: "zipkin-svc.micro-services"
+
