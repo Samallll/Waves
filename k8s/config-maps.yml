@@ -5,7 +5,7 @@ metadata:
   name: kafka-cm
   namespace: store
 data:
-  zookeeper_connect_url:zookeeper-svc.store:2181"
+  zookeeper_connect_url: "zookeeper-svc.store:2181"
 
 ---
 apiVersion: v1
@@ -19,3 +19,16 @@ data:
     advertised.listeners=PLAINTEXT://kafka-broker:9092
 
 ---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-initdb-cm
+  namespace: store
+data:
+  init.sql: |
+    CREATE DATABASE IF NOT EXISTS user_details;
+    CREATE DATABASE IF NOT EXISTS event_details;
+    CREATE DATABASE IF NOT EXISTS host_details;
+    CREATE DATABASE IF NOT EXISTS payment_details;
+    CREATE USER 'admin'@'%' IDENTIFIED BY 'admin';
+    GRANT ALL PRIVILEGES ON *.* TO 'admin'@'%';
