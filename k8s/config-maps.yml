@@ -57,3 +57,23 @@ data:
   eureka_server_url: "eureka-0.eureka.micro-services"
   zipkin_server_url: "zipkin-svc.micro-services"
 
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: api-gateway-cm
+  namespace: micro-services
+data:
+  email_service_url: email-service-svc
+  user_service_url: user-service-svc
+  host_service_url: host-service-svc
+  event_service_url: event-service-svc
+  payment_service_url: payment-service-svc
+  chat_service_url: chat-service-svc
+  react_app_url: "react-app-svc.micro-services"
+  authorization_server_url: "authorization-server-lb.authorization.svc.cluster.local"
+  #just now changed from authorization-server-0.authorization-server-svc.default
+  api_gateway_url: "api-gateway-0.api-gateway-svc.micro-services.svc.cluster.local"
+  #  api_gateway_url: "api-gateway-0.api-gateway-svc.default"
+  eureka_server_url: "eureka-0.eureka.micro-services"
+  zipkin_server_url: "zipkin-svc.micro-services"
