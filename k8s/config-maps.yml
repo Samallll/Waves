@@ -33,3 +33,14 @@ data:
     CREATE USER 'admin'@'%' IDENTIFIED BY 'admin';
     GRANT ALL PRIVILEGES ON *.* TO 'admin'@'%';
 
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-cm
+  namespace: micro-services
+data:
+  config_url: "http://config-server-svc.micro-services:8088"
+  eureka_server_url: "eureka-0.eureka.micro-services"
+  zipkin_server_url: "zipkin-svc.micro-services"
+
