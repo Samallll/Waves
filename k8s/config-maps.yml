@@ -32,3 +32,4 @@ data:
     CREATE DATABASE IF NOT EXISTS payment_details;
     CREATE USER 'admin'@'%' IDENTIFIED BY 'admin';
     GRANT ALL PRIVILEGES ON *.* TO 'admin'@'%';
+
