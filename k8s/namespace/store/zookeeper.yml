@@ -2,6 +2,7 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: zookeeper-pv
+  namespace: store
 spec:
   capacity:
     storage: 2Gi
@@ -9,7 +10,7 @@ spec:
     - ReadWriteOnce
   storageClassName: manual
   hostPath:
-    path: "/mnt/data"  # - for Unix/Linux
+    path: "/mnt/data" # - for Unix/Linux
     #    path: "/run/desktop/mnt/host/c/temp/testfiles" for windows
     type: DirectoryOrCreate
 
@@ -19,6 +20,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: zookeeper-pvc
+  namespace: store
 spec:
   resources:
     requests:
@@ -26,12 +28,14 @@ spec:
   storageClassName: manual
   accessModes:
     - ReadWriteOnce
+
 ---
 
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: zookeeper
+  namespace: store
 spec:
   selector:
     matchLabels:
@@ -66,6 +70,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: zookeeper-svc
+  namespace: store
 spec:
   clusterIP: None
   selector:
