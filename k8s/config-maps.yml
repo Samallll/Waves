@@ -77,3 +77,22 @@ data:
   #  api_gateway_url: "api-gateway-0.api-gateway-svc.default"
   eureka_server_url: "eureka-0.eureka.micro-services"
   zipkin_server_url: "zipkin-svc.micro-services"
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: react-app-cm
+  namespace: micro-services
+data:
+  VITE_API_GATEWAY_BASE_URI : "http://api-gateway-0.api-gateway-svc:80"
+  VITE_EMAIL_SERVICE_BASE_URI : "http://api-gateway-0.api-gateway-svc:80/api/v1/email"
+  VITE_USER_SERVICE_BASE_URI : "http://api-gateway-0.api-gateway-svc:80/api/v1/user"
+  VITE_REGISTRATION_SERVICE_BASE_URI : "http://api-gateway-0.api-gateway-svc:80/api/v1/register"
+  VITE_HOST_SERVICE_BASE_URI : "http://api-gateway-0.api-gateway-svc:80/api/v1/host"
+  VITE_PAYMENT_SERVICE_BASE_URI : "http://api-gateway-0.api-gateway-svc:80/api/v1/payment"
+  VITE_EVENT_SERVICE_BASE_URI : "http://api-gateway-0.api-gateway-svc:80/api/v1/event"
+  VITE_CHAT_SERVICE_BASE_URI : "http://api-gateway-0.api-gateway-svc:80/api/v1/chat"
+  VITE_LOGIN_URI : "http://api-gateway-0.api-gateway-svc.micro-services.svc.cluster.local:80/oauth2/authorization/gateway"
+  VITE_LOGOUT_URI : "http://api-gateway-0.api-gateway-svc.micro-services.svc.cluster.local:80/logout"
+  VITE_STRIPE_PUBLIC_KEY : "pk_test_51OltLySBmWDDzEvOmsoOAIXcGc4A17IjT6FjEHSyZV915ZdahaSgMw793UMhv9F2r6JMTIVtWbiqjesLDRtDh2uP0046E7LbWK"
