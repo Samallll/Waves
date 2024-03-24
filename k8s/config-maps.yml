@@ -53,7 +53,8 @@ metadata:
 data:
   mysql_db_url: "mysql-0.mysql.store"
   kafka_server_url: "kafka-0.kafka-svc.store"
-  api_gateway_url: "api-gateway-lb.micro-services.svc.cluster.local"
+#  api_gateway_url: "api-gateway-lb.micro-services.svc.cluster.local"
+  api_gateway_url: "http://crowdcraft.site"
   eureka_server_url: "eureka-0.eureka.micro-services"
   zipkin_server_url: "zipkin-svc.micro-services"
 
@@ -71,9 +72,11 @@ data:
   payment_service_url: payment-service-svc
   chat_service_url: chat-service-svc
   react_app_url: "react-app-svc.micro-services"
-  authorization_server_url: "authorization-server-lb.authorization.svc.cluster.local"
+#  authorization_server_url: "authorization-server-lb.authorization.svc.cluster.local"
+  authorization_server_url: "http://auth.crowdcraft.site"
   #just now changed from authorization-server-0.authorization-server-svc.default
-  api_gateway_url: "api-gateway-0.api-gateway-svc.micro-services.svc.cluster.local"
+#  api_gateway_url: "api-gateway-0.api-gateway-svc.micro-services.svc.cluster.local"
+  api_gateway_url: "http://crowdcraft.site"
   #  api_gateway_url: "api-gateway-0.api-gateway-svc.default"
   eureka_server_url: "eureka-0.eureka.micro-services"
   zipkin_server_url: "zipkin-svc.micro-services"
@@ -93,6 +96,6 @@ data:
   VITE_PAYMENT_SERVICE_BASE_URI : "http://api-gateway-0.api-gateway-svc:80/api/v1/payment"
   VITE_EVENT_SERVICE_BASE_URI : "http://api-gateway-0.api-gateway-svc:80/api/v1/event"
   VITE_CHAT_SERVICE_BASE_URI : "http://api-gateway-0.api-gateway-svc:80/api/v1/chat"
-  VITE_LOGIN_URI : "http://api-gateway-0.api-gateway-svc.micro-services.svc.cluster.local:80/oauth2/authorization/gateway"
+  VITE_LOGIN_URI : "http://crowdcraft.site/oauth2/authorization/gateway"
   VITE_LOGOUT_URI : "http://api-gateway-0.api-gateway-svc.micro-services.svc.cluster.local:80/logout"
   VITE_STRIPE_PUBLIC_KEY : "pk_test_51OltLySBmWDDzEvOmsoOAIXcGc4A17IjT6FjEHSyZV915ZdahaSgMw793UMhv9F2r6JMTIVtWbiqjesLDRtDh2uP0046E7LbWK"

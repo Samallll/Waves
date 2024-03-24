@@ -19,6 +19,7 @@ spring:
           enabled: true
       default-filters:
         - CustomTokenRelay=
+        - SaveSession
       routes:
         - id: email-service-router
           uri: http://${EMAIL_SERVICE_URL}:8091
@@ -70,13 +71,13 @@ spring:
             authorization-grant-type: authorization_code
 #            redirect-uri: "http://api-gateway-lb.default.svc.cluster.local:80/login/oauth2/code/gateway"
 #            redirect-uri: "http://146.190.11.80:80/login/oauth2/code/{registrationId}"
-            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            redirect-uri: "http://crowdcraft.site/login/oauth2/code/{registrationId}"
 #            redirect-uri: http://127.0.0.1:8090/login/oauth2/code/gateway
 #            redirect-uri-template: "{baseUrl}/login/oauth2/code/{registrationId}"
         provider:
           spring:
 #            issuer-uri: "http://authorization-server-lb.default.svc.cluster.local:9000"
-            issuer-uri: http://${AUTHORIZATION_SERVER_URL}:9000
+            issuer-uri: ${AUTHORIZATION_SERVER_URL}
 
 logging:
   level:
