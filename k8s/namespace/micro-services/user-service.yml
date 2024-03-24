@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-service
+  namespace: micro-services
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-service
+  template:
+    metadata:
+      labels:
+        app: user-service
+    spec:
+      containers:
+        - name: user-service
+          image: samal024/user-service
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8092
+          env:
+            - name: PROFILE
+              value: prod
+            - name: AUTHORIZATION_SERVER_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: user-service-cm
+                  key: authorization_server_url
+            - name: DB_MYSQL_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: user-service-cm
+                  key: mysql_db_url
+            - name: DB_MYSQL_USERNAME
+              value: "root"
+            - name: DB_MYSQL_PASSWORD
+              value: "root"
+            - name: KAFKA_BOOTSTRAP_SERVER
+              valueFrom:
+                configMapKeyRef:
+                  name: user-service-cm
+                  key: kafka_server_url
+            - name: CONFIG_SERVER_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: user-service-cm
+                  key: config_url
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-service-svc
+  namespace: micro-services
+spec:
+  selector:
+    app: user-service
+  ports:
+    - port: 8092
+      targetPort: 8092
+
+
