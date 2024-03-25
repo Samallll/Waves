@@ -1,32 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: user-service
+  name: email-service
   namespace: micro-services
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: user-service
+      app: email-service
   template:
     metadata:
       labels:
-        app: user-service
+        app: email-service
     spec:
       containers:
-        - name: user-service
-          image: samal024/user-service
+        - name: email-service
+          image: samal024/email-service
           imagePullPolicy: Always
           ports:
-            - containerPort: 8092
+            - containerPort: 8091
           env:
             - name: PROFILE
               value: prod
-            - name: DB_MYSQL_HOST
-              valueFrom:
-                configMapKeyRef:
-                  name: user-service-cm
-                  key: mysql_db_url
             - name: KAFKA_BOOTSTRAP_SERVER
               valueFrom:
                 configMapKeyRef:
@@ -35,21 +30,31 @@ spec:
             - name: CONFIG_SERVER_URL
               valueFrom:
                 configMapKeyRef:
-                  name: user-service-cm
+                  name: email-service-cm
                   key: config_url
+            - name: APP_EMAIL_ID
+              valueFrom:
+                secretKeyRef:
+                  name: email-secret
+                  key: email_id
+            - name: APP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: email-secret
+                  key: app_password
 
 ---
 
 apiVersion: v1
 kind: Service
 metadata:
-  name: user-service-svc
+  name: email-service-svc
   namespace: micro-services
 spec:
   selector:
-    app: user-service
+    app: email-service
   ports:
-    - port: 8092
-      targetPort: 8092
+    - port: 8091
+      targetPort: 8091
 
 

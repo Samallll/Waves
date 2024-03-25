@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: email-service
+  kafka:
+    consumer:
+      bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVER}:9092
+  config:
+    import: configserver:http://${CONFIG_SERVER_URL}:8088
+  mail:
+    username: ${APP_EMAIL_ID}
+    password: ${APP_PASSWORD}
+    host: smtp.gmail.com
+    port: 587
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+server:
+  port: 8091
+
+logging:
+  level:
+    root: INFO
+    org:
+      springframework:
+        security: INFO
