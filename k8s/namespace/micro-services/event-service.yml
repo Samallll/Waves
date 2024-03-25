@@ -1,0 +1,82 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: event-service
+  namespace: micro-services
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: event-service
+  template:
+    metadata:
+      labels:
+        app: event-service
+    spec:
+      containers:
+        - name: event-service
+          image: samal024/event-service
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8095
+          env:
+            - name: PROFILE
+              value: prod
+            - name: AUTHORIZATION_SERVER_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: event-service-cm
+                  key: authorization_server_url
+            - name: DB_MYSQL_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: user-service-cm
+                  key: mysql_db_url
+            - name: DB_MYSQL_USERNAME
+              value: "root"
+            - name: DB_MYSQL_PASSWORD
+              value: "root"
+            - name: KAFKA_BOOTSTRAP_SERVER
+              valueFrom:
+                configMapKeyRef:
+                  name: event-service-cm
+                  key: kafka_server_url
+            - name: CONFIG_SERVER_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: event-service-cm
+                  key: config_url
+            - name: AWS_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: event-secret
+                  key: aws_access_key
+            - name: AWS_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: event-secret
+                  key: aws_secret_key
+            - name: AWS_REGION
+              valueFrom:
+                secretKeyRef:
+                  name: event-secret
+                  key: aws_region
+            - name: AWS_BUCKET_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: event-secret
+                  key: aws_bucket_name
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: chat-service-svc
+  namespace: micro-services
+spec:
+  selector:
+    app: chat-service
+  ports:
+    - port: 8097
+      targetPort: 8097

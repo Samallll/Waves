@@ -135,9 +135,21 @@ metadata:
 data:
   eureka_server_url: "eureka-0.eureka.micro-services"
   mongo_db_url: "mongo-0.mongo-svc.store"
-#  mongo_db_url: "10.244.0.241"
   kafka_server_url: "kafka-0.kafka-svc.store"
   config_url: "config-server-svc.micro-services"
   authorization_server_url: "http://auth.crowdcraft.site"
-  aws_region: "ap-south-1"
-  aws_bucket_name: "crowdcraft-test"
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: event-service-cm
+  namespace: micro-services
+data:
+  eureka_server_url: "eureka-0.eureka.micro-services"
+  mysql_db_url: "mysql-0.mysql.store"
+  kafka_server_url: "kafka-0.kafka-svc.store"
+  config_url: "config-server-svc.micro-services"
+  authorization_server_url: "http://auth.crowdcraft.site"
+
+---

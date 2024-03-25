@@ -1,0 +1,39 @@
+spring:
+  application:
+    name: event-service
+  kafka:
+    producer:
+      bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVER}:9092
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${AUTHORIZATION_SERVER_URL}
+  datasource:
+    url: jdbc:mysql://${DB_MYSQL_HOST}:3306/event_details
+    username: ${DB_MYSQL_USERNAME}
+    password: ${DB_MYSQL_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  config:
+    import: configserver:http://${CONFIG_SERVER_URL}:8088
+
+server:
+  port: 8095
+
+logging:
+  level:
+    root: INFO
+    org:
+      springframework:
+        security: INFO
+
+aws:
+  bucket:
+    name: ${AWS_BUCKET_NAME}
+  region: ${AWS_REGION}
+  accessKey: ${AWS_ACCESS_KEY}
+  secretKey: ${AWS_SECRET_KEY}
