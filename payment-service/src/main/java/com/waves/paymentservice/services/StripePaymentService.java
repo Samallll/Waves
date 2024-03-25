@@ -15,6 +15,10 @@ public class StripePaymentService implements PaymentService{
     @Value("${stripe.api-key}")
     private String stripeKey;
 
+    @Value("${app.base-url}")
+    private String baseUrl;
+
+
     public void initializeStripe(){
         Stripe.apiKey = stripeKey;
     }
@@ -27,8 +31,8 @@ public class StripePaymentService implements PaymentService{
             SessionCreateParams.Builder builder = new SessionCreateParams.Builder();
             builder.addPaymentMethodType(SessionCreateParams.PaymentMethodType.CARD);
             builder.setMode(SessionCreateParams.Mode.PAYMENT);
-            builder.setSuccessUrl("http://127.0.0.1:8090/payment-successfull?session_id={CHECKOUT_SESSION_ID}");
-            builder.setCancelUrl("http://127.0.0.1:8090/user/event-details/" + eventId);
+            builder.setSuccessUrl(baseUrl + "/payment-successfull?session_id={CHECKOUT_SESSION_ID}");
+            builder.setCancelUrl(baseUrl + "/user/event-details/" + eventId);
             builder.setBillingAddressCollection(SessionCreateParams.BillingAddressCollection.AUTO);
             builder.setShippingAddressCollection(
                     SessionCreateParams.ShippingAddressCollection.builder()

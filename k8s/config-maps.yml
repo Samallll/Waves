@@ -162,3 +162,16 @@ data:
   eureka_server_url: "eureka-0.eureka.micro-services"
   kafka_server_url: "kafka-0.kafka-svc.store"
   config_url: "config-server-svc.micro-services"
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: payment-service-cm
+  namespace: micro-services
+data:
+  eureka_server_url: "eureka-0.eureka.micro-services"
+  mysql_db_url: "mysql-0.mysql.store"
+  config_url: "config-server-svc.micro-services"
+  authorization_server_url: "http://auth.crowdcraft.site"
+  api_gateway_url: "http://crowdcraft.site"
