@@ -1,0 +1,39 @@
+spring:
+  application:
+    name: chat-service
+  kafka:
+    consumer:
+      bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVER}:9092
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${AUTHORIZATION_SERVER_URL}
+  data:
+    mongodb:
+      username: ${DB_MONGO_USERNAME}
+      password: ${DB_MONGO_USERNAME}
+      host: ${DB_MONGO_HOST}
+      port: 27017
+      database: chat_app
+      logging:
+        enabled: true
+        level: TRACE
+  config:
+    import: configserver:http://${CONFIG_SERVER_URL}:8088
+
+aws:
+  bucket:
+    name: ${AWS_BUCKET_NAME}
+  region: ${AWS_REGION}
+  accessKey: ${AWS_ACCESS_KEY}
+  secretKey: ${AWS_SECRET_KEY}
+
+server:
+  port: 8097
+
+logging:
+    org:
+      springframework:
+        security: INFO
+        web: INFO

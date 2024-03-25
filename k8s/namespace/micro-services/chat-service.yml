@@ -1,0 +1,88 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chat-service
+  namespace: micro-services
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: chat-service
+  template:
+    metadata:
+      labels:
+        app: chat-service
+    spec:
+      containers:
+        - name: chat-service
+          image: samal024/chat-service
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8097
+          env:
+            - name: PROFILE
+              value: prod
+            - name: AUTHORIZATION_SERVER_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: chat-service-cm
+                  key: authorization_server_url
+            - name: DB_MONGO_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: chat-service-cm
+                  key: mongo_db_url
+            - name: KAFKA_BOOTSTRAP_SERVER
+              valueFrom:
+                configMapKeyRef:
+                  name: chat-service-cm
+                  key: kafka_server_url
+            - name: CONFIG_SERVER_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: chat-service-cm
+                  key: config_url
+            - name: DB_MONGO_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: chat-secret
+                  key: mongo_username
+            - name: DB_MONGO_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: chat-secret
+                  key: mongo_password
+            - name: AWS_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: chat-secret
+                  key: aws_access_key
+            - name: AWS_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: chat-secret
+                  key: aws_secret_key
+            - name: AWS_REGION
+              valueFrom:
+                secretKeyRef:
+                  name: chat-secret
+                  key: aws_region
+            - name: AWS_BUCKET_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: chat-secret
+                  key: aws_bucket_name
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: chat-service-svc
+  namespace: micro-services
+spec:
+  selector:
+    app: chat-service
+  ports:
+    - port: 8097
+      targetPort: 8097

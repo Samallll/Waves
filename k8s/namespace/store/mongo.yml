@@ -38,7 +38,7 @@ spec:
   selector:
     matchLabels:
       app: mongo
-  serviceName: mongo
+  serviceName: mongo-svc
   replicas: 1
   template:
     metadata:
