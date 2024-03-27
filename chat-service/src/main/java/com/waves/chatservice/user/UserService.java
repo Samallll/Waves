@@ -58,6 +58,7 @@ public class UserService {
         User user = createUser(chatUser);
         ChatRoom chatRoom = chatRoomService.addUserToChatRoom(chatUser.getEventId(),
                 chatUser.getEventName(), user);
+        System.out.println("No error in addUser to the chat room - inside user service: "+ chatRoom.toString());
         Set<String> chatRooms;
         if(user.getChatRooms()==null){
             chatRooms = new HashSet<>();

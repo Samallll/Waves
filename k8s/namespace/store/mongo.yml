@@ -47,7 +47,7 @@ spec:
     spec:
       containers:
         - name: mongo
-          image: mongo
+          image: mongo:6
           env:
             - name: MONGO_INITDB_ROOT_USERNAME
               valueFrom:
@@ -60,16 +60,16 @@ spec:
                   name: mongo-secret
                   key: password
             - name: MONGO_INITDB_DATABASE
-              value: "chat_app"
+              value: chat_app
           ports:
             - containerPort: 27017
           volumeMounts:
-            - name: mysql-persistent-storage
+            - name: mongo-persistent-storage
               mountPath: /var/lib/mongo
       volumes:
-        - name: mysql-persistent-storage
+        - name: mongo-persistent-storage
           persistentVolumeClaim:
-            claimName: mysql-pvc
+            claimName: mongo-pvc
 
 ---
 

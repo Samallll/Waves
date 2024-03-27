@@ -27,7 +27,7 @@ public class JobPostController {
         this.sharedService = sharedService;
     }
 
-    @PreAuthorize("hasAnyRole('HOST','ADMIN')")
+    @PreAuthorize("hasAnyRole('HOST','ADMIN','USER')")
     @GetMapping("/all")
     public ResponseEntity<Page<JobPost>> getJobPostsForHost(
             @RequestParam(required = true) Long postedByUserId,
@@ -42,7 +42,7 @@ public class JobPostController {
         return ResponseEntity.ok(jobPostDetails);
     }
 
-    @PreAuthorize("hasRole('HOST')")
+    @PreAuthorize("hasAnyRole('HOST','ADMIN','USER')")
     @GetMapping("/{jobPostId}")
     public ResponseEntity<JobPost> getJobPost(@PathVariable Long jobPostId){
 
@@ -50,7 +50,7 @@ public class JobPostController {
         return jobPost.map(ResponseEntity::ok).orElseGet(()->ResponseEntity.notFound().build());
     }
 
-    @PreAuthorize("hasAnyRole('HOST','ADMIN')")
+    @PreAuthorize("hasAnyRole('HOST','ADMIN','USER')")
     @GetMapping("/by-eventId/{eventId}")
     public ResponseEntity<JobPost> getJobPostByEventId(@PathVariable Long eventId){
 

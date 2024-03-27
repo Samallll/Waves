@@ -65,7 +65,7 @@ const ChatPage = () => {
 
   const onConnected = (chatRooms) => {
       chatRooms.forEach(chatRoom => {
-          const eventId = chatRoom.eventId;
+          const eventId = chatRoom?.eventId;
           stompClientRef.current.subscribe(
               `/topic/event/${eventId}`,
               onMessageReceived

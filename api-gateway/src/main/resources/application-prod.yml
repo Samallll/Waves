@@ -30,7 +30,7 @@ spring:
           predicates:
             - Path=/api/v1/user/**
         - id: registration-service-router
-          uri: http://${AUTHORIZATION_SERVER_URL}:9000
+          uri: http://auth.crowdcraft.site
           predicates:
             - Path=/api/v1/register/**
         - id: host-service-router

@@ -9,6 +9,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -26,5 +27,5 @@ public class ChatRoom {
     private Boolean writeAccess =true;
 
     @DBRef
-    private Set<User> users;
+    private Set<User> users = new HashSet<>();
 }

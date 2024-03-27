@@ -11,11 +11,14 @@ spring:
           issuer-uri: ${AUTHORIZATION_SERVER_URL}
   data:
     mongodb:
+#      uri: mongodb://${DB_MONGO_HOST}:27017/chat_app
       username: ${DB_MONGO_USERNAME}
-      password: ${DB_MONGO_USERNAME}
+      password: ${DB_MONGO_PASSWORD}
       host: ${DB_MONGO_HOST}
       port: 27017
       database: chat_app
+      authentication-database: admin
+      authMechanism: SCRAM-SHA-256
       logging:
         enabled: true
         level: TRACE

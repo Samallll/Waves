@@ -49,38 +49,38 @@ function EventRegistration() {
 
     console.log(updatedEventDetails)
 
-    // const validateEventResult = validateEventDetails(updatedEventDetails.event);
-    // if (!updatedEventDetails.event.eventName || updatedEventDetails.event.eventName.length <  3) {
-    //   setError('Event Name must be at least 3 characters long');
-    //   return;
-    // }
-    // if(validateEventResult !== ""){
-    //   setError(validateEventResult)
-    //   return;
-    // }
-    // if(updatedEventDetails.event.eventMode === "Offline"){
-    //   const validateLocation = validateLocation(updatedEventDetails.location);
-    //   if(validateLocation !== ""){
-    //     setError(validateLocation)
-    //     return;
-    //   }
-    // }
-    // if(updatedEventDetails.event.organizerCount > 0){
-    //   const validateJobPostResult = validateJobPost(updatedEventDetails.jobPost)
-    //   if(validateJobPostResult !== ""){
-    //     setError(validateJobPostResult)
-    //     return;
-    //   }
-    // }
-    // const validateLocationDetails = validateLocation(updatedEventDetails.location);
-    // if(validateLocationDetails !== ""){
-    //   setError(validateLocationDetails);
-    //   return;
-    // }
-    // if (!updatedEventDetails.event.termsAndConditions || updatedEventDetails.event.termsAndConditions.trim().length <   10) {
-    //   setError('Terms And Conditions must not be empty and should be at least 10 characters long');
-    //   return;
-    // }
+    const validateEventResult = validateEventDetails(updatedEventDetails.event);
+    if (!updatedEventDetails.event.eventName || updatedEventDetails.event.eventName.length <  3) {
+      setError('Event Name must be at least 3 characters long');
+      return;
+    }
+    if(validateEventResult !== ""){
+      setError(validateEventResult)
+      return;
+    }
+    if(updatedEventDetails.event.eventMode === "Offline"){
+      const validateLocation = validateLocation(updatedEventDetails.location);
+      if(validateLocation !== ""){
+        setError(validateLocation)
+        return;
+      }
+    }
+    if(updatedEventDetails.event.organizerCount > 0){
+      const validateJobPostResult = validateJobPost(updatedEventDetails.jobPost)
+      if(validateJobPostResult !== ""){
+        setError(validateJobPostResult)
+        return;
+      }
+    }
+    const validateLocationDetails = validateLocation(updatedEventDetails.location);
+    if(validateLocationDetails !== ""){
+      setError(validateLocationDetails);
+      return;
+    }
+    if (!updatedEventDetails.event.termsAndConditions || updatedEventDetails.event.termsAndConditions.trim().length <   10) {
+      setError('Terms And Conditions must not be empty and should be at least 10 characters long');
+      return;
+    }
     setError("");
     
     const requestOptions = {
@@ -90,11 +90,10 @@ function EventRegistration() {
     };
 
     try {
-      // const response = await fetch(`${eventServiceURI}/add-event`, requestOptions);
-      // if (!response.ok) {
-      //     throw new Error(`HTTP error! status: ${response.status}`);
-      // }
-
+      const response = await fetch(`${eventServiceURI}/add-event`, requestOptions);
+      if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+      }
       const chatUser = {
           userId: loggedUser.userId, 
           fullName: loggedUser.fullName,

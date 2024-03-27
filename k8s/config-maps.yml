@@ -134,7 +134,7 @@ metadata:
   namespace: micro-services
 data:
   eureka_server_url: "eureka-0.eureka.micro-services"
-  mongo_db_url: "mongo-0.mongo-svc.store"
+  mongo_db_url: "mongo-0.mongo-svc.store.svc.cluster.local"
   kafka_server_url: "kafka-0.kafka-svc.store"
   config_url: "config-server-svc.micro-services"
   authorization_server_url: "http://auth.crowdcraft.site"
@@ -148,7 +148,7 @@ metadata:
 data:
   eureka_server_url: "eureka-0.eureka.micro-services"
   mysql_db_url: "mysql-0.mysql.store"
-  kafka_server_url: "kafka-0.kafka-svc.store"
+  kafka_server_url: "kafka-0.kafka-svc.store.svc.cluster.local"
   config_url: "config-server-svc.micro-services"
   authorization_server_url: "http://auth.crowdcraft.site"
 

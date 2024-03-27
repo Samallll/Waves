@@ -21,7 +21,7 @@ function Redirect() {
         const data = await response.json();
         switch (data.roles) {
           case 'ADMIN':
-            navigate('/admin');
+            navigate('/admin/user-management');
             dispatch(fetchLoggedUser(data.username));
             break;
           case 'USER':

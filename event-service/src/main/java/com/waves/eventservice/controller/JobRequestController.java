@@ -24,7 +24,7 @@ public class JobRequestController {
 
     private final JobRequestService jobRequestService;
 
-    @PreAuthorize("hasRole('HOST')")
+    @PreAuthorize("hasAnyRole('HOST','ADMIN','USER')")
     @PostMapping("/register/{jobPostId}")
     public ResponseEntity<JobRequest> registerJobRequest(@Valid @RequestBody JobRequestDto jobRequestDto,
                                                          @PathVariable Long jobPostId,

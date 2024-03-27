@@ -27,6 +27,7 @@ public class ChatRoomService {
                 .map(ChatRoom::getChatId)
                 .or(() -> {
                     if(createNewRoomIfNotExists) {
+                        System.out.println("Chat room creating : ****************************");
                         var chatId = createChatId(eventId, eventName);
                         return Optional.of(chatId);
                     }
@@ -34,19 +35,25 @@ public class ChatRoomService {
                 });
     }
 
-    private String createChatId(Long eventId, String eventName) {
-
+    private synchronized String createChatId(Long eventId, String eventName) {
         var chatId = String.format("%d_%s", eventId, eventName);
-        ChatRoom senderRecipient = ChatRoom
-                .builder()
-                .chatId(chatId)
-                .eventId(eventId)
-                .eventName(eventName)
-                .build();
-        chatRoomRepository.save(senderRecipient);
-        log.debug("ChatId created for the event: "+eventId);
-        return chatId;
+        ChatRoom existingChatRoom = chatRoomRepository.findByChatId(chatId);
+        if (existingChatRoom != null) {
+            log.info("ChatId already exists for the event: " + eventId);
+            return existingChatRoom.getChatId();
+        } else {
+            ChatRoom newChatRoom = ChatRoom
+                    .builder()
+                    .chatId(chatId)
+                    .eventId(eventId)
+                    .eventName(eventName)
+                    .build();
+            chatRoomRepository.save(newChatRoom);
+            log.info("ChatId created for the event: " + eventId);
+            return chatId;
+        }
     }
+
 
     public ChatRoom addUserToChatRoom(Long eventId,String eventName,User user) {
 
@@ -57,8 +64,11 @@ public class ChatRoomService {
             savedChatRoom.getUsers().add(user);
         }
         else {
+            System.out.println("Inside chatroom service: "+ chatRoom.toString());
             String chatId = createChatId(eventId,eventName);
+            System.out.println("Inside chatroom service - chatId: "+ chatId);
             savedChatRoom = chatRoomRepository.findByChatId(chatId);
+            System.out.println("Finding the chat room id - chatId: "+ savedChatRoom.getChatId());
             Set<User> users = new HashSet<>();
             users.add(user);
             savedChatRoom.setUsers(users);

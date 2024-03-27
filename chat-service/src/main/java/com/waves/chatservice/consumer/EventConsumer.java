@@ -24,6 +24,7 @@ public class EventConsumer {
     @KafkaListener(topics = "add-chat-user", containerFactory = "chatUserKafkaListenerContainerFactory")
     public void consumeUserAddingTask(ChatUser chatUser) {
         log.info("Raw message: {}", chatUser.toString());
+        System.out.println("No error in consuming the data: "+ chatUser.toString());
         userService.addUserToChatRoom(chatUser);
     }
 

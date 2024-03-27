@@ -30,7 +30,7 @@ spec:
             - name: DB_MYSQL_HOST
               valueFrom:
                 configMapKeyRef:
-                  name: user-service-cm
+                  name: event-service-cm
                   key: mysql_db_url
             - name: DB_MYSQL_USERNAME
               value: "root"
@@ -72,11 +72,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: chat-service-svc
+  name: event-service-svc
   namespace: micro-services
 spec:
   selector:
-    app: chat-service
+    app: event-service
   ports:
     - port: 8095
       targetPort: 8095
