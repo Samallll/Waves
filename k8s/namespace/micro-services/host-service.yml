@@ -46,6 +46,18 @@ spec:
                 configMapKeyRef:
                   name: host-service-cm
                   key: config_url
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8094
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8094
+            initialDelaySeconds: 5
+            periodSeconds: 10
 
 ---
 

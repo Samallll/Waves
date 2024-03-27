@@ -72,6 +72,18 @@ spec:
                 secretKeyRef:
                   name: chat-secret
                   key: aws_bucket_name
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8097
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8097
+            initialDelaySeconds: 5
+            periodSeconds: 10
 
 ---
 

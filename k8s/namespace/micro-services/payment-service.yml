@@ -51,6 +51,18 @@ spec:
                 secretKeyRef:
                   name: payment-secret
                   key: stripe_secret_key
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8096
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8096
+            initialDelaySeconds: 5
+            periodSeconds: 10
 
 ---
 
