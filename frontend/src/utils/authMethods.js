@@ -10,7 +10,7 @@ export const generateRandomOtp = () => {
     for (let i = 0; i < 6; i++) {
         otp += digits[Math.floor(Math.random() * 10)];
     }
-    console.log("generated otp: ",otp)
+    // console.log("generated otp: ",otp)
     return otp;
 }
 
