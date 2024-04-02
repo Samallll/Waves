@@ -96,9 +96,9 @@ function SignUpForm() {
                 <img className="w-16 h-18 mr-2 rounded-xl" src="/assets/square-logo.jpg" alt="logo"/>
                 CrowdCraft      
             </Link>
-            <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+            <div className="w-full bg-gray-800 rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
                 <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-                    <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+                    <h1 className="text-xl font-bold leading-tight tracking-tight text-white md:text-2xl dark:text-white">
                         Create account
                     </h1>
                     { error && <>
@@ -106,7 +106,7 @@ function SignUpForm() {
                     </>}
                     <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
                         <div>
-                            <label htmlFor="fullName" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Full Name</label>
+                            <label htmlFor="fullName" className="block mb-2 text-sm font-medium text-white dark:text-white">Full Name</label>
                             <input type="text" 
                                 name="fullName" 
                                 id="fullName" 
@@ -116,7 +116,7 @@ function SignUpForm() {
                                 onChange={handleChange}/>
                         </div>
                         <div>
-                            <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email</label>
+                            <label htmlFor="email" className="block mb-2 text-sm font-medium text-white dark:text-white">Your email</label>
                             <input type="email" 
                             name="email" 
                             id="email" 
@@ -127,7 +127,7 @@ function SignUpForm() {
                             onChange={handleChange}/>
                         </div>
                         <div>
-                            <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
+                            <label htmlFor="password" className="block mb-2 text-sm font-medium text-white dark:text-white">Password</label>
                             <input type="password" 
                             name="password" 
                             id="password" 

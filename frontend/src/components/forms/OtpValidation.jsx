@@ -41,9 +41,9 @@ function OtpValidation() {
                 <img className="w-16 h-18 mr-2 rounded-xl" src="/assets/square-logo.jpg" alt="logo"/>
                 CrowdCraft      
             </Link>
-            <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+            <div className="w-full bg-gray-800 rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
                 <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-                    <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl" >
+                    <h1 className="text-xl font-bold leading-tight tracking-tight text-white md:text-2xl" >
                         OTP Validation
                     </h1>
                     { error && <>
@@ -51,7 +51,7 @@ function OtpValidation() {
                     </>}
                     <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
                         <div>
-                            <p className="block text-center my-4 text-sm font-medium text-gray-900 dark:text-white">We have send an OTP to your email! Please validate it</p>
+                            <p className="block text-center my-4 text-sm font-medium text-white dark:text-white">We have send an OTP to your email! Please validate it</p>
                             <input type="text" 
                                 placeholder='xxxxxx'
                                 name="otp" 
