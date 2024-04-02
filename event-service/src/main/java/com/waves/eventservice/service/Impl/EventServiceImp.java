@@ -83,7 +83,10 @@ public class EventServiceImp implements EventService {
         eventDto.setEventId(savedEvent.getEventId());
         eventDto.setEventName(savedEvent.getEventName());
         eventDto.setWriteAccess(true);
-        chatProducer.createChatRoom(eventDto);
+        if(savedEvent.getOrganizerCount()>0){
+            chatProducer.createChatRoom(eventDto);
+            log.error("Send Request to create chat room for event:{}",savedEvent.getEventId());
+        }
         log.debug("Event has been created");
         return savedEvent;
     }
