@@ -92,9 +92,12 @@ function EventDetails() {
                     </div>
                 </div>
 
-                <div className='mx-auto max-w-2xl px-4 bg-gray-800 shadow pb-16 sm:px-6 lg:max-w-7xl lg:pb-5 mb-10 rounded-[20px]'>
-                    <RowPost data={similarRecords} title={"People Also Searched for"}/>
-                </div>
+                {
+                    similarRecords.length !== 0 && 
+                    <div className='mx-auto max-w-2xl px-4 bg-gray-800 shadow pb-16 sm:px-6 lg:max-w-7xl lg:pb-5 mb-10 rounded-[20px]'>
+                        <RowPost data={similarRecords} title={"People Also Searched for"}/>
+                    </div>
+                }
             </div>
             <ToastContainer/>
         </div>
