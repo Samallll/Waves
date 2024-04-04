@@ -1,0 +1,50 @@
+spring:
+  application:
+    name: event-service
+  kafka:
+    producer:
+      bootstrap-servers: localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:9000
+  datasource:
+    url: jdbc:mysql://localhost:3306/event_details
+    username: ${username}
+    password: ${password}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: update
+  config:
+    import: optional:configserver:http://localhost:8088
+
+server:
+  port: 8095
+
+logging:
+  level:
+    root: INFO
+    org:
+      springframework:
+        security: INFO
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+aws:
+  bucket:
+    name: ${bucket_name}
+  region: ${region}
+  accessKey: ${access_key}
+  secretKey: ${secret_key}
