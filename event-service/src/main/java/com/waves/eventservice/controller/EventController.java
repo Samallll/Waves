@@ -80,9 +80,9 @@ public class EventController {
             @RequestParam(required = false) List<String> eventStatus,
             @RequestParam(required = false) String removeEventStatus
     ){
-        if (eventStatus == null || eventStatus.isEmpty()) {
-            eventStatus = Arrays.asList(EventStatus.LIVE.name(), EventStatus.ORGANIZING.name());
-        }
+//        if (eventStatus == null || eventStatus.isEmpty()) {
+//            eventStatus = Arrays.asList(EventStatus.LIVE.name(), EventStatus.ORGANIZING.name());
+//        }
         Pageable pageable = PageRequest.of(page,size);
         Page<Event> eventDetails = eventService.getEvents(searchQuery, genre, contentType, eventMode, eventStatus,removeEventStatus, pageable);
         return ResponseEntity.ok(eventDetails);

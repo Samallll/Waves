@@ -15,7 +15,7 @@ function Events() {
     const [filter, setFilter] = useState({
         genre: [],
         contentTypeValues: [],
-        eventStatusValues: [],
+        eventStatusValues: ["LIVE","ORGANIZING"],
         eventModeValues: []
     });
     
