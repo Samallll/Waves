@@ -70,6 +70,7 @@ Here is the system design I have implemented for this application.
 - **Dependencies:** Spring Config Server, Eureka Server, Zipkin
 - **Image Storage:** Amazon S3 Bucket
 
+For **Production related information**, see the [production branch](../../tree/production-changes).
 
 ## Getting Started
 1. **Clone the repository:**
@@ -109,5 +110,3 @@ Note: I executed each services whenever its required, but it's better to create 
 After configuring the `application-dev.yml` file, you're ready to run the application. Follow the steps in the [Getting Started](#getting-started) section to clone the repository and launch the application.
 
 Feel free to reach out if you encounter any issues during the configuration process.
-
-For **Production related information**, see the [production branch](../../tree/production-changes).
