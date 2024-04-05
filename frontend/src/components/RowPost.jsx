@@ -12,8 +12,8 @@ const RowPost = ({ title, data, isSmall }) => {
         {data && data.map((event, index) => (
           <Link to={`/user/event-details/${event?.eventId}`} key={index} className={`w-60 h-36 cursor-pointer hover:scale-110 transition-transform relative`}>
             <img
-              // src={event.eventPictureId ? `${eventServiceURI}/get-picture/${event.eventPictureId}` : Image}
-              src="/assets/defaultImage.jpg"
+              src={event.eventPictureId ? `${eventServiceURI}/get-picture/${event.eventPictureId}` : Image}
+              // src="/assets/defaultImage.jpg"
               alt="poster"
               className="w-full h-full object-cover rounded"
             />

@@ -31,6 +31,7 @@ public class JobPostServiceImp implements JobPostService {
 
     @Override
     public JobPost createJobPost(JobPost jobPost) {
+        System.out.println(jobPost.toString());
         return jobPostRepository.save(jobPost);
     }
 
@@ -49,7 +50,7 @@ public class JobPostServiceImp implements JobPostService {
             editedJobPost.setTermsAndConditions(jobPost.getTermsAndConditions());
             return jobPostRepository.save(editedJobPost);
         }
-        log.debug("JobPost updated successfully");
+        log.debug("JobPost Creation Failed");
         return null;
     }
 

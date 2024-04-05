@@ -80,9 +80,6 @@ public class EventController {
             @RequestParam(required = false) List<String> eventStatus,
             @RequestParam(required = false) String removeEventStatus
     ){
-//        if (eventStatus == null || eventStatus.isEmpty()) {
-//            eventStatus = Arrays.asList(EventStatus.LIVE.name(), EventStatus.ORGANIZING.name());
-//        }
         Pageable pageable = PageRequest.of(page,size);
         Page<Event> eventDetails = eventService.getEvents(searchQuery, genre, contentType, eventMode, eventStatus,removeEventStatus, pageable);
         return ResponseEntity.ok(eventDetails);
@@ -99,12 +96,8 @@ public class EventController {
     @PreAuthorize("hasRole('HOST')")
     @PutMapping("/{eventId}")
     public ResponseEntity<EventDetails> updateEvent(@PathVariable Long eventId,
-                                                    @Valid @RequestBody EventDetails eventDetails,
-                                                    BindingResult bindingResult) {
-
-        if(bindingResult.hasErrors()){
-            return ResponseEntity.notFound().build();
-        }
+                                                    @RequestBody EventDetails eventDetails
+                                                    ) {
         Optional<EventDetails> updatedEventDetails = eventService.updateEvent(eventDetails);
         return updatedEventDetails.map(ResponseEntity::ok).orElseGet(()->ResponseEntity.notFound().build());
     }

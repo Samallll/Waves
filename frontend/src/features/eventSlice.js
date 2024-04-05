@@ -60,10 +60,20 @@ const eventSlice = createSlice({
       state.userId = action.payload.userId || "";
     },
     updateEventDetails: (state, action) => {
-      state.event = { ...state.event, ...action.payload.event };
-      state.location = { ...state.location, ...action.payload.location };
-      state.jobPost = action.payload.jobPost || state.jobPost;
-      state.userId = action.payload.userId || state.userId;
+      const eventPayload = action.payload.event || {};
+      if (eventPayload.contentType) {
+        eventPayload.contentType = eventPayload.contentType.charAt(0).toUpperCase() + eventPayload.contentType.slice(1).toLowerCase();
+      }
+      if (eventPayload.eventMode) {
+        eventPayload.eventMode = eventPayload.eventMode.charAt(0).toUpperCase() + eventPayload.eventMode.slice(1).toLowerCase();
+      }
+   
+      state.event = eventPayload;
+      state.location = action.payload.location || {};
+      if(state.event.organizerCount === 0 ){
+        state.jobPost = initialState.jobPost;
+      }
+      state.userId = action.payload.userId || "";
     },
     updateEvent: (state, action) => {
       state.event = { ...state.event, ...action.payload };

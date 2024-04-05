@@ -66,6 +66,8 @@ function EventUpdation() {
     }
     setError("");
 
+    console.log(updatedEventDetails)
+
     const requestOptions = {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },

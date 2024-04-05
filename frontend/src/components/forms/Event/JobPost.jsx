@@ -7,16 +7,16 @@ function JobPost() {
   const dispatch = useDispatch();
   const loggedUser = useSelector(state=>state.auth.loggedUser);
   const jobPost = useSelector(state => state.event.jobPost) || {
-    jobPostId:jobPost?.jobPostId ,
-    jobName: "",
-    skillsRequired: "",
-    jobDescription: "",
-    termsAndConditions: "",
-    salary: "",
-    openPositions: "",
-    postedByUserId: loggedUser.userId,
-    isActive:jobPost?.isActive,
-    organizers:jobPost?.organizers
+    jobPostId:"",
+    jobName:"",
+    skillsRequired:"",
+    jobDescription:"",
+    termsAndConditions:"",
+    salary:0,
+    openPositions:0,
+    postedByUserId:loggedUser.userId,
+    active:true,
+    organizers:[]
   };
   
     const handleChange = (e) => {

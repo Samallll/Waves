@@ -15,7 +15,7 @@ function Events() {
     const [filter, setFilter] = useState({
         genre: [],
         contentTypeValues: [],
-        eventStatusValues: ["LIVE","ORGANIZING"],
+        eventStatusValues: [],
         eventModeValues: []
     });
     
@@ -56,7 +56,10 @@ function Events() {
 
         const eventMode = filter.eventModeValues.map(mode => mode.toUpperCase())
         const contentType = filter.contentTypeValues.map(type => type.toUpperCase())
-        const eventStatus = filter.eventStatusValues.map(status => status.toUpperCase())
+        let eventStatus = filter.eventStatusValues.map(status => status.toUpperCase())
+        if (eventStatus.length === 0) {
+            eventStatus = ["LIVE", "ORGANIZING"];
+        }
         const removeEventStatus = "EXPIRED"
         try {
             const response = await fetch(`${eventServiceURI}/events?page=${page}&size=${pageSize}&searchQuery=${searchData}&genre=${filter.genre.join(',')}&contentType=${contentType.join(',')}&eventMode=${eventMode.join(',')}&eventStatus=${eventStatus.join(',')}&removeEventStatus=${removeEventStatus}`);

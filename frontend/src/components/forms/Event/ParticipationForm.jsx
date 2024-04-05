@@ -74,24 +74,18 @@ function ParticipationForm({event}) {
                 console.log(error)
             }
         }
+        if(event?.ticketPrice<1){
+                try{
+                  const response = await axios.post(`${eventServiceURI}/register-participant`,formData)
+                  const data = response.data;
+                  console.log(data)
+                  navigate(`/user/event-details/${event?.eventId}`);
+                }
+                catch(error){
+                  console.log(error)
+                }
+        }
 
-        // try{
-        //     const response = await axiosHelper.post(`${eventServiceURI}/job-request/register/${jobPostId}`,formData)
-        //     const data = response.data;
-        //     console.log(data)
-        //     setFormData({
-        //         about: '',
-        //         designation: '',
-        //         dietaryPreference: 'Vegetarian',
-        //         userId:loggedUser.userId,
-        //         eventId:eventId
-        //     })
-        //     showToast('Job Request submitted successfully!', { type: 'success' })
-        // }
-        // catch(error){
-        //     console.log(error)
-        //     showToast('Failed to submit the request!', { type: 'danger' })
-        // }
     };
 
     const handleCancel = () => {

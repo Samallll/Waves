@@ -96,7 +96,14 @@ public class EventServiceImp implements EventService {
         Optional<Event> existingEvent = eventRepository.findById(eventDetails.getEvent().getEventId());
         if(existingEvent.isPresent()){
             Event updatedEvent = updateEventData(existingEvent.get(), eventDetails);
-            updateJobPost(eventDetails.getJobPost());
+            eventDetails.setEvent(existingEvent.get());
+            if(eventDetails.getJobPost() != null) {
+                JobPost updatedJobPost = updateJobPost(eventDetails.getJobPost());
+                if (updatedJobPost != null) {
+                    updatedEvent.setJobPost(updatedJobPost);
+                    eventRepository.save(updatedEvent);
+                }
+            }
             updateLocation(eventDetails.getLocation());
             chatProducer.updateChatRoom(new EventDto(updatedEvent.getEventName(),updatedEvent.getEventId(),true));
             EventDetails eventDetails1 = EventMapper.eventToEventDetails(updatedEvent);
@@ -128,15 +135,17 @@ public class EventServiceImp implements EventService {
         return existingEvent;
     }
 
-    private void updateJobPost(JobPost jobPost) {
+    private JobPost updateJobPost(JobPost jobPost) {
+        JobPost j = new JobPost();
         if(jobPost != null){
             if(jobPost.getJobPostId()==null){
-                jobPostService.createJobPost(jobPost);
+                j = jobPostService.createJobPost(jobPost);
             }
             else{
-                jobPostService.updateJobPost(jobPost.getJobPostId(), jobPost);
+                j = jobPostService.updateJobPost(jobPost.getJobPostId(), jobPost);
             }
         }
+        return j;
     }
 
     private void updateLocation(Location location) {
